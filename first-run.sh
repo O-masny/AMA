@@ -35,9 +35,11 @@ fi
 
 # ---- NPM build (pokud používáš frontend) ----
 info "Spouštím frontend build v Node 20 containeru..."
-docker compose -f docker-compose.yml run --rm node
+docker compose run --rm node sh -c "
+  npm install &&
+  npm run build
+"
 success "Frontend build hotov"
-
 # ---- Build Docker image ----
 info "Builduji Docker image bez cache..."
 docker compose -f docker-compose.yml build --no-cache app
