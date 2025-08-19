@@ -35,10 +35,8 @@ fi
 
 # ---- NPM build (pokud používáš frontend) ----
 info "Spouštím frontend build v Node 20 containeru..."
-docker compose run --rm node sh -c "
-  npm install &&
-  npm run build
-"
+docker compose run --rm node sh -c "npm install && npm run build"
+
 success "Frontend build hotov"
 # ---- Build Docker image ----
 info "Builduji Docker image bez cache..."
