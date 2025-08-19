@@ -1,21 +1,22 @@
-FROM php:8.2-fpm-alpine
+# --- Base image s PHP 8.3 ---
+FROM php:8.3-fpm-alpine
 
 WORKDIR /var/www
 
 # Systémové závislosti + intl + GD s WebP
 RUN apk add --no-cache \
-    libzip-dev \
-    unzip \
-    oniguruma-dev \
-    sqlite-dev \
-    bash \
-    git \
-    curl \
-    icu-dev \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    libwebp-dev \
-    freetype-dev \
+        libzip-dev \
+        unzip \
+        oniguruma-dev \
+        sqlite-dev \
+        bash \
+        git \
+        curl \
+        icu-dev \
+        libpng-dev \
+        libjpeg-turbo-dev \
+        libwebp-dev \
+        freetype-dev \
     && docker-php-ext-configure gd \
         --with-freetype \
         --with-jpeg \
