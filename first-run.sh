@@ -1,38 +1,89 @@
 #!/bin/bash
-# -----------------------------
-# First Run Script for AMA Docker App
-# -----------------------------
-# Author: tady_vlož_svůj_nick
-# Description: Creates Docker network, builds and runs AMA app and logs output
-# -----------------------------
+set -euo pipefail
 
-# Log file
-LOG_FILE="/var/www/AMA/first-run.log"
+# ---- Barvy pro logy ----
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+CYAN='\033[1;36m'
+NC='\033[0m' # No Color
 
-echo "===== $(date '+%Y-%m-%d %H:%M:%S') =====" | tee -a "$LOG_FILE"
-echo "Starting first run setup for AMA Docker app..." | tee -a "$LOG_FILE"
+info()    { echo -e "${CYAN}ℹ️  $1${NC}"; }
+success() { echo -e "${GREEN}✔️  $1${NC}"; }
+warn()    { echo -e "${YELLOW}⚠️  $1${NC}"; }
+error()   { echo -e "${RED}❌ $1${NC}"; exit 1; }
 
-# Step 1: Create external Docker network if it doesn't exist
-NETWORK_NAME="ama"
-if ! docker network ls | grep -q "$NETWORK_NAME"; then
-    echo "Creating Docker network: $NETWORK_NAME" | tee -a "$LOG_FILE"
-    docker network create "$NETWORK_NAME" >> "$LOG_FILE" 2>&1
-else
-    echo "Docker network $NETWORK_NAME already exists" | tee -a "$LOG_FILE"
+# ---- Kontrola Dockeru ----
+if ! docker info > /dev/null 2>&1; then
+  error "Docker není spuštěný. Spusť ho a zkus znovu."
 fi
 
-# Step 2: Ensure volumes exist
-echo "Checking/creating Docker volumes..." | tee -a "$LOG_FILE"
-docker volume create storage_data >> "$LOG_FILE" 2>&1
-docker volume create database_data >> "$LOG_FILE" 2>&1
+# ---- Kontrola .env ----
+[[ -f .env.production ]] || error "Chybí .env.production soubor."
+cp .env.production .env
+success ".env.production zkopírován do .env"
 
-# Step 3: Build and run Docker containers
-echo "Building and starting Docker containers..." | tee -a "$LOG_FILE"
-docker-compose -f /var/www/AMA/docker-compose.yml up -d --build >> "$LOG_FILE" 2>&1
+# ---- Aktualizace kódu ----
+if [ -d ".git" ]; then
+  info "Aktualizuji repozitář..."
+  git fetch --all --prune
+  git reset --hard origin/main
+  success "Repozitář aktualizován"
+else
+  warn "Adresář není git repozitář. Aktualizace přeskočena."
+fi
 
-# Step 4: Show container status
-echo "Docker containers status:" | tee -a "$LOG_FILE"
-docker ps | tee -a "$LOG_FILE"
+# ---- NPM build (pokud používáš frontend) ----
+if [[ -f package.json ]]; then
+  info "Instaluji NPM závislosti..."
+  npm install
+  info "Builduji frontend assets..."
+  npm run build
+  success "Frontend build hotov"
+fi
 
-echo "First run setup completed!" | tee -a "$LOG_FILE"
-echo "Logs saved in $LOG_FILE"
+# ---- Build Docker image ----
+info "Builduji Docker image bez cache..."
+docker compose -f docker-compose.yml build --no-cache app
+success "Docker image hotov"
+
+# ---- Start kontejnerů ----
+info "Spouštím kontejnery..."
+docker compose -f docker-compose.yml up -d --force-recreate
+success "Kontejnery spuštěny"
+
+# ---- Čekání na spuštění aplikace ----
+info "Čekám na spuštění aplikace..."
+until docker compose -f docker-compose.yml exec -T app curl -s http://localhost > /dev/null; do
+  sleep 1
+done
+success "Aplikační kontejner je připraven."
+
+# ---- Optimalizace Laravel cache ----
+info "Optimalizuji Laravel cache..."
+docker compose -f docker-compose.yml exec -T app bash -c "
+  php artisan config:clear &&
+  php artisan route:clear &&
+  php artisan view:clear &&
+  php artisan config:cache &&
+  php artisan route:cache &&
+  php artisan view:cache
+"
+success "Cache optimalizována"
+
+# ---- Migrace databáze ----
+info "Spouštím migrace (force)..."
+docker compose -f docker-compose.yml exec -T app php artisan migrate --force
+success "Migrace dokončeny"
+
+# ---- Výpis stavu kontejnerů ----
+docker compose -f docker-compose.yml ps
+
+# ---- Test dostupnosti ----
+SERVER_IP=$(hostname -I | awk '{print $1}')
+info "Testuji dostupnost aplikace..."
+if curl -I --max-time 10 http://$SERVER_IP 2>/dev/null | grep "HTTP/" >/dev/null; then
+  success "Aplikace je dostupná: http://$SERVER_IP"
+else
+  error "Nelze se připojit k aplikaci."
+fi
