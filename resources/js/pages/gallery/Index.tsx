@@ -1,19 +1,28 @@
-import { artworks, categories } from "@/components/data/artworks";
+import { Artwork } from "@/components/data/artworks";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import Footer from "@/components/Widgets/Footer";
 import Navigation from "@/components/Widgets/Nav";
 import { FadeInStagger, HorizontalScroll, ScrollReveal } from "@/components/Widgets/ScrollAnimations";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
-const GalleryIndex = () => {
-    const [selectedCategory, setSelectedCategory] = useState("Vše");
+interface PageProps {
+    artworks: Artwork[];
+    categories: string[];
+    [key: string]: any; // zachování kompatibility s Inertia PageProps
+}
+
+const Index: React.FC = () => {
+    const { props } = usePage<PageProps>();
+    const { artworks, categories } = props;
+
+    const [selectedCategory, setSelectedCategory] = useState<string>("Vše");
 
     const filteredArtworks = selectedCategory === "Vše"
         ? artworks
-        : artworks.filter(artwork => artwork.category === selectedCategory);
+        : artworks.filter((artwork) => artwork.category === selectedCategory);
 
     return (
         <div className="min-h-screen">
@@ -75,7 +84,7 @@ const GalleryIndex = () => {
 
             {/* Featured Horizontal Scroll */}
             <HorizontalScroll className="bg-background">
-                {filteredArtworks.slice(0, 3).map((artwork, index) => (
+                {filteredArtworks.slice(0, 3).map((artwork) => (
                     <motion.div
                         key={artwork.id}
                         className="flex-shrink-0 w-[80vw] md:w-[60vw] lg:w-[40vw] h-[70vh] mx-8"
@@ -86,7 +95,7 @@ const GalleryIndex = () => {
                             <Card className="group h-full overflow-hidden border-0 bg-card shadow-artistic hover:shadow-lg transition-all duration-700">
                                 <div className="relative h-3/4 overflow-hidden">
                                     <img
-                                        src={artwork.image}
+                                        src={`/storage/${artwork.image}`}
                                         alt={artwork.title}
                                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                                     />
@@ -101,7 +110,7 @@ const GalleryIndex = () => {
                                         <h3 className="font-playfair font-bold text-2xl text-foreground mb-2">
                                             {artwork.title}
                                         </h3>
-                                        <p className="font-inter text-muted-foreground text-sm">
+                                        <p className="fonct-inter text-muted-foreground text-sm">
                                             {artwork.technique} • {artwork.dimensions}
                                         </p>
                                     </div>
@@ -147,7 +156,7 @@ const GalleryIndex = () => {
                                             <Card className="group overflow-hidden border-0 bg-card shadow-artistic hover:shadow-lg transition-all duration-700 cursor-pointer">
                                                 <div className="relative overflow-hidden">
                                                     <img
-                                                        src={artwork.image}
+                                                        src={`/storage/${artwork.image}`}
                                                         alt={artwork.title}
                                                         className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-700"
                                                     />
@@ -209,4 +218,4 @@ const GalleryIndex = () => {
     );
 };
 
-export default GalleryIndex;
+export default Index;

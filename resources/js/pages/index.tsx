@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { Artwork } from "@/components/data/artworks";
 import About from "@/components/Widgets/About";
 import Contact from "@/components/Widgets/Contact";
 import Exhibitions from "@/components/Widgets/Exhibitions";
@@ -9,7 +9,11 @@ import Hero from "@/components/Widgets/Hero";
 import Navigation from "@/components/Widgets/Nav";
 import { SplashScreen } from "./splash";
 
-const Index = () => {
+interface IndexProps {
+    featuredArtworks: Artwork[];
+}
+
+const Index = ({ featuredArtworks }: IndexProps) => {
     const [showSplash, setShowSplash] = useState(true);
 
     return (
@@ -19,7 +23,7 @@ const Index = () => {
             <Navigation />
             <main className={`${showSplash ? "pointer-events-none" : ""}`}>
                 <Hero />
-                <Gallery />
+                <Gallery featuredArtworks={featuredArtworks} />
                 <Exhibitions />
                 <About />
                 <Contact />

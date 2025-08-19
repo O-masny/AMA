@@ -19,8 +19,10 @@ class GalleryForm
                 Textarea::make('description')
                     ->columnSpanFull(),
                 FileUpload::make('image')
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif', 'image/webp'])
                     ->image()
-                    ->directory('galleries')
+                    ->directory(directory: 'galleries')
+                    ->disk('public')
                     ->required(),
                 TextInput::make('category'),
                 TextInput::make('technique'),

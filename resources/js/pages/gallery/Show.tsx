@@ -1,36 +1,40 @@
-import { artworks } from "@/components/data/artworks";
+import { Artwork } from "@/components/data/artworks";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Footer from "@/components/Widgets/Footer";
 import Navigation from "@/components/Widgets/Nav";
 import { Parallax, ScrollReveal } from "@/components/Widgets/ScrollAnimations";
+import { Link, usePage } from "@inertiajs/react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ChevronLeft, ChevronRight, Heart, Share2 } from "lucide-react";
-import { Link, useNavigate, useParams } from "react-router-dom";
 
-const GalleryShow = () => {
-    const { id } = useParams();
-    const navigate = useNavigate();
+interface PageProps {
+    artwork: Artwork;
+    artworks: Artwork[];
+    [key: string]: any;
+}
 
-    const artwork = artworks.find(a => a.id === id);
-    const currentIndex = artworks.findIndex(a => a.id === id);
-
-    const previousArtwork = currentIndex > 0 ? artworks[currentIndex - 1] : artworks[artworks.length - 1];
-    const nextArtwork = currentIndex < artworks.length - 1 ? artworks[currentIndex + 1] : artworks[0];
+const Show: React.FC = () => {
+    const { props } = usePage<PageProps>();
+    const { artwork, artworks } = props;
 
     if (!artwork) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center">
                     <h1 className="text-4xl font-playfair font-bold text-primary mb-4">Dílo nenalezeno</h1>
-                    <Button onClick={() => navigate('/gallery')} variant="outline">
-                        Zpět do galerie
-                    </Button>
+                    <Link href="/gallery">
+                        <Button variant="outline">Zpět do galerie</Button>
+                    </Link>
                 </div>
             </div>
         );
     }
+
+    const currentIndex = artworks.findIndex(a => a.id === artwork.id);
+    const previousArtwork = currentIndex > 0 ? artworks[currentIndex - 1] : artworks[artworks.length - 1];
+    const nextArtwork = currentIndex < artworks.length - 1 ? artworks[currentIndex + 1] : artworks[0];
 
     return (
         <div className="min-h-screen">
@@ -49,14 +53,12 @@ const GalleryShow = () => {
                         transition={{ duration: 0.8 }}
                         className="mb-8"
                     >
-                        <Button
-                            variant="ghost"
-                            onClick={() => navigate('/gallery')}
-                            className="mb-8 hover:bg-art-rose transition-colors duration-300"
-                        >
-                            <ArrowLeft className="w-4 h-4 mr-2" />
-                            Zpět do galerie
-                        </Button>
+                        <Link href="/gallery">
+                            <Button variant="ghost" className="mb-8 hover:bg-art-rose transition-colors duration-300">
+                                <ArrowLeft className="w-4 h-4 mr-2" />
+                                Zpět do galerie
+                            </Button>
+                        </Link>
                     </motion.div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -69,7 +71,7 @@ const GalleryShow = () => {
                         >
                             <div className="relative group">
                                 <img
-                                    src={artwork.image}
+                                    src={`/storage/${artwork.image}`}
                                     alt={artwork.title}
                                     className="w-full h-[70vh] object-cover rounded-3xl shadow-artistic"
                                 />
@@ -145,12 +147,9 @@ const GalleryShow = () => {
                     <div className="max-w-4xl mx-auto px-6">
                         <ScrollReveal>
                             <div className="text-center mb-16">
-                                <h2 className="text-heading font-playfair font-bold text-primary mb-6">
-                                    Příběh díla
-                                </h2>
+                                <h2 className="text-heading font-playfair font-bold text-primary mb-6">Příběh díla</h2>
                             </div>
                         </ScrollReveal>
-
                         <ScrollReveal direction="up" delay={0.2}>
                             <Card className="p-12 bg-card border-0 shadow-soft">
                                 <p className="text-lg font-inter text-muted-foreground leading-relaxed text-center italic">
@@ -166,71 +165,38 @@ const GalleryShow = () => {
             <section className="py-20 bg-background">
                 <div className="max-w-7xl mx-auto px-6">
                     <ScrollReveal>
-                        <h2 className="text-heading font-playfair font-bold text-primary text-center mb-16">
-                            Další díla
-                        </h2>
+                        <h2 className="text-heading font-playfair font-bold text-primary text-center mb-16">Další díla</h2>
                     </ScrollReveal>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {/* Previous Artwork */}
-                        <motion.div
-                            whileHover={{ scale: 1.02, y: -8 }}
-                            transition={{ duration: 0.4 }}
-                        >
-                            <Link to={`/gallery/${previousArtwork.id}`}>
-                                <Card className="group overflow-hidden border-0 bg-card shadow-artistic hover:shadow-lg transition-all duration-500 cursor-pointer">
-                                    <div className="relative h-64 overflow-hidden">
-                                        <img
-                                            src={previousArtwork.image}
-                                            alt={previousArtwork.title}
-                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                        />
-                                        <div className="absolute top-4 left-4">
-                                            <ChevronLeft className="w-6 h-6 text-white bg-black/50 rounded-full p-1" />
+                        {[previousArtwork, nextArtwork].map((item, idx) => (
+                            <motion.div key={item.id} whileHover={{ scale: 1.02, y: -8 }} transition={{ duration: 0.4 }}>
+                                <Link href={`/gallery/${item.id}`}>
+                                    <Card className="group overflow-hidden border-0 bg-card shadow-artistic hover:shadow-lg transition-all duration-500 cursor-pointer">
+                                        <div className="relative h-64 overflow-hidden">
+                                            <img
+                                                src={`/storage/${item.image}`}
+                                                alt={item.title}
+                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                            />
+                                            <div className={`absolute top-4 ${idx === 0 ? 'left-4' : 'right-4'}`}>
+                                                {idx === 0 ? (
+                                                    <ChevronLeft className="w-6 h-6 text-white bg-black/50 rounded-full p-1" />
+                                                ) : (
+                                                    <ChevronRight className="w-6 h-6 text-white bg-black/50 rounded-full p-1" />
+                                                )}
+                                            </div>
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                         </div>
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                    </div>
-                                    <div className="p-6">
-                                        <h3 className="font-playfair font-bold text-xl text-foreground mb-2">
-                                            {previousArtwork.title}
-                                        </h3>
-                                        <p className="font-inter text-muted-foreground text-sm">
-                                            Předchozí dílo
-                                        </p>
-                                    </div>
-                                </Card>
-                            </Link>
-                        </motion.div>
-
-                        {/* Next Artwork */}
-                        <motion.div
-                            whileHover={{ scale: 1.02, y: -8 }}
-                            transition={{ duration: 0.4 }}
-                        >
-                            <Link to={`/gallery/${nextArtwork.id}`}>
-                                <Card className="group overflow-hidden border-0 bg-card shadow-artistic hover:shadow-lg transition-all duration-500 cursor-pointer">
-                                    <div className="relative h-64 overflow-hidden">
-                                        <img
-                                            src={nextArtwork.image}
-                                            alt={nextArtwork.title}
-                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                        />
-                                        <div className="absolute top-4 right-4">
-                                            <ChevronRight className="w-6 h-6 text-white bg-black/50 rounded-full p-1" />
+                                        <div className="p-6">
+                                            <h3 className="font-playfair font-bold text-xl text-foreground mb-2">{item.title}</h3>
+                                            <p className="font-inter text-muted-foreground text-sm">
+                                                {idx === 0 ? 'Předchozí dílo' : 'Další dílo'}
+                                            </p>
                                         </div>
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                    </div>
-                                    <div className="p-6">
-                                        <h3 className="font-playfair font-bold text-xl text-foreground mb-2">
-                                            {nextArtwork.title}
-                                        </h3>
-                                        <p className="font-inter text-muted-foreground text-sm">
-                                            Následující dílo
-                                        </p>
-                                    </div>
-                                </Card>
-                            </Link>
-                        </motion.div>
+                                    </Card>
+                                </Link>
+                            </motion.div>
+                        ))}
                     </div>
                 </div>
             </section>
@@ -240,4 +206,4 @@ const GalleryShow = () => {
     );
 };
 
-export default GalleryShow;
+export default Show;

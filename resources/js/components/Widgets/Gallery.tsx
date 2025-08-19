@@ -1,11 +1,13 @@
-import { artworks } from "@/components/data/artworks";
+import { Artwork } from "@/components/data/artworks"; // typ pro TS
 import { Card } from "@/components/ui/card";
 import { FadeInStagger, ScrollReveal } from "@/components/Widgets/ScrollAnimations";
 import { Link } from "@inertiajs/react";
 
-const Gallery = () => {
-    const featuredArtworks = artworks.slice(0, 6);
+interface GalleryProps {
+    featuredArtworks: Artwork[];
+}
 
+const Gallery = ({ featuredArtworks }: GalleryProps) => {
     return (
         <section id="gallery" className="py-32 bg-gradient-subtle">
             <div className="max-w-7xl mx-auto px-6">
@@ -32,19 +34,24 @@ const Gallery = () => {
                             {featuredArtworks.map((artwork, index) => (
                                 <Link key={artwork.id} href={`/gallery/${artwork.id}`}>
                                     <Card
-                                        className={`group overflow-hidden border-0 bg-card shadow-artistic hover:shadow-lg transition-all duration-500 cursor-pointer ${index % 3 === 0 ? "lg:transform lg:translate-y-8" :
-                                            index % 3 === 1 ? "lg:transform lg:-translate-y-4" : ""
+                                        className={`group overflow-hidden border-0 bg-card shadow-artistic hover:shadow-lg transition-all duration-500 cursor-pointer ${index % 3 === 0
+                                            ? "lg:transform lg:translate-y-8"
+                                            : index % 3 === 1
+                                                ? "lg:transform lg:-translate-y-4"
+                                                : ""
                                             }`}
                                     >
                                         <div className="relative overflow-hidden">
                                             <img
-                                                src={artwork.image}
+                                                src={`/storage/${artwork.image}`}
                                                 alt={artwork.title}
                                                 className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-700"
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                             <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                <h3 className="font-playfair font-bold text-xl mb-1">{artwork.title}</h3>
+                                                <h3 className="font-playfair font-bold text-xl mb-1">
+                                                    {artwork.title}
+                                                </h3>
                                                 <p className="font-inter text-sm">{artwork.description}</p>
                                             </div>
                                         </div>
@@ -71,7 +78,7 @@ const Gallery = () => {
                                     </Card>
                                 </Link>
                             ))}
-                        </div>
+                        </div>,
                     ]}
                 </FadeInStagger>
             </div>

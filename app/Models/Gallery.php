@@ -18,6 +18,7 @@ class Gallery extends Model
         'technique',
         'dimensions',
         'price',
+        'category',
         'available',
         'story',
     ];
