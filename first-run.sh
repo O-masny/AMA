@@ -34,13 +34,9 @@ else
 fi
 
 # ---- NPM build (pokud používáš frontend) ----
-if [[ -f package.json ]]; then
-  info "Instaluji NPM závislosti..."
-  npm install
-  info "Builduji frontend assets..."
-  npm run build
-  success "Frontend build hotov"
-fi
+info "Spouštím frontend build v Node 20 containeru..."
+docker compose -f docker-compose.yml run --rm node
+success "Frontend build hotov"
 
 # ---- Build Docker image ----
 info "Builduji Docker image bez cache..."

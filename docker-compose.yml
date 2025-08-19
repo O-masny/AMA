@@ -43,6 +43,21 @@ services:
       - ama
     restart: unless-stopped
 
+  node:
+    image: node:20-alpine
+    container_name: ama_node
+    working_dir: /var/www
+    volumes:
+      - ./public:/var/www/public
+      - ./resources:/var/www/resources
+      - ./package.json:/var/www/package.json
+      - ./package-lock.json:/var/www/package-lock.json
+    networks:
+      - ama
+    entrypoint: ["sh", "-c"]
+    command: "npm install && npm run build"
+    restart: "no"
+
 volumes:
   storage_data:
   database_data:
