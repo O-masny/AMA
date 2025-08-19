@@ -20,6 +20,7 @@ class GalleryForm
                     ->columnSpanFull(),
                 FileUpload::make('image')
                     ->image()
+                    ->directory('galleries')
                     ->required(),
                 TextInput::make('category'),
                 TextInput::make('technique'),

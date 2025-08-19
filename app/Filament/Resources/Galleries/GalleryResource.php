@@ -9,6 +9,8 @@ use App\Filament\Resources\Galleries\Schemas\GalleryForm;
 use App\Filament\Resources\Galleries\Tables\GalleriesTable;
 use App\Models\Gallery;
 use BackedEnum;
+use UnitEnum;
+
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -20,6 +22,7 @@ class GalleryResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static ?int $navigationSort = 1;
     public static function form(Schema $schema): Schema
     {
         return GalleryForm::configure($schema);
@@ -29,7 +32,10 @@ class GalleryResource extends Resource
     {
         return GalleriesTable::configure($table);
     }
-
+    public static function canCreate(): bool
+    {
+        return true;
+    }
     public static function getRelations(): array
     {
         return [

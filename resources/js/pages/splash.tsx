@@ -43,7 +43,7 @@ export const SplashScreen = ({ onFinish }: Props) => {
 
                     {/* Psací font */}
                     <motion.h1
-                        className="relative text-white font-[adelia] text-8xl sm:text-7xl md:text-9xl"
+                        className="relative text-white font-[adelia] text-8xl sm:text-7xl md:text-9xl p-12"
                         initial={{ clipPath: "inset(0 100% 0 0)", opacity: 0, scale: 0.9 }}
                         animate={{ clipPath: "inset(0 0% 0 0)", opacity: 1, scale: 1 }}
                         transition={{ duration: 3, ease: "easeInOut" }}
