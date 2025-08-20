@@ -6,7 +6,8 @@ services:
       - app
     volumes:
       - ./public:/var/www/public:ro
-      - ./docker/prod/nginx/default.conf:/etc/nginx/nginx.conf:ro  # <-- změna zde
+      - ./docker/prod/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/prod/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro      
       - storage_data:/var/www/storage
       - database_data:/var/www/database
     labels:
