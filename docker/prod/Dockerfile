@@ -32,7 +32,7 @@ COPY . .
 # Composer dependencies (production)
 RUN composer install --no-dev --optimize-autoloader
 
-# Nastavení práv
+# Nastavení práv pro storage, cache a databázi
 RUN chown -R www-data:www-data storage bootstrap/cache database
 
 EXPOSE 9000
