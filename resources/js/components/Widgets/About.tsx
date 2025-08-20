@@ -65,7 +65,7 @@ const About = () => {
                             transition={{ duration: 0.5, ease: "easeOut" }}
                         >
                             <motion.img
-                                src="/src/assets/portrait.jpg"
+                                src="/assets/pic1.jpg"
                                 alt="Autor"
                                 className="w-full h-full object-cover"
                                 whileHover={{ scale: 1.1 }}
