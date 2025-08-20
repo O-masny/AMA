@@ -8,7 +8,7 @@ services:
       - ./public:/var/www/public:ro
       - ./docker/prod/nginx:/etc/nginx/conf.d:ro
       - storage_data:/var/www/storage
-      - database_data:/var/www/database
+      - database_data:/var/www/database   # použijeme named volume
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.ama.rule=Host(`amatelier.cz`) || Host(`www.amatelier.cz`)"
@@ -31,7 +31,7 @@ services:
       - ./.env.production
     volumes:
       - ./public:/var/www/public:cached
-      - ./database:/var/www/database
+      - database_data:/var/www/database       # named volume pro zápis
       - storage_data:/var/www/storage
       - ./.env.production:/var/www/.env:ro
     expose:
