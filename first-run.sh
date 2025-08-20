@@ -41,7 +41,7 @@ success "Kontejnery spuštěny"
 
 # ---- Laravel optimalizace ----
 info "Optimalizuji Laravel cache..."
-docker compose -f docker-compose.yml exec app bash -c "
+docker compose -f docker-compose.yml exec -T app bash -c "
   php artisan config:cache &&
   php artisan route:cache &&
   php artisan view:cache
@@ -49,18 +49,19 @@ docker compose -f docker-compose.yml exec app bash -c "
 success "Laravel cache optimalizována"
 
 # ---- Migrace databáze ----
-info "Spouštím migrace databáze..."
-docker compose -f docker-compose.yml exec app php artisan migrate --force
-success "Migrace dokončeny"
-
-# ---- Frontend build (jen pokud je potřeba) ----
-if [ ! -d node_modules ] || [ node_modules/* -nt public/build/* ]; then
-  info "Build frontend..."
-  docker compose run --rm node sh -c "npm ci && npm run build"
-  success "Frontend build hotov"
+info "Kontroluji migrace..."
+PENDING=$(docker compose -f docker-compose.yml exec -T app php artisan migrate:status --no-ansi | grep 'No' || true)
+if [ -n "$PENDING" ]; then
+  docker compose -f docker-compose.yml exec -T app php artisan migrate --force
+  success "Migrace dokončeny"
 else
-  info "Frontend build aktuální, přeskočeno"
+  info "Žádné nové migrace, přeskočeno"
 fi
+
+# ---- Frontend build (vždy bezpečně) ----
+info "Build frontend..."
+docker compose run --rm node sh -c "npm ci && npm run build"
+success "Frontend build hotov"
 
 # ---- Test dostupnosti (externí URL) ----
 APP_URL=$(grep -E '^APP_URL=' .env.production | cut -d '=' -f2)
