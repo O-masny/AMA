@@ -6,9 +6,9 @@ services:
       - app
     volumes:
       - ./public:/var/www/public:ro
-      - ./docker/prod/nginx:/etc/nginx/conf.d:ro
+      - ./docker/prod/nginx/default.conf:/etc/nginx/nginx.conf:ro  # <-- změna zde
       - storage_data:/var/www/storage
-      - database_data:/var/www/database   # použijeme named volume
+      - database_data:/var/www/database
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.ama.rule=Host(`amatelier.cz`) || Host(`www.amatelier.cz`)"
