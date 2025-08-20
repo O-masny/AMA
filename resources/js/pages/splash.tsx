@@ -1,57 +1,88 @@
 "use client";
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useRef } from "react";
 
-type Props = { onFinish: () => void };
+gsap.registerPlugin(ScrollTrigger);
 
-export const SplashScreen = ({ onFinish }: Props) => {
-    const [show, setShow] = useState(false);
+export const SplashScreen = () => {
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        // počkej na načtení fontu
-        document.fonts.ready.then(() => setShow(true));
+        const container = containerRef.current;
+        if (!container) return;
+
+        // 1️⃣ Animace abstraktního pozadí (květiny)
+        const flowers = container.querySelectorAll<SVGPathElement>(".flower path");
+        if (flowers.length) {
+            gsap.fromTo(
+                flowers,
+                { strokeDashoffset: 1000, opacity: 0 },
+                {
+                    strokeDashoffset: 0,
+                    opacity: 1,
+                    duration: 2,
+                    stagger: 0.2,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "power2.inOut",
+                }
+            );
+        }
+
+        // 2️⃣ Animace sekcí při scrollu
+        const sections = container.querySelectorAll<HTMLElement>(".section");
+        sections.forEach((section) => {
+            gsap.fromTo(
+                section,
+                { opacity: 0, y: 100 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top 80%",
+                        end: "bottom top",
+                        toggleActions: "play none none reverse",
+                    },
+                }
+            );
+        });
     }, []);
 
-    useEffect(() => {
-        if (!show) return;
-
-        const timer = setTimeout(() => {
-            setShow(false);
-            setTimeout(() => onFinish(), 1200);
-        }, 4000);
-
-        return () => clearTimeout(timer);
-    }, [show, onFinish]);
-
     return (
-        <AnimatePresence>
-            {show && (
-                <motion.div
-                    key="splash"
-                    initial={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 1 }}
-                    className="fixed inset-0 bg-black z-50 flex items-center justify-center overflow-visible"
-                >
-                    {/* Jemné animované pozadí */}
-                    <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-purple-800 via-pink-600 to-red-500 opacity-20 animate-pulse"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 0.2 }}
-                        transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
-                    />
+        <div ref={containerRef} className="relative w-full h-full">
+            {/* 🌸 Animované pozadí */}
+            <svg
+                className="absolute inset-0 w-full h-full pointer-events-none"
+                viewBox="0 0 600 600"
+            >
+                <g className="flower" fill="none" strokeWidth={2}>
+                    <path stroke="purple" d="M300,300 C350,250 400,350 300,300" />
+                    <path stroke="pink" d="M300,300 C250,350 350,400 300,300" />
+                    <path stroke="red" d="M300,300 C280,200 320,400 300,300" />
+                    {/* Přidejte více path pro složitější efekt */}
+                </g>
+            </svg>
 
-                    {/* Psací font */}
-                    <motion.h1
-                        className="relative text-white font-[adelia] text-8xl sm:text-7xl md:text-9xl p-12"
-                        initial={{ clipPath: "inset(0 100% 0 0)", opacity: 0, scale: 0.9 }}
-                        animate={{ clipPath: "inset(0 0% 0 0)", opacity: 1, scale: 1 }}
-                        transition={{ duration: 3, ease: "easeInOut" }}
-                    >
-                        adela masna
-                    </motion.h1>
-                </motion.div>
-            )}
-        </AnimatePresence>
+            {/* ✨ Splash screen text */}
+            <h1 className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-8xl font-[adelia] text-white z-20">
+                adela masna
+            </h1>
+
+            {/* 📄 Obsahové sekce */}
+            <div className="relative z-10">
+                <section className="section min-h-screen flex items-center justify-center text-white text-4xl">
+                    Sekce 1
+                </section>
+                <section className="section min-h-screen flex items-center justify-center text-white text-4xl">
+                    Sekce 2
+                </section>
+                <section className="section min-h-screen flex items-center justify-center text-white text-4xl">
+                    Sekce 3
+                </section>
+            </div>
+        </div>
     );
 };

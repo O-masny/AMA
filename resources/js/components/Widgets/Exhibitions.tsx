@@ -1,19 +1,30 @@
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Calendar, MapPin, Users } from "lucide-react";
+"use client";
+import { AnimatePresence, motion, useSpring } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+
+type Exhibition = {
+    id: number;
+    title: string;
+    gallery: string;
+    date: string;
+    location: string;
+    description: string;
+    image: string;
+    visitors: string;
+};
 
 const Exhibitions = () => {
-    const exhibitions = [
+    const exhibitions: Exhibition[] = [
         {
             id: 1,
             title: "Pastelové vize",
             gallery: "Galerie Moderna",
             date: "15. září - 30. listopadu 2024",
             location: "Praha",
-            description: "Retrospektivní výstava zaměřená na pastelové kompozice posledních dvou let.",
+            description:
+                "Retrospektivní výstava zaměřená na pastelové kompozice posledních dvou let.",
             image: "/assets/pic1.jpg",
-            status: "current",
-            visitors: "2,400+"
+            visitors: "2,400+",
         },
         {
             id: 2,
@@ -21,10 +32,10 @@ const Exhibitions = () => {
             gallery: "Kunsthalle Brno",
             date: "3. května - 15. července 2024",
             location: "Brno",
-            description: "Společná výstava s mladými současnými malíři exploring emocionální rozměry umění.",
-            image: "/assets/pic1.jpg",
-            status: "past",
-            visitors: "3,100+"
+            description:
+                "Společná výstava s mladými současnými malíři exploring emocionální rozměry umění.",
+            image: "/assets/pic2.jpg",
+            visitors: "3,100+",
         },
         {
             id: 3,
@@ -32,130 +43,135 @@ const Exhibitions = () => {
             gallery: "Městská galerie",
             date: "12. ledna - 28. března 2024",
             location: "Ostrava",
-            description: "První samostatná výstava představující vývoj autorského stylu.",
-            image: "/assets/pic1.jpg",
-            status: "past",
-            visitors: "1,800+"
-        }
+            description:
+                "První samostatná výstava představující vývoj autorského stylu.",
+            image: "/assets/pic3.jpg",
+            visitors: "1,800+",
+        },
     ];
 
-    const currentExhibitions = exhibitions.filter(ex => ex.status === "current");
-    const pastExhibitions = exhibitions.filter(ex => ex.status === "past");
+    const [active, setActive] = useState<number | null>(null);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Plynulé sledování kurzoru (s malým offsetem, aby modal nekryl pointer)
+    const springX = useSpring(0, { stiffness: 200, damping: 25 });
+    const springY = useSpring(0, { stiffness: 200, damping: 25 });
+
+    useEffect(() => {
+        const handleMove = (e: MouseEvent) => {
+            springX.set(e.clientX + 32);
+            springY.set(e.clientY + 32);
+        };
+        window.addEventListener("mousemove", handleMove);
+        return () => window.removeEventListener("mousemove", handleMove);
+    }, [springX, springY]);
+
+    // Debounce přepínání aktivního itemu (omezí blikání při rychlém přejezdu)
+    const handleHover = (id: number | null) => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => setActive(id), 120);
+    };
+
+    const a = exhibitions.find((e) => e.id === active);
 
     return (
-        <section id="exhibitions" className="py-32">
-            <div className="max-w-7xl mx-auto px-6">
-                {/* Section Header */}
-                <div className="text-center mb-20">
-                    <h2 className="text-display font-playfair font-bold text-primary mb-6">
-                        Vernisáže & Výstavy
-                    </h2>
-                    <p className="text-xl font-inter text-muted-foreground max-w-2xl mx-auto">
-                        Přehled aktuálních a proběhlých výstav, kde můžete spatřit má díla
-                    </p>
-                </div>
-
-                {/* Current Exhibitions */}
-                {currentExhibitions.length > 0 && (
-                    <div className="mb-20">
-                        <h3 className="text-heading font-playfair font-bold text-foreground mb-10 text-center">
-                            Aktuální výstavy
-                        </h3>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            {currentExhibitions.map((exhibition) => (
-                                <Card key={exhibition.id} className="overflow-hidden border-0 shadow-artistic bg-gradient-artistic p-1">
-                                    <div className="bg-card rounded-lg overflow-hidden">
-                                        <div className="relative h-64">
-                                            <img
-                                                src={exhibition.image}
-                                                alt={exhibition.title}
-                                                className="w-full h-full object-cover"
-                                            />
-                                            <div className="absolute top-4 right-4">
-                                                <span className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-inter font-medium">
-                                                    Aktuální
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div className="p-8">
-                                            <h4 className="font-playfair font-bold text-2xl text-foreground mb-3">
-                                                {exhibition.title}
-                                            </h4>
-                                            <div className="space-y-3 mb-6">
-                                                <div className="flex items-center gap-3 text-muted-foreground">
-                                                    <Calendar className="w-4 h-4" />
-                                                    <span className="font-inter">{exhibition.date}</span>
-                                                </div>
-                                                <div className="flex items-center gap-3 text-muted-foreground">
-                                                    <MapPin className="w-4 h-4" />
-                                                    <span className="font-inter">{exhibition.gallery}, {exhibition.location}</span>
-                                                </div>
-                                                <div className="flex items-center gap-3 text-muted-foreground">
-                                                    <Users className="w-4 h-4" />
-                                                    <span className="font-inter">{exhibition.visitors} návštěvníků</span>
-                                                </div>
-                                            </div>
-                                            <p className="font-inter text-foreground leading-relaxed mb-6">
-                                                {exhibition.description}
-                                            </p>
-                                            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-inter rounded-full">
-                                                Více informací
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </Card>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {/* Past Exhibitions */}
-                <div>
-                    <h3 className="text-heading font-playfair font-bold text-foreground mb-10 text-center">
-                        Proběhlé výstavy
-                    </h3>
-                    <div className="space-y-8">
-                        {pastExhibitions.map((exhibition, index) => (
-                            <Card
-                                key={exhibition.id}
-                                className={`overflow-hidden border-0 shadow-soft bg-card ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
-                                    } lg:flex`}
+        <section
+            id="exhibitions"
+            className="relative w-full min-h-screen flex flex-col bg-background"
+        >
+            {/* Header nad seznamem */}
+            <div className="px-6 md:px-10 pt-16 pb-24 md:pt-24">
+                <h2 className="font-playfair font-extrabold leading-none
+                       text-[14vw] md:text-[12vw] xl:text-[10vw]
+                       text-foreground line-through decoration-primary decoration-[12px]">
+                    EXHIBITIONS
+                </h2>
+            </div>
+            {/* Obsah – list vlevo, modal se drží kurzoru */}
+            <div className="relative z-10  w-full px-6 md:px-10 pb-24">
+                <div className="flex justify-end items-end ">
+                    {/* List u boku (vlevo), více prostoru (max-w-3xl) */}
+                    <ul className="flex-1   md:space-y-12 ">
+                        {exhibitions.map((ex) => (
+                            <li
+                                key={ex.id}
+                                className="relative cursor-pointer group pb-4
+                           after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0
+                           after:h-px after:bg-border"
+                                onMouseEnter={() => handleHover(ex.id)}
+                                onMouseMove={() => handleHover(ex.id)}
+                                onMouseLeave={() => handleHover(null)}
                             >
-                                <div className="lg:w-1/2 relative">
-                                    <img
-                                        src={exhibition.image}
-                                        alt={exhibition.title}
-                                        className="w-full h-64 lg:h-full object-cover"
+                                <span
+                                    className={`block font-playfair font-bold
+                              text-5xl md:text-6xl transition-colors
+                              ${active === ex.id ? "text-primary" : "text-foreground group-hover:text-primary/80"}`}
+                                >
+                                    {ex.title}
+                                </span>
+                                <span className="block text-base md:text-lg text-muted-foreground italic">
+                                    {ex.date} · {ex.gallery}
+                                </span>
+
+                                {/* Aktivní divider (plynule se přesouvá pod aktivní řádek) */}
+                                {active === ex.id && (
+                                    <motion.div
+                                        layoutId="active-underline"
+                                        className="absolute bottom-0 left-0 h-[3px] bg-primary rounded-full"
+                                        initial={false}
+                                        animate={{ width: "100%" }}
+                                        transition={{ type: "spring", stiffness: 260, damping: 30 }}
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>
-                                </div>
-                                <div className="lg:w-1/2 p-8 flex flex-col justify-center">
-                                    <h4 className="font-playfair font-bold text-2xl text-foreground mb-3">
-                                        {exhibition.title}
-                                    </h4>
-                                    <div className="space-y-2 mb-6">
-                                        <div className="flex items-center gap-3 text-muted-foreground">
-                                            <Calendar className="w-4 h-4" />
-                                            <span className="font-inter">{exhibition.date}</span>
-                                        </div>
-                                        <div className="flex items-center gap-3 text-muted-foreground">
-                                            <MapPin className="w-4 h-4" />
-                                            <span className="font-inter">{exhibition.gallery}, {exhibition.location}</span>
-                                        </div>
-                                        <div className="flex items-center gap-3 text-muted-foreground">
-                                            <Users className="w-4 h-4" />
-                                            <span className="font-inter">{exhibition.visitors} návštěvníků</span>
-                                        </div>
-                                    </div>
-                                    <p className="font-inter text-foreground leading-relaxed">
-                                        {exhibition.description}
-                                    </p>
-                                </div>
-                            </Card>
+                                )}
+                            </li>
                         ))}
-                    </div>
+                    </ul>
                 </div>
             </div>
+
+            {/* Cursor Preview modal – zachováno chování nad kurzorem jako ve tvém funkčním snippetu */}
+            <AnimatePresence>
+                {active && a && (
+                    <motion.div
+                        style={{ x: springX, y: springY }}
+                        className="fixed top-0 left-0 z-50 pointer-events-none"
+                        initial={{ opacity: 0, scale: 0.86 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.86 }}
+                        transition={{ duration: 0.22 }}
+                    >
+                        <div
+                            className="relative w-[24rem] md:w-[26rem] h-[30rem] md:h-[32rem] overflow-hidden
+                         bg-card border border-border shadow-2xl backdrop-blur-lg
+                         [clip-path:polygon(8%_0%,100%_0%,92%_100%,0%_100%)]"
+                        >
+                            {/* dekorativní glow okraj */}
+                            <div className="pointer-events-none absolute -inset-px rounded-[2rem] opacity-70 mix-blend-screen
+                              bg-[radial-gradient(120px_120px_at_20%_10%,hsl(var(--primary)/.35),transparent_60%),radial-gradient(140px_140px_at_90%_90%,hsl(var(--accent)/.28),transparent_60%)]" />
+
+                            <img
+                                src={a.image}
+                                alt={a.title}
+                                className="w-full h-full object-cover"
+                            />
+
+                            {/* Skleněný overlay pro text */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/45 to-transparent p-6 flex flex-col justify-end">
+                                <h4 className="text-2xl md:text-3xl font-playfair font-bold text-foreground mb-2">
+                                    {a.title}
+                                </h4>
+                                <p className="text-sm md:text-base text-muted-foreground mb-1">{a.date}</p>
+                                <p className="text-sm md:text-base text-muted-foreground mb-2">
+                                    {a.gallery}, {a.location}
+                                </p>
+                                <p className="text-sm md:text-base text-muted-foreground line-clamp-3">
+                                    {a.description}
+                                </p>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     );
 };

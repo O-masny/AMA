@@ -6,12 +6,12 @@ import Navigation from "@/components/Widgets/Nav";
 import { FadeInStagger, HorizontalScroll, ScrollReveal } from "@/components/Widgets/ScrollAnimations";
 import { Link, usePage } from "@inertiajs/react";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 interface PageProps {
     artworks: Artwork[];
     categories: string[];
-    [key: string]: any; // zachování kompatibility s Inertia PageProps
+    [key: string]: any;
 }
 
 const Index: React.FC = () => {
@@ -20,9 +20,22 @@ const Index: React.FC = () => {
 
     const [selectedCategory, setSelectedCategory] = useState<string>("Vše");
 
-    const filteredArtworks = selectedCategory === "Vše"
-        ? artworks
-        : artworks.filter((artwork) => artwork.category === selectedCategory);
+    // Optimalizovaný filtr s useMemo
+    const filteredArtworks = useMemo(() => {
+        return selectedCategory === "Vše"
+            ? artworks
+            : artworks.filter((artwork) => artwork.category === selectedCategory);
+    }, [selectedCategory, artworks]);
+
+    // Motion varianty pro jednotné animace
+    const fadeUpVariant = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 },
+    };
+
+    const hoverCardVariant = {
+        hover: { scale: 1.02, y: -8 },
+    };
 
     return (
         <div className="min-h-screen">
@@ -43,8 +56,9 @@ const Index: React.FC = () => {
                             </motion.h1>
                             <motion.p
                                 className="text-xl font-inter text-muted-foreground max-w-3xl mx-auto leading-relaxed"
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
+                                variants={fadeUpVariant}
+                                initial="hidden"
+                                animate="visible"
                                 transition={{ duration: 0.8, delay: 0.3 }}
                             >
                                 Kolekce uměleckých děl zachycující různé období a styly mé tvorby.
@@ -110,7 +124,7 @@ const Index: React.FC = () => {
                                         <h3 className="font-playfair font-bold text-2xl text-foreground mb-2">
                                             {artwork.title}
                                         </h3>
-                                        <p className="fonct-inter text-muted-foreground text-sm">
+                                        <p className="font-inter text-muted-foreground text-sm">
                                             {artwork.technique} • {artwork.dimensions}
                                         </p>
                                     </div>
@@ -139,76 +153,75 @@ const Index: React.FC = () => {
                     </ScrollReveal>
 
                     <FadeInStagger staggerDelay={0.15}>
-                        {[
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                {filteredArtworks.map((artwork, index) => (
-                                    <motion.div
-                                        key={artwork.id}
-                                        className={`${index % 4 === 0 ? "lg:transform lg:translate-y-8" :
-                                            index % 4 === 1 ? "lg:transform lg:-translate-y-4" :
-                                                index % 4 === 2 ? "lg:transform lg:translate-y-6" :
-                                                    "lg:transform lg:-translate-y-2"
-                                            }`}
-                                        whileHover={{ y: -8, scale: 1.02 }}
-                                        transition={{ duration: 0.4, ease: "easeOut" }}
-                                    >
-                                        <Link href={`/gallery/${artwork.id}`}>
-                                            <Card className="group overflow-hidden border-0 bg-card shadow-artistic hover:shadow-lg transition-all duration-700 cursor-pointer">
-                                                <div className="relative overflow-hidden">
-                                                    <img
-                                                        src={`/storage/${artwork.image}`}
-                                                        alt={artwork.title}
-                                                        className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-700"
-                                                    />
-                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                                    <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                        <h3 className="font-playfair font-bold text-xl mb-1">{artwork.title}</h3>
-                                                        <p className="font-inter text-sm">{artwork.description}</p>
-                                                    </div>
-                                                    {!artwork.available && (
-                                                        <div className="absolute top-4 right-4">
-                                                            <Badge variant="destructive" className="bg-red-500 text-white">
-                                                                Prodáno
-                                                            </Badge>
-                                                        </div>
-                                                    )}
+                        [<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {filteredArtworks.map((artwork, index) => (
+                                <motion.div
+                                    key={artwork.id}
+                                    className={`${index % 4 === 0 ? "lg:transform lg:translate-y-8" :
+                                        index % 4 === 1 ? "lg:transform lg:-translate-y-4" :
+                                            index % 4 === 2 ? "lg:transform lg:translate-y-6" :
+                                                "lg:transform lg:-translate-y-2"
+                                        }`}
+                                    variants={hoverCardVariant}
+                                    whileHover="hover"
+                                    transition={{ duration: 0.4, ease: "easeOut" }}
+                                >
+                                    <Link href={`/gallery/${artwork.id}`}>
+                                        <Card className="group overflow-hidden border-0 bg-card shadow-artistic hover:shadow-lg transition-all duration-700 cursor-pointer">
+                                            <div className="relative overflow-hidden">
+                                                <img
+                                                    src={`/storage/${artwork.image}`}
+                                                    alt={artwork.title}
+                                                    className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-700"
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                                <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                    <h3 className="font-playfair font-bold text-xl mb-1">{artwork.title}</h3>
+                                                    <p className="font-inter text-sm">{artwork.description}</p>
                                                 </div>
-                                                <div className="p-6">
-                                                    <div className="flex justify-between items-start mb-4">
-                                                        <div>
-                                                            <h3 className="font-playfair font-bold text-xl text-foreground mb-2">
-                                                                {artwork.title}
-                                                            </h3>
-                                                            <p className="font-inter text-muted-foreground text-sm mb-2">
-                                                                {artwork.technique}
-                                                            </p>
-                                                            <p className="font-inter text-muted-foreground text-xs">
-                                                                {artwork.dimensions}
-                                                            </p>
-                                                        </div>
-                                                        <div className="text-right">
-                                                            <span className="bg-art-lavender text-foreground px-3 py-1 rounded-full text-xs font-inter font-medium mb-2 block">
-                                                                {artwork.year}
-                                                            </span>
-                                                            {artwork.price && artwork.available && (
-                                                                <span className="font-inter font-bold text-primary text-sm">
-                                                                    {artwork.price}
-                                                                </span>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                    <div className="pt-3 border-t border-border">
-                                                        <Badge variant="outline" className="border-primary text-primary">
-                                                            {artwork.category}
+                                                {!artwork.available && (
+                                                    <div className="absolute top-4 right-4">
+                                                        <Badge variant="destructive" className="bg-red-500 text-white">
+                                                            Prodáno
                                                         </Badge>
                                                     </div>
+                                                )}
+                                            </div>
+                                            <div className="p-6">
+                                                <div className="flex justify-between items-start mb-4">
+                                                    <div>
+                                                        <h3 className="font-playfair font-bold text-xl text-foreground mb-2">
+                                                            {artwork.title}
+                                                        </h3>
+                                                        <p className="font-inter text-muted-foreground text-sm mb-2">
+                                                            {artwork.technique}
+                                                        </p>
+                                                        <p className="font-inter text-muted-foreground text-xs">
+                                                            {artwork.dimensions}
+                                                        </p>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <span className="bg-art-lavender text-foreground px-3 py-1 rounded-full text-xs font-inter font-medium mb-2 block">
+                                                            {artwork.year}
+                                                        </span>
+                                                        {artwork.price && artwork.available && (
+                                                            <span className="font-inter font-bold text-primary text-sm">
+                                                                {artwork.price}
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </Card>
-                                        </Link>
-                                    </motion.div>
-                                ))}
-                            </div>
-                        ]}
+                                                <div className="pt-3 border-t border-border">
+                                                    <Badge variant="outline" className="border-primary text-primary">
+                                                        {artwork.category}
+                                                    </Badge>
+                                                </div>
+                                            </div>
+                                        </Card>
+                                    </Link>
+                                </motion.div>
+                            ))}
+                        </div>]
                     </FadeInStagger>
                 </div>
             </section>

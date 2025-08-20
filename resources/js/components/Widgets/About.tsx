@@ -1,86 +1,116 @@
-import { Parallax, ScrollReveal } from "@/components/Widgets/ScrollAnimations";
+"use client";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+import { motion, useMotionTemplate, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 const About = () => {
+    const ref = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start start", "end end"],
+    });
+
+    // --- Krokové opacity pro texty
+    const step1Opacity = useTransform(scrollYProgress, [0, 0.25, 0.3], [1, 1, 0]);
+    const step2Opacity = useTransform(scrollYProgress, [0.3, 0.45, 0.65], [0, 1, 0]);
+    const step3Opacity = useTransform(scrollYProgress, [0.65, 0.8, 1], [0, 1, 1]);
+
+    // --- Posun textů (společný)
+    const stepY = useTransform(scrollYProgress, [0, 1], ["40px", "-40px"]);
+
+    // --- Hue rotate pro obrázky
+    const hueRotate = useTransform(scrollYProgress, [0, 1], [0, 120]);
+    const filterStyle = useMotionTemplate`hue-rotate(${hueRotate}deg)`;
+
+    const images = [
+        "/assets/pic1.jpg",
+        "/assets/pic2.jpg",
+        "/assets/pic3.jpg",
+    ];
+
+    // --- Mapování opacity obrázků přes stejný interval jako text
+    const imageOpacities = [
+        useTransform(scrollYProgress, [0, 0.25, 0.3], [1, 1, 0]),
+        useTransform(scrollYProgress, [0.3, 0.45, 0.65], [0, 1, 0]),
+        useTransform(scrollYProgress, [0.65, 0.8, 1], [0, 1, 1]),
+    ];
+
     return (
-        <section
-            className="relative w-full min-h-screen bg-gradient-to-br from-yellow-50 via-pink-50 to-purple-50 overflow-hidden flex items-center"
-            aria-label="O autorovi"
-        >
-            {/* --- Floating Background Shapes (optimized, minimal layers) --- */}
-            <Parallax speed={0.1}>
-                <div className="absolute top-16 left-1/4 w-48 h-48 bg-pink-300 rounded-full opacity-20 blur-3xl pointer-events-none"></div>
-            </Parallax>
-            <Parallax speed={-0.05}>
-                <div className="absolute bottom-20 right-1/3 w-60 h-60 bg-purple-300 rounded-full opacity-15 blur-2xl pointer-events-none"></div>
-            </Parallax>
+        <section ref={ref} className="relative h-[350vh]" aria-label="O autorovi">
+            <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+                {/* Background Title */}
+                <motion.h2
+                    className="absolute left-0 -top-10 font-playfair font-extrabold text-[18vw] md:text-[12vw] text-foreground/10 tracking-tight leading-none select-none"
+                    style={{ y: stepY }}
+                >
+                    <h2 className="font-playfair font-extrabold leading-none
+                       text-[14vw] md:text-[12vw] xl:text-[10vw]
+                       text-foreground line-through decoration-primary decoration-[12px]">
+                        ABOUT ME
+                    </h2>
+                </motion.h2>
 
-            {/* --- Main Content Wrapper --- */}
-            <div className="relative z-10 container mx-auto px-6 grid lg:grid-cols-12 gap-12 items-center">
+                <div className="container mx-auto px-6 grid lg:grid-cols-12 gap-8 items-center relative">
 
-                {/* --- Hero Text Section --- */}
-                <div className="col-span-12 lg:col-span-6 space-y-8 lg:space-y-12">
-                    <ScrollReveal>
-                        <motion.h1
-                            className="text-6xl lg:text-8xl font-playfair font-extrabold text-primary leading-tight tracking-tight -rotate-1"
-                            initial={{ opacity: 0, x: -100 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 1.2, ease: "easeOut" }}
-                        >
-                            O autorovi
-                        </motion.h1>
 
-                        <motion.p
-                            className="text-lg lg:text-xl font-inter text-foreground max-w-xl leading-relaxed"
-                            initial={{ opacity: 0, y: 40 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 1, delay: 0.4, ease: "easeOut" }}
-                        >
-                            Jsem vášnivý umělec a tvůrce vizuálních příběhů. Moje práce kombinuje barvy, emoce a příběhy, které propojují fantazii s realitou. Každý obraz je experiment s formou a prostorem, kde hledám unikátní vizuální jazyk.
-                        </motion.p>
 
-                        <motion.div
-                            className="flex flex-wrap gap-4 pt-6"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.6 }}
-                        >
-                            <Button size="lg" className="bg-primary hover:bg-primary/90 text-white font-inter px-8 py-4 rounded-full transition-all">
-                                Kontaktovat mě
-                            </Button>
-                            <Button variant="outline" size="lg" className="border border-primary text-primary hover:bg-primary hover:text-white font-inter px-8 py-4 rounded-full transition-all">
-                                Moje portfolio
-                            </Button>
+                    {/* LEFT – Texty */}
+                    <div className="col-span-12 lg:col-span-5 relative space-y-10 z-10">
+                        <motion.div style={{ opacity: step1Opacity, y: stepY }} className="space-y-6">
+                            <h3 className="text-5xl lg:text-6xl font-bold font-playfair text-primary -rotate-1">
+                                Experimenty s barvou
+                            </h3>
+                            <p className="text-lg text-foreground leading-relaxed">
+                                V každém díle hledám dialog mezi barvou a emocí – někdy jemně, někdy explozivně.
+                            </p>
                         </motion.div>
-                    </ScrollReveal>
-                </div>
 
-                {/* --- Hero Visual Section --- */}
-                <div className="col-span-12 lg:col-span-6 relative flex justify-center lg:justify-end">
-                    <ScrollReveal direction="right" delay={0.3}>
-                        <motion.div
-                            className="relative w-80 h-[28rem] lg:w-96 lg:h-[36rem] rounded-3xl overflow-hidden shadow-2xl cursor-pointer"
-                            whileHover={{ scale: 1.05, rotate: 1 }}
-                            transition={{ duration: 0.5, ease: "easeOut" }}
-                        >
-                            <motion.img
-                                src="/assets/pic1.jpg"
-                                alt="Autor"
-                                className="w-full h-full object-cover"
-                                whileHover={{ scale: 1.1 }}
-                                transition={{ duration: 0.7 }}
+                        <motion.div style={{ opacity: step2Opacity, y: stepY }} className="space-y-6 absolute top-0 left-0">
+                            <h3 className="text-5xl lg:text-6xl font-bold font-playfair text-primary rotate-1">
+                                Spojení reality a fantazie
+                            </h3>
+                            <p className="text-lg text-foreground leading-relaxed">
+                                Malba je pro mě nástrojem, jak realitu přetavit do snového světa a dát divákovi klíč k vlastní interpretaci.
+                            </p>
+                        </motion.div>
+
+                        <motion.div style={{ opacity: step3Opacity, y: stepY }} className="space-y-6 absolute top-0 left-0">
+                            <h3 className="text-5xl lg:text-6xl font-bold font-playfair text-primary">
+                                Moje mise
+                            </h3>
+                            <p className="text-lg text-foreground leading-relaxed">
+                                Chci vytvářet vizuální příběhy, které se dotýkají emocí a přinášejí unikátní perspektivu.
+                            </p>
+                            <div className="flex gap-4 pt-6">
+                                <Button size="lg" className="bg-primary text-white rounded-full px-8">
+                                    Kontaktovat mě
+                                </Button>
+                                <Button variant="outline" size="lg" className="rounded-full px-8">
+                                    Moje portfolio
+                                </Button>
+                            </div>
+                        </motion.div>
+                    </div>
+
+                    {/* RIGHT – Parallax Images */}
+                    <div className="col-span-12 w-full  lg:col-span-7 relative h-[80vh] lg:h-[90vh] rounded-[3rem] overflow-hidden shadow-2xl">
+                        {images.map((src, index) => (
+                            <motion.div
+                                key={index}
+                                className="absolute inset-0 bg-cover bg-center"
+                                style={{
+                                    backgroundImage: `url('${src}')`,
+                                    opacity: imageOpacities[index],
+                                    y: useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]),
+                                    filter: filterStyle,
+                                }}
                             />
+                        ))}
 
-                            {/* --- Floating Info Cards (optimized) --- */}
-                            <Parallax speed={0.15}>
-                                <div className="absolute -top-6 -left-10 w-24 h-24 bg-yellow-300 rounded-2xl opacity-50 blur-xl pointer-events-none"></div>
-                            </Parallax>
-                            <Parallax speed={-0.1}>
-                                <div className="absolute bottom-6 right-6 w-28 h-28 bg-pink-300 rounded-2xl opacity-40 blur-lg pointer-events-none"></div>
-                            </Parallax>
-                        </motion.div>
-                    </ScrollReveal>
+                        {/* Dynamické overlayy */}
+                        <motion.div style={{ opacity: step2Opacity }} className="absolute inset-0 bg-pink-500/20 mix-blend-overlay" />
+                        <motion.div style={{ opacity: step3Opacity }} className="absolute inset-0 bg-black/40" />
+                    </div>
                 </div>
             </div>
         </section>
