@@ -1,80 +1,128 @@
 import { Button } from "@/components/ui/button";
-import { Link } from "@inertiajs/react";
-import { useState } from "react";
+import { Link, usePage } from "@inertiajs/react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Home, Image, Menu, Phone, User, X } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const Navigation = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+
+    const { url } = usePage<{ url: string }>().props; // aktuální route
+
+    useEffect(() => {
+        const move = (e: MouseEvent) => setCursorPos({ x: e.clientX, y: e.clientY });
+        window.addEventListener("mousemove", move);
+        return () => window.removeEventListener("mousemove", move);
+    }, []);
 
     const navItems = [
-        { name: "Galerie", href: "#gallery" },
-        { name: "Vernisáže", href: "#exhibitions" },
-        { name: "O mně", href: "#about" },
-        { name: "Kontakt", href: "#contact" }
+        { name: "Galerie", hash: "gallery", icon: <Image className="w-5 h-5" /> },
+        { name: "Vernisáže", hash: "exhibitions", icon: <Home className="w-5 h-5" /> },
+        { name: "O mně", hash: "about", icon: <User className="w-5 h-5" /> },
+        { name: "Kontakt", hash: "contact", icon: <Phone className="w-5 h-5" /> },
     ];
 
+    const leftNav = navItems.slice(0, 2);
+    const rightNav = navItems.slice(2);
+
+    const getHref = (hash: string) =>
+        url === "/" ? `#${hash}` : `/${`#${hash}`}`; // Pokud nejsme na home, přesměruj na /
+
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
-            <div className="max-w-7xl mx-auto px-6 py-4">
-                <div className="flex items-center justify-between">
-                    <Link href="/">
-                        <div className="text-2xl font-playfair font-bold text-primary">
-                            AMA
-                        </div>
-                    </Link>
+        <>
+            {/* --- Bottom Navbar --- */}
+            <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[95%] md:w-auto">
+                <div className="relative flex items-center justify-between bg-background/80 backdrop-blur-lg border border-border shadow-artistic rounded-2xl px-6 py-4 md:px-12 md:py-6 transition-all duration-300">
+                    <motion.div
+                        className="absolute inset-0 pointer-events-none"
+                        animate={{ x: cursorPos.x / 20, y: cursorPos.y / 20 }}
+                        transition={{ type: "spring", stiffness: 80, damping: 30 }}
+                    >
+                        <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-primary/10 blur-3xl" />
+                    </motion.div>
 
-
-                    {/* Desktop Navigation */}
-                    <div className="hidden md:flex items-center space-x-8">
-                        {navItems.map((item) => (
-                            <a
+                    <div className="hidden md:flex items-center space-x-12">
+                        {leftNav.map((item) => (
+                            <Link
                                 key={item.name}
-                                href={item.href}
-                                className="font-inter font-medium text-foreground hover:text-primary transition-colors duration-200"
+                                href={getHref(item.hash)}
+                                className="relative font-playfair text-lg font-semibold text-foreground"
                             >
                                 {item.name}
-                            </a>
+                            </Link>
                         ))}
                     </div>
 
-                    {/* Mobile Menu Button */}
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className="md:hidden"
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                    >
-                        <div className="w-6 h-6 flex flex-col justify-center">
-                            <span
-                                className={`block h-0.5 w-6 bg-foreground transition-all duration-300 ${isMenuOpen ? "rotate-45 translate-y-1" : ""
-                                    }`}
-                            />
-                            <span
-                                className={`block h-0.5 w-6 bg-foreground mt-1 transition-all duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-1" : ""
-                                    }`}
-                            />
-                        </div>
-                    </Button>
-                </div>
+                    <Link href="/" className="mx-8">
+                        <motion.div
+                            className="text-2xl md:text-3xl font-playfair font-bold text-primary tracking-wide"
+                            whileHover={{ scale: 1.05 }}
+                            transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                        >
+                            AMA
+                        </motion.div>
+                    </Link>
 
-                {/* Mobile Menu */}
-                {isMenuOpen && (
-                    <div className="md:hidden mt-4 pb-4 border-t border-border">
-                        <div className="flex flex-col space-y-4 pt-4">
-                            {navItems.map((item) => (
-                                <a
-                                    key={item.name}
-                                    href={item.href}
-                                    className="font-inter font-medium text-foreground hover:text-primary transition-colors duration-200"
-                                    onClick={() => setIsMenuOpen(false)}
-                                >
-                                    {item.name}
-                                </a>
-                            ))}
-                        </div>
+                    <div className="hidden md:flex items-center space-x-12">
+                        {rightNav.map((item) => (
+                            <Link
+                                key={item.name}
+                                href={getHref(item.hash)}
+                                className="relative font-playfair text-lg font-semibold text-foreground"
+                            >
+                                {item.name}
+                            </Link>
+                        ))}
                     </div>
+
+                    {/* --- Mobile Dock --- */}
+                    <div className="flex md:hidden items-center justify-between w-full space-x-4">
+                        {navItems.slice(0, 3).map((item) => (
+                            <Link
+                                key={item.name}
+                                href={getHref(item.hash)}
+                                className="flex flex-col items-center text-foreground hover:text-primary transition-colors"
+                            >
+                                {item.icon}
+                                <span className="text-xs">{item.name}</span>
+                            </Link>
+                        ))}
+
+                        <Button
+                            size="icon"
+                            variant="outline"
+                            className="rounded-full border-primary text-primary hover:bg-primary hover:text-primary-foreground transition"
+                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        >
+                            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                        </Button>
+                    </div>
+                </div>
+            </nav>
+
+            <AnimatePresence>
+                {isMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-background/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center space-y-12"
+                    >
+                        {navItems.map((item, i) => (
+                            <Link
+                                key={item.name}
+                                href={getHref(item.hash)}
+                                className="text-3xl font-playfair font-bold text-foreground hover:text-primary transition"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                {item.name}
+                            </Link>
+                        ))}
+                    </motion.div>
                 )}
-            </div>
-        </nav>
+            </AnimatePresence>
+        </>
     );
 };
 

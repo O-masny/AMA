@@ -11,6 +11,7 @@ import Footer from "@/components/Widgets/Footer";
 import Gallery from "@/components/Widgets/Gallery";
 import Hero from "@/components/Widgets/Hero";
 import Navigation from "@/components/Widgets/Nav";
+import LoadingProvider from "./loading_provider";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -63,35 +64,40 @@ export const Index = ({ featuredArtworks }: IndexProps) => {
     }, []);
 
     return (
-        <div className="relative min-h-screen">
-            {/* Sticky animované pozadí */}
-            <div
-                ref={bgRef}
-                className="fixed inset-0 w-full h-full z-0 pointer-events-none"
-            >
-                <svg viewBox="0 0 600 600" className="w-full h-full">
-                    <g className="flower" fill="none" strokeWidth={2}>
-                        <path stroke="purple" d="M300,300 C350,250 400,350 300,300" />
-                        <path stroke="pink" d="M300,300 C250,350 350,400 300,300" />
-                        <path stroke="red" d="M300,300 C280,200 320,400 300,300" />
-                        {/* Přidej víc path pro komplexní efekt */}
-                    </g>
-                </svg>
+        <LoadingProvider>
 
 
+            <div className="relative min-h-screen">
+                {/* Sticky animované pozadí */}
+                <div
+                    ref={bgRef}
+                    className="fixed inset-0 w-full h-full z-0 pointer-events-none"
+                >
+                    <svg viewBox="0 0 600 600" className="w-full h-full">
+                        <g className="flower" fill="none" strokeWidth={2}>
+                            <path stroke="purple" d="M300,300 C350,250 400,350 300,300" />
+                            <path stroke="pink" d="M300,300 C250,350 350,400 300,300" />
+                            <path stroke="red" d="M300,300 C280,200 320,400 300,300" />
+                            {/* Přidej víc path pro komplexní efekt */}
+                        </g>
+                    </svg>
+
+
+                </div>
+
+                {/* Obsah nad pozadím */}
+                <Navigation />
+                <main className="relative z-20">
+                    <Hero />
+                    <Gallery featuredArtworks={featuredArtworks} />
+                    <Exhibitions />
+                    <About />
+                    <Contact />
+                </main>
+                <Footer />
             </div>
+        </LoadingProvider>
 
-            {/* Obsah nad pozadím */}
-            <Navigation />
-            <main className="relative z-20">
-                <Hero />
-                <Gallery featuredArtworks={featuredArtworks} />
-                <Exhibitions />
-                <About />
-                <Contact />
-            </main>
-            <Footer />
-        </div>
     );
 };
 
