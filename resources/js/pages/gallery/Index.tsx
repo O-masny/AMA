@@ -1,7 +1,7 @@
 import { Artwork } from "@/components/data/artworks";
 import Footer from "@/components/Widgets/Footer";
 import FeaturedArtworks from "@/components/Widgets/Gallery/FeatureArtworks";
-import CategoryFilter from "@/components/Widgets/Gallery/filter";
+import CategoryFilter from "@/components/Widgets/Gallery/Filter";
 import GalleryGrid from "@/components/Widgets/Gallery/GalleryGrid";
 import Navigation from "@/components/Widgets/Nav";
 import { usePage } from "@inertiajs/react";
