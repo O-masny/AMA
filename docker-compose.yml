@@ -42,7 +42,7 @@ services:
     restart: unless-stopped
     command: >
       sh -c "php artisan optimize:clear &&
-             php-fpm"
+            php-fpm -F"
 
   node:
     image: node:20-alpine
