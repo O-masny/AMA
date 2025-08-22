@@ -60,7 +60,7 @@ fi
 
 # ---- Frontend build (vždy bezpečně) ----
 info "Build frontend..."
-docker compose run --rm node sh -c "npm ci && npm run build"
+docker compose run -T --rm node sh -c "npm ci && npm run build"
 success "Frontend build hotov"
 
 # ---- Test dostupnosti (externí URL) ----
