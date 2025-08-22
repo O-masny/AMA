@@ -9,13 +9,18 @@ interface GalleryProps {
 
 const Gallery = ({ featuredArtworks }: GalleryProps) => {
     return (
-        <section id="gallery" className="py-32 bg-gradient-subtle">
-            <div className="max-w-7xl mx-auto px-6">
+        <section id="gallery" className="">
+            <div className="w-full mx-auto py-16">
                 <ScrollReveal>
-                    <div className="text-center mb-20">
-                        <h2 className="text-display font-playfair font-bold text-primary mb-6">
-                            Galerie
+                    <div className="px-6 md:px-10 pt-16 pb-24 md:pt-24">
+                        <h2 className="font-playfair font-extrabold leading-none
+                       text-[14vw] md:text-[12vw] xl:text-[10vw]
+                       text-foreground line-through decoration-primary decoration-[2px]">
+                            GALLERY
                         </h2>
+                    </div>
+                    <div className="text-center mb-20">
+
                         <p className="text-xl font-inter text-muted-foreground max-w-2xl mx-auto mb-8">
                             Kolekce děl zachycující různé období a styly mé tvorby
                         </p>

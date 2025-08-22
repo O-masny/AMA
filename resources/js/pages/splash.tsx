@@ -1,88 +1,163 @@
 "use client";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
-gsap.registerPlugin(ScrollTrigger);
+export type SplashScreenProps = {
+    onComplete?: () => void;
+    logoText?: string;
+    bgColor?: string; // pozadí celé sekce
+    accent?: string; // barva expand vrstvy
+    logoColor?: string; // počáteční barva loga
+    logoTargetColor?: string; // cílová barva loga
+};
 
-export const SplashScreen = () => {
-    const containerRef = useRef<HTMLDivElement>(null);
+const SplashScreen: React.FC<SplashScreenProps> = ({
+    onComplete,
+    logoText = "LOGO",
+    bgColor = "#191919",
+    accent = "#f5d300",
+    logoColor = "#ffffff",
+    logoTargetColor = "#292929",
+}) => {
+    const rootRef = useRef<HTMLDivElement>(null);
+    const layerMinRef = useRef<HTMLDivElement>(null);
+    const layerExpRef = useRef<HTMLDivElement>(null);
+    const logoRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
+        const root = rootRef.current;
+        const min = layerMinRef.current;
+        const exp = layerExpRef.current;
+        const logo = logoRef.current;
+        if (!root || !min || !exp || !logo) return;
 
-        // 1️⃣ Animace abstraktního pozadí (květiny)
-        const flowers = container.querySelectorAll<SVGPathElement>(".flower path");
-        if (flowers.length) {
-            gsap.fromTo(
-                flowers,
-                { strokeDashoffset: 1000, opacity: 0 },
-                {
-                    strokeDashoffset: 0,
-                    opacity: 1,
-                    duration: 2,
-                    stagger: 0.2,
-                    repeat: -1,
-                    yoyo: true,
-                    ease: "power2.inOut",
-                }
-            );
-        }
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const prevOverflow = document.documentElement.style.overflow;
+        document.documentElement.style.overflow = "hidden";
 
-        // 2️⃣ Animace sekcí při scrollu
-        const sections = container.querySelectorAll<HTMLElement>(".section");
-        sections.forEach((section) => {
-            gsap.fromTo(
-                section,
-                { opacity: 0, y: 100 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    duration: 1,
-                    scrollTrigger: {
-                        trigger: section,
-                        start: "top 80%",
-                        end: "bottom top",
-                        toggleActions: "play none none reverse",
+        const ctx = gsap.context(() => {
+            gsap.set(root, { opacity: 1 });
+            gsap.set(logo, { opacity: 1, color: logoColor });
+            gsap.set(min, {
+                opacity: 1,
+                backgroundColor: accent,
+                clipPath: "polygon(0 0, 100vw 0, 100vw 100vh, 0 100vh)",
+            });
+            gsap.set(exp, {
+                opacity: 1,
+                backgroundColor: accent,
+                clipPath: "polygon(45vw 40vh, 55vw 40vh, 55vw 60vh, 45vw 60vh)",
+            });
+
+            if (prefersReduced) {
+                gsap.set(min, { opacity: 0 });
+                gsap.set(exp, {
+                    clipPath: "polygon(0 0, 100vw 0, 100vw 100vh, 0 100vh)",
+                    backgroundColor: accent,
+                });
+                document.documentElement.style.overflow = prevOverflow;
+                onComplete?.();
+                return;
+            }
+
+            const tl = gsap.timeline({
+                defaults: { ease: "power2.inOut" },
+                onComplete: () => {
+                    document.documentElement.style.overflow = prevOverflow;
+                    onComplete?.();
+                },
+            });
+
+            // 1) Shrink/minimize
+            tl.addLabel("minStart", 1.0)
+                .to(
+                    min,
+                    {
+                        clipPath: "polygon(45vw 40vh, 55vw 40vh, 55vw 60vh, 45vw 60vh)",
+                        duration: 0.2,
+                        ease: "power1.out",
                     },
-                }
+                    "minStart"
+                )
+                .to(min, { opacity: 0, duration: 1.3, ease: "power1.out" }, "minStart+=0.2");
+
+            // 2) Logo → změní barvu, ale už nezmizí!
+            tl.addLabel("logoColor", 1.5).to(
+                logo,
+                { color: logoTargetColor, duration: 0.3, ease: "power1.in" },
+                "logoColor"
             );
-        });
-    }, []);
+
+            // 3) Expand vrstva
+            tl.addLabel("expand", 2.7).to(
+                exp,
+                {
+                    keyframes: [
+                        {
+                            clipPath: "polygon(0 0, 55vw 40vh, 55vw 60vh, 45vw 60vh)",
+                            backgroundColor: "#ffffff",
+                            duration: 0.7 * 0.25,
+                        },
+                        {
+                            clipPath: "polygon(0 0, 100vw 0, 55vw 60vh, 45vw 60vh)",
+                            backgroundColor: accent,
+                            duration: 0.7 * 0.25,
+                        },
+                        {
+                            clipPath: "polygon(0 0, 100vw 0, 55vw 60vh, 0 100vh)",
+                            backgroundColor: "#ffffff",
+                            duration: 0.7 * 0.25,
+                        },
+                        {
+                            clipPath: "polygon(0 0, 100vw 0, 100vw 100vh, 0 100vh)",
+                            backgroundColor: accent,
+                            duration: 0.7 * 0.25,
+                        },
+                    ],
+                    ease: "none",
+                },
+                "expand"
+            );
+
+            // 4) Final fullscreen
+            tl.to(
+                exp,
+                {
+                    clipPath: "polygon(0 0, 100vw 0, 100vw 100vh, 0 100vh)",
+                    backgroundColor: accent,
+                    duration: 0.6,
+                },
+                3.7
+            );
+        }, root);
+
+        return () => {
+            ctx.revert();
+            document.documentElement.style.overflow = prevOverflow;
+        };
+    }, [onComplete, accent, logoColor, logoTargetColor]);
 
     return (
-        <div ref={containerRef} className="relative w-full h-full">
-            {/* 🌸 Animované pozadí */}
-            <svg
-                className="absolute inset-0 w-full h-full pointer-events-none"
-                viewBox="0 0 600 600"
+        <section
+            ref={rootRef}
+            className="relative w-full h-screen flex items-center justify-center z-10"
+            style={{ backgroundColor: bgColor }}
+        >
+            {/* LOGO – zůstává i po animaci */}
+            <div
+                ref={logoRef}
+                className="text-3xl md:text-5xl font-semibold tracking-wide relative z-50"
+                style={{ color: logoColor }}
             >
-                <g className="flower" fill="none" strokeWidth={2}>
-                    <path stroke="purple" d="M300,300 C350,250 400,350 300,300" />
-                    <path stroke="pink" d="M300,300 C250,350 350,400 300,300" />
-                    <path stroke="red" d="M300,300 C280,200 320,400 300,300" />
-                    {/* Přidejte více path pro složitější efekt */}
-                </g>
-            </svg>
-
-            {/* ✨ Splash screen text */}
-            <h1 className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-8xl font-[adelia] text-white z-20">
-                adela masna
-            </h1>
-
-            {/* 📄 Obsahové sekce */}
-            <div className="relative z-10">
-                <section className="section min-h-screen flex items-center justify-center text-white text-4xl">
-                    Sekce 1
-                </section>
-                <section className="section min-h-screen flex items-center justify-center text-white text-4xl">
-                    Sekce 2
-                </section>
-                <section className="section min-h-screen flex items-center justify-center text-white text-4xl">
-                    Sekce 3
-                </section>
+                {logoText}
+                <span className="absolute left-1/2 -translate-x-1/2 -bottom-2 w-8 h-px bg-neutral-500" />
+                <span className="absolute left-1/2 -translate-x-1/2 -top-2 w-8 h-px bg-neutral-500" />
             </div>
-        </div>
+
+            <div ref={layerMinRef} className="absolute inset-0 z-10" />
+            <div ref={layerExpRef} className="absolute inset-0 z-20" />
+        </section>
     );
 };
+
+export default SplashScreen;

@@ -12,7 +12,7 @@ import Gallery from "@/components/Widgets/Gallery";
 import Hero from "@/components/Widgets/Hero";
 import Navigation from "@/components/Widgets/Nav";
 import LoadingProvider from "./loading_provider";
-
+import SplashScreen from "./splash";
 gsap.registerPlugin(ScrollTrigger);
 
 interface IndexProps {
@@ -65,7 +65,8 @@ export const Index = ({ featuredArtworks }: IndexProps) => {
 
     return (
         <LoadingProvider>
-
+            {/* SplashScreen přidaný před obsahem */}
+            <SplashScreen />
 
             <div className="relative min-h-screen">
                 {/* Sticky animované pozadí */}
@@ -78,11 +79,8 @@ export const Index = ({ featuredArtworks }: IndexProps) => {
                             <path stroke="purple" d="M300,300 C350,250 400,350 300,300" />
                             <path stroke="pink" d="M300,300 C250,350 350,400 300,300" />
                             <path stroke="red" d="M300,300 C280,200 320,400 300,300" />
-                            {/* Přidej víc path pro komplexní efekt */}
                         </g>
                     </svg>
-
-
                 </div>
 
                 {/* Obsah nad pozadím */}
@@ -97,7 +95,6 @@ export const Index = ({ featuredArtworks }: IndexProps) => {
                 <Footer />
             </div>
         </LoadingProvider>
-
     );
 };
 
