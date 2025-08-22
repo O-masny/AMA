@@ -29,8 +29,14 @@ else
   warn "Adresář není git repozitář. Git kontrola přeskočena."
 fi
 
-# ---- Docker build (cache-friendly) ----
-info "Builduji Docker image (cache-friendly)..."
+# ---- Frontend build přímo na host VPS ----
+info "Build frontend přímo na VPS..."
+npm ci
+npm run build
+success "Frontend build hotov"
+
+# ---- Docker build backendu ----
+info "Builduji Docker image backendu..."
 docker compose -f docker-compose.yml build app
 success "Docker image připraven"
 
@@ -57,11 +63,6 @@ if [ -n "$PENDING" ]; then
 else
   info "Žádné nové migrace, přeskočeno"
 fi
-
-# ---- Frontend build (vždy bezpečně) ----
-info "Build frontend..."
-docker compose run -T --rm node sh -c "npm ci && npm run build"
-success "Frontend build hotov"
 
 # ---- Test dostupnosti (externí URL) ----
 APP_URL=$(grep -E '^APP_URL=' .env.production | cut -d '=' -f2)
