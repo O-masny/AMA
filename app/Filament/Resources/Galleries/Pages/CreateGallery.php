@@ -8,6 +8,7 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Encoders\WebpEncoder;
 
 class CreateGallery extends CreateRecord
 {
@@ -52,7 +53,8 @@ class CreateGallery extends CreateRecord
             //     $constraint->upsize();
             // });
 
-            $image->encode('webp', 90)->save($webpPath);
+            $image->encode(new WebpEncoder(quality: 90))
+                ->save($webpPath);
             error_log("✅ Obrázek uložen jako WebP: {$webpPath}");
 
             // Smažeme původní soubor až po úspěšném uložení WebP
