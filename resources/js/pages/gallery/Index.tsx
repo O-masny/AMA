@@ -14,7 +14,7 @@ import LoadingProvider from "../loading_provider";
 
 interface PageProps {
     artworks: Artwork[];
-    categories: string[];
+    categories?: string[] | null; // ← povolíme null i undefined
     [key: string]: any;
 }
 
@@ -40,7 +40,7 @@ const Index: React.FC = () => {
                 <HeroSection artworks={artworks} />
 
                 {/* IMMERSIVE SCROLL SECTIONS */}
-                {artworks.slice(0, 4).map((art, i) => (
+                {artworks.slice(0, 4).map((art) => (
                     <section
                         key={art.id}
                         className="h-screen relative flex items-center justify-center overflow-hidden"
@@ -66,7 +66,7 @@ const Index: React.FC = () => {
 
                 {/* FILTER + GRID */}
                 <CategoryFilter
-                    categories={categories}
+                    categories={categories ?? []} // ← fallback na prázdné pole
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
                 />
