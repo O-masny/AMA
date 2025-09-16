@@ -12,6 +12,7 @@ use Brevo\Client\Api\TransactionalEmailsApi;
 use Brevo\Client\Configuration;
 use Brevo\Client\Model\SendSmtpEmail;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 class ContactMessage extends Mailable implements ShouldQueue
 {
@@ -26,7 +27,7 @@ class ContactMessage extends Mailable implements ShouldQueue
      */
     public function build(): self
     {
-        \Log::debug('ContactMessage: building email (Mailhog fallback)', [
+        Log::debug('ContactMessage: building email (Mailhog fallback)', [
             'env' => app()->environment(),
             'data' => $this->data,
         ]);
@@ -73,14 +74,14 @@ class ContactMessage extends Mailable implements ShouldQueue
 
             $result = $apiInstance->sendTransacEmail($sendSmtpEmail);
 
-            \Log::info('ContactMessage: Brevo mail sent', [
+            Log::info('ContactMessage: Brevo mail sent', [
                 'messageId' => method_exists($result, 'getMessageId') ? $result->getMessageId() : null,
                 'raw' => $result,
             ]);
 
             return true;
         } catch (\Throwable $e) {
-            \Log::error('ContactMessage: Brevo mail failed', [
+            Log::error('ContactMessage: Brevo mail failed', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
                 'data' => $this->data,
