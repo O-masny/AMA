@@ -23,7 +23,11 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
-
+    'brevo' => [
+        'dsn' => env('MAILER_DSN'),
+        'key' => env('BREVO_API_KEY'),
+        'template_id' => env('BREVO_TEMPLATE_ID'),
+    ],
     'resend' => [
         'key' => env('RESEND_KEY'),
     ],

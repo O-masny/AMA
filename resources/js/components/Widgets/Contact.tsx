@@ -1,224 +1,130 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { motion } from "framer-motion";
-import { Facebook, Instagram, Mail, MapPin, Phone } from "lucide-react";
-
-import { Variants, easeOut } from "framer-motion";
-
-const fadeUp: Variants = {
-    hidden: { opacity: 0, y: 40 },
-    visible: (custom: number = 1) => ({
-        opacity: 1,
-        y: 0,
-        transition: {
-            delay: custom * 0.2,
-            duration: 0.8,
-            ease: easeOut, // správný typ pro Easing
-        },
-    }),
-};
+import { motion, useMotionTemplate, useScroll, useTransform } from "framer-motion";
+import { Facebook, Instagram } from "lucide-react";
+import { useRef } from "react";
 
 const Contact = () => {
+    const ref = useRef<HTMLElement | null>(null);
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start start", "end end"],
+    });
+
+    // postupné zobrazení kroků
+    const step1 = useTransform(scrollYProgress, [0, 0.2, 0.3], [1, 1, 0]);
+    const step2 = useTransform(scrollYProgress, [0.3, 0.45, 0.55], [0, 1, 0]);
+    const step3 = useTransform(scrollYProgress, [0.55, 0.7, 0.8], [0, 1, 0]);
+    const formOpacity = useTransform(scrollYProgress, [0.8, 1], [0, 1]);
+
+    // hue shift pro pozadí
+    const hue = useTransform(scrollYProgress, [0, 1], [0, 90]);
+    const filter = useMotionTemplate`hue-rotate(${hue}deg)`;
+
     return (
-        <section id="contact" className="relative py-32 overflow-hidden">
-            {/* Animated Gradient Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-art-rose via-art-mint to-art-lavender opacity-20 animate-gradient-slow pointer-events-none"></div>
+        <section ref={ref} id="contact" className="relative h-[300vh]">
+            {/* Background blobs */}
+            <motion.div
+                className="absolute -top-20 -left-20 w-96 h-96 bg-art-rose/40 rounded-full blur-3xl"
+                style={{ filter }}
+            />
+            <motion.div
+                className="absolute top-40 right-0 w-[28rem] h-[28rem] bg-art-mint/30 rounded-full blur-3xl"
+                style={{ filter }}
+            />
 
-            <div className="px-6 md:px-10 pt-16 pb-24 md:pt-24 relative z-10">
-                {/* Large Stylized Heading */}
-                <motion.h2
-                    initial={{ opacity: 0, x: -150 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 1 }}
-                    className="font-playfair font-extrabold leading-none
-                     text-[14vw] md:text-[12vw] xl:text-[10vw]
-                     text-foreground line-through decoration-primary decoration-[2px]">
-                    CONTACT
-                </motion.h2>
-            </div>
+            <div className="sticky top-0 h-screen relative">
+                {/* Step 1 */}
+                <motion.div
+                    style={{ opacity: step1 }}
+                    className="absolute inset-0 flex flex-col items-center justify-center text-center space-y-4"
+                >
+                    <h3 className="font-playfair text-6xl md:text-7xl font-extrabold text-primary">
+                        Email
+                    </h3>
+                    <p className="text-lg md:text-xl text-muted-foreground">
+                        atelier@example.com
+                    </p>
+                </motion.div>
 
-            <div className="max-w-7xl mx-auto px-6">
-                {/* Intro Text */}
-                <div className="text-center mb-20">
-                    <motion.h2
-                        initial="hidden"
-                        whileInView="visible"
-                        variants={fadeUp}
-                        className="text-display font-playfair font-bold text-primary mb-6">
-                        Kontakt
-                    </motion.h2>
-                    <motion.p
-                        initial="hidden"
-                        whileInView="visible"
-                        variants={fadeUp}
-                        className="text-xl font-inter text-muted-foreground max-w-2xl mx-auto">
-                        Pojďme spolu vytvořit něco krásného. Kontaktujte mě pro zakázky,
-                        výstavy nebo jen tak pro umělecký rozhovor.
-                    </motion.p>
-                </div>
+                {/* Step 2 */}
+                <motion.div
+                    style={{ opacity: step2 }}
+                    className="absolute inset-0 flex flex-col items-center justify-center text-center space-y-4"
+                >
+                    <h3 className="font-playfair text-6xl md:text-7xl font-extrabold text-primary">
+                        Telefon
+                    </h3>
+                    <p className="text-lg md:text-xl text-muted-foreground">
+                        +420 123 456 789
+                    </p>
+                </motion.div>
 
-                <div className="magazine-layout gap-16">
-                    {/* Left Contact Info */}
-                    <motion.div
-                        initial="hidden"
-                        whileInView="visible"
-                        className="col-span-12 lg:col-span-5 space-y-8">
-                        <motion.div custom={1} variants={fadeUp}>
-                            <h3 className="font-playfair font-bold text-2xl text-foreground mb-6">
-                                Spojme se
-                            </h3>
-                            <div className="space-y-6">
-                                {/* Email */}
-                                <motion.div
-                                    whileHover={{ scale: 1.03 }}
-                                    className="flex items-start gap-4">
-                                    <div className="w-12 h-12 bg-art-rose rounded-xl flex items-center justify-center flex-shrink-0">
-                                        <Mail className="w-5 h-5 text-foreground" />
-                                    </div>
-                                    <div>
-                                        <div className="font-inter font-medium text-foreground">Email</div>
-                                        <a href="mailto:atelier@example.com" className="font-inter text-muted-foreground hover:text-primary transition-colors">
-                                            atelier@example.com
-                                        </a>
-                                    </div>
-                                </motion.div>
+                {/* Step 3 */}
+                <motion.div
+                    style={{ opacity: step3 }}
+                    className="absolute inset-0 flex flex-col items-center justify-center text-center space-y-4"
+                >
+                    <h3 className="font-playfair text-6xl md:text-7xl font-extrabold text-primary">
+                        Ateliér
+                    </h3>
+                    <p className="text-lg md:text-xl text-muted-foreground">
+                        Umělecká čtvrť, Praha 7
+                    </p>
+                    <div className="flex gap-4 pt-6">
+                        <Button variant="outline" size="icon" className="rounded-full">
+                            <Instagram className="w-5 h-5" />
+                        </Button>
+                        <Button variant="outline" size="icon" className="rounded-full">
+                            <Facebook className="w-5 h-5" />
+                        </Button>
+                    </div>
+                </motion.div>
 
-                                {/* Phone */}
-                                <motion.div
-                                    whileHover={{ scale: 1.03 }}
-                                    className="flex items-start gap-4">
-                                    <div className="w-12 h-12 bg-art-lavender rounded-xl flex items-center justify-center flex-shrink-0">
-                                        <Phone className="w-5 h-5 text-foreground" />
-                                    </div>
-                                    <div>
-                                        <div className="font-inter font-medium text-foreground">Telefon</div>
-                                        <a href="tel:+420123456789" className="font-inter text-muted-foreground hover:text-primary transition-colors">
-                                            +420 123 456 789
-                                        </a>
-                                    </div>
-                                </motion.div>
-
-                                {/* Address */}
-                                <motion.div
-                                    whileHover={{ scale: 1.03 }}
-                                    className="flex items-start gap-4">
-                                    <div className="w-12 h-12 bg-art-mint rounded-xl flex items-center justify-center flex-shrink-0">
-                                        <MapPin className="w-5 h-5 text-foreground" />
-                                    </div>
-                                    <div>
-                                        <div className="font-inter font-medium text-foreground">Ateliér</div>
-                                        <div className="font-inter text-muted-foreground">
-                                            Umělecká čtvrť<br />
-                                            Praha 7, Česká republika
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            </div>
+                {/* Form as final step */}
+                {/* Form as final step */}
+                <motion.div
+                    style={{ opacity: formOpacity }}
+                    className="absolute inset-0 flex flex-col items-center justify-center px-6"
+                >
+                    <h3 className="font-playfair font-extrabold text-5xl md:text-7xl text-center text-foreground mb-12">
+                        Napište mi
+                    </h3>
+                    <form className="w-full max-w-3xl space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <Input
+                                placeholder="Jméno"
+                                className="rounded-xl bg-white/10 border border-white/20 focus:ring-2 focus:ring-primary/50 text-lg py-4"
+                            />
+                            <Input
+                                type="email"
+                                placeholder="Email"
+                                className="rounded-xl bg-white/10 border border-white/20 focus:ring-2 focus:ring-primary/50 text-lg py-4"
+                            />
+                        </div>
+                        <Input
+                            placeholder="Předmět"
+                            className="rounded-xl bg-white/10 border border-white/20 focus:ring-2 focus:ring-primary/50 text-lg py-4"
+                        />
+                        <Textarea
+                            rows={8}
+                            placeholder="Vaše zpráva..."
+                            className="rounded-xl bg-white/10 border border-white/20 focus:ring-2 focus:ring-primary/50 text-lg resize-none py-4"
+                        />
+                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
+                            <Button className="w-full rounded-full bg-gradient-to-r from-primary to-art-rose text-white font-semibold py-6 text-xl shadow-lg hover:shadow-xl transition-all">
+                                Odeslat zprávu
+                            </Button>
                         </motion.div>
+                    </form>
+                </motion.div>
 
-                        {/* Social Media */}
-                        <motion.div custom={2} variants={fadeUp}>
-                            <h4 className="font-playfair font-bold text-xl text-foreground mb-4">
-                                Sledujte mě
-                            </h4>
-                            <div className="flex gap-4">
-                                <Button variant="outline" size="icon" className="rounded-full border-art-rose hover:bg-art-rose transition-all duration-300">
-                                    <Instagram className="w-5 h-5" />
-                                </Button>
-                                <Button variant="outline" size="icon" className="rounded-full border-art-lavender hover:bg-art-lavender transition-all duration-300">
-                                    <Facebook className="w-5 h-5" />
-                                </Button>
-                            </div>
-                        </motion.div>
-
-                        {/* Atelier Card */}
-                        <motion.div custom={3} variants={fadeUp}>
-                            <Card className="p-6 border-0 bg-gradient-artistic hover:shadow-2xl transition-shadow duration-500">
-                                <h4 className="font-playfair font-bold text-lg text-foreground mb-4">
-                                    Ateliér - návštěvy
-                                </h4>
-                                <div className="space-y-2 font-inter text-sm">
-                                    <div className="flex justify-between">
-                                        <span className="text-foreground">Po předchozí domluvě</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-foreground">Sobota</span>
-                                        <span className="text-muted-foreground">10:00 - 16:00</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-foreground">Neděle</span>
-                                        <span className="text-muted-foreground">Zavřeno</span>
-                                    </div>
-                                </div>
-                            </Card>
-                        </motion.div>
-                    </motion.div>
-
-                    {/* Right Contact Form */}
-                    <motion.div initial="hidden" whileInView="visible" className="col-span-12 lg:col-span-7">
-                        <Card className="p-8 border-0 shadow-artistic hover:shadow-2xl transition-shadow duration-500">
-                            <h3 className="font-playfair font-bold text-2xl text-foreground mb-6">
-                                Napište mi
-                            </h3>
-                            <form className="space-y-6">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label className="block font-inter font-medium text-foreground mb-2">
-                                            Jméno
-                                        </label>
-                                        <Input
-                                            placeholder="Vaše jméno"
-                                            className="border-border focus:ring-primary transition-all duration-300"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block font-inter font-medium text-foreground mb-2">
-                                            Email
-                                        </label>
-                                        <Input
-                                            type="email"
-                                            placeholder="vas@email.com"
-                                            className="border-border focus:ring-primary transition-all duration-300"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="block font-inter font-medium text-foreground mb-2">
-                                        Předmět
-                                    </label>
-                                    <Input
-                                        placeholder="Čeho se dotaz týká?"
-                                        className="border-border focus:ring-primary transition-all duration-300"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block font-inter font-medium text-foreground mb-2">
-                                        Zpráva
-                                    </label>
-                                    <Textarea
-                                        placeholder="Vaše zpráva..."
-                                        rows={6}
-                                        className="border-border focus:ring-primary resize-none transition-all duration-300"
-                                    />
-                                </div>
-
-                                <Button
-                                    type="submit"
-                                    size="lg"
-                                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-inter font-medium rounded-full transition-all duration-300"
-                                >
-                                    Odeslat zprávu
-                                </Button>
-                            </form>
-                        </Card>
-                    </motion.div>
-                </div>
             </div>
         </section>
+
     );
 };
 

@@ -1,91 +1,110 @@
-import { Artwork } from "@/components/data/artworks"; // typ pro TS
-import { Card } from "@/components/ui/card";
-import { FadeInStagger, ScrollReveal } from "@/components/Widgets/ScrollAnimations";
-import { Link } from "@inertiajs/react";
+"use client";
+
+import { Artwork } from "@/components/data/artworks";
+import { Button } from "@/components/ui/button";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 interface GalleryProps {
     featuredArtworks: Artwork[];
 }
 
 const Gallery = ({ featuredArtworks }: GalleryProps) => {
+    const ref = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start start", "end end"],
+    });
+
+    // Intro fade
+    const introOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
+
+    // CTA fade
+    const ctaOpacity = useTransform(scrollYProgress, [0.75, 0.95], [0, 1]);
+    const ctaScale = useTransform(scrollYProgress, [0.75, 0.95], [0.9, 1]);
+
     return (
-        <section id="gallery" className="">
-            <div className="w-full mx-auto py-16">
-                <ScrollReveal>
-                    <div className="px-6 md:px-10 pt-16 pb-24 md:pt-24">
-                        <h2 className="font-playfair font-extrabold leading-none
-                       text-[14vw] md:text-[12vw] xl:text-[10vw]
-                       text-foreground line-through decoration-primary decoration-[2px]">
-                            GALLERY
-                        </h2>
-                    </div>
-                    <div className="text-center mb-20">
+        <section ref={ref} id="gallery" className="relative h-[600vh] bg-background">
+            <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
+                {/* INTRO */}
+                <motion.div
+                    style={{ opacity: introOpacity }}
+                    className="absolute inset-0 flex flex-col items-center justify-center text-center"
+                >
+                    <h2 className="font-playfair font-extrabold text-[12vw] md:text-[8vw] text-foreground tracking-tight">
+                        GALLERY
+                    </h2>
+                    <p className="mt-6 text-lg md:text-xl max-w-xl text-muted-foreground">
+                        Kolekce děl zachycující různé období a styly mé tvorby
+                    </p>
+                </motion.div>
 
-                        <p className="text-xl font-inter text-muted-foreground max-w-2xl mx-auto mb-8">
-                            Kolekce děl zachycující různé období a styly mé tvorby
-                        </p>
-                        <Link
-                            href="/gallery"
-                            className="inline-block bg-primary hover:bg-primary/90 text-primary-foreground font-inter font-medium px-8 py-4 text-lg rounded-full transition-all duration-300 hover:scale-105"
-                        >
-                            Zobrazit celou galerii
-                        </Link>
-                    </div>
-                </ScrollReveal>
+                {/* IMAGE SEQUENCE */}
+                <div className="relative w-full h-full">
+                    {featuredArtworks.slice(0, 4).map((artwork, i) => {
+                        // Vytvoříme individuální scroll interval pro každý obrázek
+                        const start = 0.2 + i * 0.15;
+                        const end = start + 0.25;
 
-                <FadeInStagger staggerDelay={0.15}>
-                    {[
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {featuredArtworks.map((artwork, index) => (
-                                <Link key={artwork.id} href={`/gallery/${artwork.id}`}>
-                                    <Card
-                                        className={`group overflow-hidden border-0 bg-card shadow-artistic hover:shadow-lg transition-all duration-500 cursor-pointer ${index % 3 === 0
-                                            ? "lg:transform lg:translate-y-8"
-                                            : index % 3 === 1
-                                                ? "lg:transform lg:-translate-y-4"
-                                                : ""
-                                            }`}
-                                    >
-                                        <div className="relative overflow-hidden">
-                                            <img
-                                                src={`/storage/${artwork.image}`}
-                                                alt={artwork.title}
-                                                className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-700"
-                                            />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                            <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                <h3 className="font-playfair font-bold text-xl mb-1">
-                                                    {artwork.title}
-                                                </h3>
-                                                <p className="font-inter text-sm">{artwork.description}</p>
-                                            </div>
+                        const opacity = useTransform(
+                            scrollYProgress,
+                            [start, start + 0.05, end - 0.05, end],
+                            [0, 1, 1, 0]
+                        );
+                        const scale = useTransform(
+                            scrollYProgress,
+                            [start, end],
+                            [0.9, 1.1]
+                        );
+                        const y = useTransform(
+                            scrollYProgress,
+                            [start, end],
+                            [100, -100]
+                        );
+
+                        return (
+                            <motion.div
+                                key={artwork.id}
+                                style={{ opacity, scale, y }}
+                                className="absolute inset-0 flex items-center justify-center"
+                            >
+                                <div className="relative w-[70vw] md:w-[40vw] h-[70vh] rounded-3xl overflow-hidden shadow-2xl">
+                                    <img
+                                        src={`/storage/${artwork.image}`}
+                                        alt={artwork.title}
+                                        className="w-full h-full object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-8">
+                                        <div>
+                                            <h3 className="font-playfair font-bold text-3xl text-white mb-2">
+                                                {artwork.title}
+                                            </h3>
+                                            <p className="font-inter text-white/80">
+                                                {artwork.year} · {artwork.category}
+                                            </p>
                                         </div>
-                                        <div className="p-6">
-                                            <div className="flex justify-between items-start">
-                                                <div>
-                                                    <h3 className="font-playfair font-bold text-xl text-foreground mb-2">
-                                                        {artwork.title}
-                                                    </h3>
-                                                    <p className="font-inter text-muted-foreground text-sm mb-3">
-                                                        {artwork.description}
-                                                    </p>
-                                                </div>
-                                                <span className="bg-art-lavender text-foreground px-3 py-1 rounded-full text-xs font-inter font-medium">
-                                                    {artwork.year}
-                                                </span>
-                                            </div>
-                                            <div className="pt-3 border-t border-border">
-                                                <span className="text-primary font-inter font-medium text-sm">
-                                                    {artwork.category}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </Card>
-                                </Link>
-                            ))}
-                        </div>,
-                    ]}
-                </FadeInStagger>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
+                </div>
+
+                {/* CTA BLOCK */}
+                <motion.div
+                    style={{ opacity: ctaOpacity, scale: ctaScale }}
+                    className="absolute inset-0 flex flex-col items-center justify-center text-center bg-background"
+                >
+                    <h2 className="font-playfair font-extrabold text-[10vw] md:text-[6vw] text-foreground mb-6">
+                        Explore More
+                    </h2>
+                    <p className="mb-8 text-lg md:text-xl max-w-lg text-muted-foreground">
+                        Objev celou galerii s více než 50 originálními díly
+                    </p>
+                    <Button size="lg" asChild>
+                        <a href="/gallery">View Full Gallery</a>
+                    </Button>
+                </motion.div>
             </div>
         </section>
     );

@@ -10,34 +10,40 @@ const socialLinks = [
 
 const Footer = () => {
     return (
-        <footer className="bg-foreground text-background relative z-10 py-16">
-            <div className="max-w-7xl mx-auto px-6">
+        <footer className="relative z-10 py-24 bg-gradient-to-b from-foreground via-foreground/95 to-background overflow-hidden">
+            {/* subtle grain / texture */}
+            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay pointer-events-none" />
+
+            <div className="relative max-w-7xl mx-auto px-6">
                 {/* Branding */}
-                <div className="text-center mb-12">
+                <div className="text-center mb-16">
                     <motion.h2
-                        className="text-4xl md:text-5xl font-playfair font-bold mb-4"
+                        className="text-5xl md:text-6xl font-playfair font-bold tracking-widest mb-6 text-background"
                         initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
                     >
                         Ateliér AMA
                     </motion.h2>
                     <motion.p
-                        className="font-inter text-background/70 max-w-lg mx-auto text-lg md:text-xl"
+                        className="font-inter text-background/80 max-w-xl mx-auto text-lg md:text-xl italic"
                         initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 0.2 }}
                     >
-                        Umění, které mluví k srdci. Každé dílo je příběhem.
+                        Umění, které mluví k&nbsp;srdci. <span className="text-primary">Každé dílo je příběhem.</span>
                     </motion.p>
                 </div>
 
                 {/* Social Icons */}
                 <motion.div
-                    className="flex justify-center gap-6 mb-12"
+                    className="flex justify-center gap-6 mb-16"
                     initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.3 }}
                 >
                     {socialLinks.map((link, index) => (
                         <motion.a
@@ -45,8 +51,8 @@ const Footer = () => {
                             href={link.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-background/80 text-2xl md:text-3xl hover:text-primary transition-colors"
-                            whileHover={{ scale: 1.2, rotate: 10 }}
+                            className="w-12 h-12 flex items-center justify-center rounded-full border border-background/30 text-background/80 hover:text-primary hover:border-primary transition-colors"
+                            whileHover={{ scale: 1.15, rotate: 6 }}
                             whileTap={{ scale: 0.95 }}
                             transition={{ type: "spring", stiffness: 300 }}
                         >
@@ -58,9 +64,10 @@ const Footer = () => {
                 {/* Divider */}
                 <div className="border-t border-background/20 pt-6">
                     <motion.p
-                        className="font-inter text-sm text-background/60 text-center"
+                        className="font-inter text-sm text-background/60 text-center tracking-wide"
                         initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 0.6 }}
                     >
                         © 2024 Ateliér Adéla Masná Bočková. Všechna práva vyhrazena.

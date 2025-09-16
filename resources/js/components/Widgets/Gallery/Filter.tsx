@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "framer-motion";
 
 interface CategoryFilterProps {
@@ -6,28 +8,45 @@ interface CategoryFilterProps {
     setSelectedCategory: (category: string) => void;
 }
 
-const CategoryFilter: React.FC<CategoryFilterProps> = ({ categories, selectedCategory, setSelectedCategory }) => {
+const CategoryFilter: React.FC<CategoryFilterProps> = ({
+    categories,
+    selectedCategory,
+    setSelectedCategory,
+}) => {
     return (
-        <section className="py-16 bg-background/90">
+        <section className="py-8 bg-background/90 sticky top-0 z-30 backdrop-blur-sm">
             <div className="max-w-7xl mx-auto px-6">
-                <div className="flex flex-wrap justify-center gap-4 mb-16">
-                    {categories.map((category, index) => (
-                        <motion.button
-                            key={category}
-                            onClick={() => setSelectedCategory(category)}
-                            className={`px-8 py-4 rounded-full font-inter font-medium text-lg transition-all duration-500 ${selectedCategory === category
-                                    ? "bg-primary text-primary-foreground shadow-soft scale-110"
-                                    : "bg-card text-card-foreground hover:bg-art-rose hover:text-foreground hover:scale-105"
-                                }`}
-                            whileHover={{ y: -2 }}
-                            whileTap={{ scale: 0.95 }}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: index * 0.08 }}
-                        >
-                            {category}
-                        </motion.button>
-                    ))}
+                <div className="flex justify-center gap-4 overflow-x-auto scrollbar-hide">
+                    {categories.map((category, index) => {
+                        const isSelected = selectedCategory === category;
+                        return (
+                            <motion.button
+                                key={category}
+                                onClick={() => setSelectedCategory(category)}
+                                className={`relative px-6 py-3 rounded-full font-inter font-medium text-base md:text-lg transition-all duration-500 whitespace-nowrap
+                  ${isSelected
+                                        ? "text-primary-foreground"
+                                        : "text-card-foreground hover:text-foreground"
+                                    }`}
+                                whileHover={{ y: -2 }}
+                                whileTap={{ scale: 0.95 }}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: index * 0.08 }}
+                            >
+                                {category}
+
+                                {/* Highlight bubble (animated with layoutId) */}
+                                {isSelected && (
+                                    <motion.span
+                                        layoutId="activeCategory"
+                                        className="absolute inset-0 rounded-full bg-primary shadow-md -z-10"
+                                        transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
+                                    />
+                                )}
+                            </motion.button>
+                        );
+                    })}
                 </div>
             </div>
         </section>

@@ -3,7 +3,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Footer from "@/components/Widgets/Footer";
-import Navigation from "@/components/Widgets/Nav";
 import { ScrollReveal } from "@/components/Widgets/ScrollAnimations";
 import { Link, usePage } from "@inertiajs/react";
 import { motion } from "framer-motion";
@@ -49,10 +48,20 @@ const Show: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-background text-foreground font-sans">
-            <Navigation />
 
             {/* HERO */}
+            {/* HERO */}
             <section className="relative h-screen overflow-hidden">
+                {/* Back button */}
+                <button
+                    onClick={() => window.history.back()}
+                    // alternativně router.visit("/gallery") pokud chceš vždy zpět do galerie
+                    className="absolute top-6 left-6 z-30 flex items-center gap-2 px-4 py-2 bg-black/60 hover:bg-black/80 text-white rounded-full transition"
+                >
+                    <ArrowLeft className="w-4 h-4" />
+                    <span className="text-sm font-medium">Zpět</span>
+                </button>
+
                 <motion.div
                     className="absolute inset-0 bg-cover bg-center"
                     style={{
@@ -63,13 +72,20 @@ const Show: React.FC = () => {
                     }}
                 />
 
-                {showOverlay && <div className="absolute inset-0 bg-gradient-hero opacity-80 transition-opacity duration-700" />}
+                {showOverlay && (
+                    <div className="absolute inset-0 bg-gradient-hero opacity-80 transition-opacity duration-700" />
+                )}
 
+                {/* Overlay text */}
                 <div
                     className={`absolute inset-0 flex items-center justify-center text-center transition-opacity duration-700 ${showOverlay ? "opacity-100" : "opacity-0 pointer-events-none"
                         }`}
                 >
-                    <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
+                    <motion.div
+                        initial={{ opacity: 0, y: 40 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 1 }}
+                    >
                         <h1
                             className="text-6xl md:text-8xl font-playfair font-bold tracking-wide mb-6 text-primary-foreground"
                             style={{ transform: `translateY(${scrollY * -0.2}px)` }}
@@ -80,70 +96,99 @@ const Show: React.FC = () => {
                     </motion.div>
                 </div>
 
-                <button
-                    onClick={() => setShowOverlay(!showOverlay)}
-                    className="absolute bottom-6 right-6 p-3 bg-black/50 rounded-full text-white hover:bg-black/70 transition"
-                    aria-label="Přepnout overlay"
-                >
-                    {showOverlay ? <EyeOff className="w-6 h-6" /> : <Eye className="w-6 h-6" />}
-                </button>
+                {/* Bottom-center floating bar */}
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
+                    <button
+                        onClick={() => setShowOverlay(!showOverlay)}
+                        className="px-5 py-3 bg-black/60 rounded-full flex items-center gap-2 text-white hover:bg-black/80 transition"
+                        aria-label="Přepnout overlay"
+                    >
+                        {showOverlay ? (
+                            <>
+                                <EyeOff className="w-5 h-5" />
+                                <span className="text-sm">Skrýt overlay</span>
+                            </>
+                        ) : (
+                            <>
+                                <Eye className="w-5 h-5" />
+                                <span className="text-sm">Zobrazit overlay</span>
+                            </>
+                        )}
+                    </button>
+                </div>
             </section>
 
-            {/* CONTENT */}
-            <section className="pt-20 pb-20 relative overflow-hidden bg-gradient-subtle">
-                <div className="relative z-10 max-w-7xl mx-auto px-6">
-                    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-                        <Link href="/gallery">
-                            <Button variant="ghost" className="mb-8 hover:bg-accent transition-colors duration-300">
-                                <ArrowLeft className="w-4 h-4 mr-2" />
-                                Zpět do galerie
-                            </Button>
-                        </Link>
-                    </motion.div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* CONTENT */}
+            <section className="relative overflow-hidden bg-gradient-subtle py-32">
+                <div className="relative z-10 max-w-7xl mx-auto px-6">
+
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+                        {/* LEFT COLUMN */}
                         <motion.div
-                            initial={{ opacity: 0, x: 50 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 1, delay: 0.4 }}
-                            className="space-y-8"
+                            initial={{ opacity: 0, y: 40 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1 }}
+                            className="space-y-12"
                         >
+                            {/* Category + Title */}
                             <div>
-                                <Badge variant="outline" className="border-primary text-primary mb-4">
+                                <Badge variant="outline" className="border-primary text-primary mb-6 text-sm uppercase tracking-widest">
                                     {artwork.category}
                                 </Badge>
-                                <h1 className="text-display font-playfair font-bold text-primary mb-4 leading-tight">{artwork.title}</h1>
-                                <p className="text-xl font-inter text-muted-foreground leading-relaxed">{artwork.description}</p>
+                                <h1 className="text-6xl md:text-7xl font-playfair font-bold text-primary mb-8 leading-tight">
+                                    {artwork.title}
+                                </h1>
+                                <p className="text-xl font-inter text-muted-foreground leading-relaxed max-w-2xl italic">
+                                    {artwork.description}
+                                </p>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-6">
-                                <div>
-                                    <h3 className="font-playfair font-bold text-lg mb-2">Technika</h3>
-                                    <p className="text-muted-foreground">{artwork.technique}</p>
-                                </div>
-                                <div>
-                                    <h3 className="font-playfair font-bold text-lg mb-2">Rozměry</h3>
-                                    <p className="text-muted-foreground">{artwork.dimensions}</p>
-                                </div>
-                                <div>
-                                    <h3 className="font-playfair font-bold text-lg mb-2">Rok vzniku</h3>
-                                    <p className="text-muted-foreground">{artwork.year}</p>
-                                </div>
-                                <div>
-                                    <h3 className="font-playfair font-bold text-lg mb-2">Dostupnost</h3>
-                                    <p className={`font-medium ${artwork.available ? "text-green-600" : "text-red-600"}`}>
-                                        {artwork.available ? "Dostupné" : "Prodáno"}
-                                    </p>
-                                </div>
+                            {/* Info cards */}
+                            <div className="grid grid-cols-2 gap-8">
+                                {[
+                                    { label: "Technika", value: artwork.technique },
+                                    { label: "Rozměry", value: artwork.dimensions },
+                                    { label: "Rok vzniku", value: artwork.year },
+                                    {
+                                        label: "Dostupnost",
+                                        value: artwork.available ? "Dostupné" : "Prodáno",
+                                        color: artwork.available ? "text-green-600" : "text-red-600",
+                                    },
+                                ].map((info, idx) => (
+                                    <motion.div
+                                        key={info.label}
+                                        initial={{ opacity: 0, y: 30 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 0.8, delay: idx * 0.2 }}
+                                        className="p-6 bg-white/70 dark:bg-black/40 backdrop-blur-md rounded-2xl shadow-lg"
+                                    >
+                                        <h3 className="font-playfair font-bold text-lg mb-2">{info.label}</h3>
+                                        <p className={`text-muted-foreground font-inter ${info.color || ""}`}>
+                                            {info.value}
+                                        </p>
+                                    </motion.div>
+                                ))}
                             </div>
 
+                            {/* Price */}
                             {artwork.price && artwork.available && (
-                                <div className="p-6 bg-card rounded-lg shadow-artistic">
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    whileInView={{ opacity: 1, scale: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.6, delay: 0.8 }}
+                                    className="p-8 bg-gradient-to-r from-primary/90 to-primary rounded-2xl shadow-xl text-white"
+                                >
                                     <h3 className="font-playfair font-bold text-xl mb-2">Cena</h3>
-                                    <p className="font-bold text-2xl text-primary">{artwork.price}</p>
-                                </div>
+                                    <p className="font-bold text-3xl">{artwork.price}</p>
+                                </motion.div>
                             )}
 
+                            {/* Actions */}
                             <div className="flex gap-4">
                                 <Button size="lg" className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90">
                                     <Heart className="w-4 h-4 mr-2" />
@@ -157,6 +202,21 @@ const Show: React.FC = () => {
                                     <Share2 className="w-4 h-4" />
                                 </Button>
                             </div>
+                        </motion.div>
+
+                        {/* RIGHT COLUMN – Image accent */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, delay: 0.5 }}
+                            className="relative rounded-3xl overflow-hidden shadow-2xl"
+                        >
+                            <img
+                                src={`/storage/${artwork.image}`}
+                                alt={artwork.title}
+                                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                            />
                         </motion.div>
                     </div>
                 </div>

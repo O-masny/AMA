@@ -152,29 +152,36 @@ const Exhibitions = () => {
                                 y: isTouchDevice ? touchY : springY,
                             }}
                             className="fixed top-0 left-0 z-50"
-                            initial={{ opacity: 0, scale: 0.86 }}
+                            initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.86 }}
-                            transition={{ duration: 0.22 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: 0.25 }}
                         >
-                            <div
-                                className={`relative w-[24rem] md:w-[26rem] h-[30rem] md:h-[32rem] overflow-hidden
-                      bg-card border border-border shadow-2xl backdrop-blur-lg
-                      [clip-path:polygon(8%_0%,100%_0%,92%_100%,0%_100%)]
-                      ${!isTouchDevice ? "pointer-events-none" : ""}`}
+                            <motion.div
+                                className="relative w-[24rem] h-[30rem] overflow-hidden rounded-2xl shadow-2xl"
+                                whileHover={{ scale: 1.02 }}
                             >
-                                <div className="absolute -inset-px rounded-[2rem] opacity-70 mix-blend-screen
-            bg-[radial-gradient(120px_120px_at_20%_10%,hsl(var(--primary)/.35),transparent_60%),
-                radial-gradient(140px_140px_at_90%_90%,hsl(var(--accent)/.28),transparent_60%)]"
+                                <motion.img
+                                    src={a.image}
+                                    alt={a.title}
+                                    className="w-full h-full object-cover"
+                                    initial={{ scale: 1 }}
+                                    animate={{ scale: 1.1 }}
+                                    transition={{ duration: 5, repeat: Infinity, repeatType: "reverse" }}
                                 />
-                                <img src={a.image} alt={a.title} className="w-full h-full object-cover" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/45 to-transparent p-6 flex flex-col justify-end">
-                                    <h4 className="text-2xl md:text-3xl font-playfair font-bold text-foreground mb-2">{a.title}</h4>
-                                    <p className="text-sm md:text-base text-muted-foreground mb-1">{a.date}</p>
-                                    <p className="text-sm md:text-base text-muted-foreground mb-2">{a.gallery}, {a.location}</p>
-                                    <p className="text-sm md:text-base text-muted-foreground line-clamp-3">{a.description}</p>
+                                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent p-6 flex flex-col justify-end">
+                                    <motion.h4
+                                        className="text-2xl font-playfair font-bold mb-2"
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                    >
+                                        {a.title}
+                                    </motion.h4>
+                                    <p className="text-sm text-muted-foreground">{a.date}</p>
+                                    <p className="text-sm text-muted-foreground">{a.gallery}, {a.location}</p>
+                                    <p className="text-sm text-muted-foreground">{a.visitors} návštěvníků</p>
                                 </div>
-                            </div>
+                            </motion.div>
                         </motion.div>
                     </>
                 )}

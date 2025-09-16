@@ -1,16 +1,27 @@
+"use client";
+
 import { Artwork } from "@/components/data/artworks";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { FadeInStagger } from "@/components/Widgets/ScrollAnimations";
 import { Link } from "@inertiajs/react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 interface GalleryGridProps {
     artworks: Artwork[];
 }
 
-const hoverCardVariant = {
-    hover: { scale: 1.03, y: -6 },
+const cardVariants: Variants = {
+    hidden: (i: number) => ({
+        opacity: 0,
+        x: i % 2 === 0 ? -60 : 60,
+        y: 30,
+    }),
+    visible: (i: number) => ({
+        opacity: 1,
+        x: 0,
+        y: 0,
+        transition: { delay: i * 0.08, duration: 0.6, ease: "easeOut" },
+    }),
 };
 
 const GalleryGrid: React.FC<GalleryGridProps> = ({ artworks }) => {
@@ -21,45 +32,57 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({ artworks }) => {
                     Kompletní kolekce
                 </h2>
 
-                {/* FadeInStagger nyní přijímá i jednoho potomka */}
-                <FadeInStagger staggerDelay={0.1}>
-                    {/*
-                      Zabalíme jednotlivé cards přímo, protože FadeInStagger očekává pole,
-                      ale ReactNode je kompatibilní i s jediným elementem
-                    */}
-                    {artworks.map((artwork) => (
+                <motion.div
+                    layout
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10"
+                >
+                    {artworks.map((artwork, i) => (
                         <motion.div
                             key={artwork.id}
-                            variants={hoverCardVariant}
-                            whileHover="hover"
+                            layout
+                            custom={i}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ amount: 0.2 }}
+                            variants={cardVariants}
+                            whileHover={{ scale: 1.03, y: -6 }}
+                            transition={{ type: "spring", stiffness: 200, damping: 20 }}
                             className="overflow-hidden"
                         >
                             <Link href={`/gallery/${artwork.id}`}>
                                 <Card className="group h-full border-0 bg-card shadow-soft hover:shadow-xl transition-all duration-700">
                                     <div className="relative h-80 overflow-hidden">
-                                        <img
+                                        <motion.img
                                             src={`/storage/${artwork.image}`}
                                             alt={artwork.title}
                                             loading="lazy"
                                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                            whileHover={{ rotate: 1 }}
+                                            transition={{ type: "spring", stiffness: 150, damping: 15 }}
                                         />
-                                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                     </div>
                                     <div className="p-6 flex flex-col justify-between h-56">
                                         <div>
-                                            <h3 className="font-playfair font-bold text-2xl text-foreground mb-2">{artwork.title}</h3>
-                                            <p className="font-inter text-muted-foreground text-sm">{artwork.technique} • {artwork.dimensions}</p>
+                                            <h3 className="font-playfair font-bold text-2xl text-foreground mb-2 group-hover:text-primary transition-colors duration-500">
+                                                {artwork.title}
+                                            </h3>
+                                            <p className="font-inter text-muted-foreground text-sm">
+                                                {artwork.technique} • {artwork.dimensions}
+                                            </p>
                                         </div>
                                         <div className="flex justify-between items-center pt-4">
                                             <Badge>{artwork.category}</Badge>
-                                            <span className="font-inter font-bold text-primary">{artwork.year}</span>
+                                            <span className="font-inter font-bold text-primary">
+                                                {artwork.year}
+                                            </span>
                                         </div>
                                     </div>
                                 </Card>
                             </Link>
                         </motion.div>
                     ))}
-                </FadeInStagger>
+                </motion.div>
             </div>
         </section>
     );

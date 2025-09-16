@@ -12,10 +12,19 @@ services:
       - database_data:/var/www/database
     labels:
       - "traefik.enable=true"
+
+      # HTTPS router
       - "traefik.http.routers.ama.rule=Host(`amatelier.cz`) || Host(`www.amatelier.cz`)"
       - "traefik.http.routers.ama.entrypoints=websecure"
       - "traefik.http.routers.ama.tls.certresolver=cloudflare"
       - "traefik.http.services.ama.loadbalancer.server.port=80"
+
+      # HTTP -> HTTPS redirect
+      - "traefik.http.routers.ama-http.rule=Host(`amatelier.cz`) || Host(`www.amatelier.cz`)"
+      - "traefik.http.routers.ama-http.entrypoints=web"
+      - "traefik.http.routers.ama-http.middlewares=ama-redirect-to-https"
+
+      - "traefik.http.middlewares.ama-redirect-to-https.redirectscheme.scheme=https"
     networks:
       - traefik
       - ama
