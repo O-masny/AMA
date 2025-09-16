@@ -12,7 +12,19 @@ const Footer = () => {
     return (
         <footer className="relative z-10 py-24 bg-gradient-to-b from-foreground via-foreground/95 to-background overflow-hidden">
             {/* subtle grain / texture */}
-            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay pointer-events-none" />
+            <div
+                className="absolute inset-0 opacity-10 mix-blend-overlay pointer-events-none"
+                style={{
+                    backgroundImage: `url("data:image/svg+xml;utf8,
+      <svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'>
+        <filter id='noiseFilter'>
+          <feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/>
+        </filter>
+        <rect width='100%' height='100%' filter='url(%23noiseFilter)' />
+      </svg>")`,
+                    backgroundRepeat: "repeat",
+                }}
+            />
 
             <div className="relative max-w-7xl mx-auto px-6">
                 {/* Branding */}

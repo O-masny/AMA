@@ -7,12 +7,9 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    $artworks = Gallery::latest()->take(6)->get();
-    $categories = Gallery::select('category')->distinct()->pluck('category');
-
+    $featuredArtworks = Gallery::latest()->take(6)->get();
     return Inertia::render('index', [
-        'artworks' => $artworks,
-        'categories' => $categories,
+        'featuredArtworks' => $featuredArtworks
     ]);
 })->name('home');
 
