@@ -5,6 +5,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+// Motion verze ikon
+const MotionMenu = motion(Menu);
+const MotionX = motion(X);
+
 const navItems = [
     { name: "Galerie", hash: "gallery" },
     { name: "Vernisáže", hash: "exhibitions" },
@@ -66,11 +70,12 @@ const Navigation = ({ isReady }: { isReady: boolean }) => {
                     animate={{ height: isCollapsed ? 56 : 88 }}
                     transition={{ type: "spring", stiffness: 120, damping: 20 }}
                 >
-                    <div className="relative flex items-center justify-between 
+                    <div
+                        className="relative flex items-center justify-between 
           bg-background/70 backdrop-blur-xl border border-border 
           rounded-2xl px-6 py-3 md:px-12 md:py-5 
-          shadow-[0_0_25px_-5px_var(--tw-shadow-color)] shadow-primary/20">
-
+          shadow-[0_0_25px_-5px_var(--tw-shadow-color)] shadow-primary/20"
+                    >
                         {/* Desktop nav left */}
                         <motion.div
                             className="hidden md:flex items-center space-x-10"
@@ -133,23 +138,21 @@ const Navigation = ({ isReady }: { isReady: boolean }) => {
                             >
                                 <AnimatePresence mode="wait" initial={false}>
                                     {isMenuOpen ? (
-                                        <motion.div
+                                        <MotionX
                                             key="x"
                                             initial={{ opacity: 0, rotate: -90 }}
                                             animate={{ opacity: 1, rotate: 0 }}
                                             exit={{ opacity: 0, rotate: 90 }}
-                                        >
-                                            <X className="w-6 h-6" />
-                                        </motion.div>
+                                            className="w-6 h-6"
+                                        />
                                     ) : (
-                                        <motion.div
+                                        <MotionMenu
                                             key="menu"
                                             initial={{ opacity: 0, rotate: 90 }}
                                             animate={{ opacity: 1, rotate: 0 }}
                                             exit={{ opacity: 0, rotate: -90 }}
-                                        >
-                                            <Menu className="w-6 h-6" />
-                                        </motion.div>
+                                            className="w-6 h-6"
+                                        />
                                     )}
                                 </AnimatePresence>
                             </Button>
@@ -184,5 +187,5 @@ const Navigation = ({ isReady }: { isReady: boolean }) => {
             </motion.section>
         </>
     );
-}
+};
 export default Navigation;
