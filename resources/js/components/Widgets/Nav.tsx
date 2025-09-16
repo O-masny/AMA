@@ -30,7 +30,7 @@ const Navigation = ({ isReady }: { isReady: boolean }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const lastScroll = useRef(0);
-    const { url } = usePage<{ url: string }>().props;
+    const { url } = usePage();
 
     useEffect(() => {
         const onScroll = () => {
