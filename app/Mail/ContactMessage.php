@@ -48,6 +48,11 @@ class ContactMessage extends Mailable implements ShouldQueue
 
             $apiInstance = new TransactionalEmailsApi(new Client(), $config);
 
+            $htmlMessage = '<h1>Kontaktní zpráva</h1>'
+                . '<p><strong>Jméno:</strong> ' . htmlspecialchars($this->data['name']) . '</p>'
+                . '<p><strong>Email:</strong> ' . htmlspecialchars($this->data['email']) . '</p>'
+                . '<p><strong>Zpráva:</strong><br>' . nl2br(htmlspecialchars($this->data['message'])) . '</p>';
+
             $sendSmtpEmail = new SendSmtpEmail([
                 'sender' => [
                     'name' => 'amatelier',
@@ -61,12 +66,7 @@ class ContactMessage extends Mailable implements ShouldQueue
                     'name' => $this->data['name'],
                 ],
                 'subject' => 'Nová zpráva z kontaktního formuláře',
-                'htmlContent' => '
-                    <h1>Kontaktní zpráva</h1>
-                    <p><strong>Jméno:</strong> ' . e($this->data['name']) . '</p>
-                    <p><strong>Email:</strong> ' . e($this->data['email']) . '</p>
-                    <p><strong>Zpráva:</strong><br>' . nl2br(e($this->data['message'])) . '</p>
-                ',
+                'htmlContent' => $htmlMessage,
                 'tags' => ['contact-form'],
             ]);
 
