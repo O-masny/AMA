@@ -6,10 +6,10 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
 interface GalleryProps {
-    featuredArtworks: Artwork[];
+    artworks: Artwork[];
 }
 
-const Gallery = ({ featuredArtworks }: GalleryProps) => {
+const Gallery = ({ artworks }: GalleryProps) => {
     const ref = useRef(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -41,7 +41,7 @@ const Gallery = ({ featuredArtworks }: GalleryProps) => {
 
                 {/* IMAGE SEQUENCE */}
                 <div className="relative w-full h-full">
-                    {featuredArtworks.slice(0, 4).map((artwork, i) => {
+                    {artworks.slice(0, 4).map((artwork, i) => {
                         // Vytvoříme individuální scroll interval pro každý obrázek
                         const start = 0.2 + i * 0.15;
                         const end = start + 0.25;

@@ -16,10 +16,10 @@ import SplashScreen from "./splash";
 gsap.registerPlugin(ScrollTrigger);
 
 interface IndexProps {
-    featuredArtworks: Artwork[];
+    artworks: Artwork[];
 }
 
-export const Index = ({ featuredArtworks }: IndexProps) => {
+export const Index = ({ artworks }: IndexProps) => {
     const bgRef = useRef<HTMLDivElement>(null);
     const [heroReady, setHeroReady] = useState(false);
 
@@ -88,7 +88,7 @@ export const Index = ({ featuredArtworks }: IndexProps) => {
                 <Navigation isReady={heroReady} />
                 <main className="relative z-20">
                     <Hero isReady={heroReady} />
-                    <Gallery featuredArtworks={featuredArtworks} />
+                    <Gallery artworks={artworks} />
                     <About />
 
                     <Exhibitions />
