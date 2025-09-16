@@ -119,6 +119,14 @@ const Contact = () => {
                             onChange={(e) => setData("message", e.target.value)}
                             className="rounded-xl bg-white/10 border border-white/20 focus:ring-2 focus:ring-primary/50 text-lg resize-none py-4"
                         />
+                        <p className="text-xs text-muted-foreground text-center">
+                            Odesláním zprávy potvrzujete, že vaše údaje (jméno, e-mail, text zprávy)
+                            budou použity pouze k vyřízení vaší žádosti.
+                            Více informací najdete v&nbsp;
+                            <a href="/privacy" className="underline hover:text-primary">
+                                zásadách ochrany osobních údajů
+                            </a>.
+                        </p>
                         {errors.message && <p className="text-red-500 text-sm">{errors.message}</p>}
 
                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
