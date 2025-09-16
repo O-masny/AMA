@@ -6,7 +6,6 @@ services:
       - app
     volumes:
       - ./public:/var/www/public:ro          # hotový frontend z hostu
-      - ./docker/prod/nginx/nginx.conf:/etc/nginx/nginx.conf:rw
       - ./docker/prod/nginx/default.conf:/etc/nginx/conf.d/default.conf:rw
       - storage_data:/var/www/storage
       - database_data:/var/www/database
