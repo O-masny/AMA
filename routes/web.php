@@ -8,7 +8,7 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     $featuredArtworks = Gallery::latest()->take(6)->get();
-    return Inertia::render('Index', [
+    return Inertia::render('index', [
         'featuredArtworks' => $featuredArtworks
     ]);
 })->name('home');

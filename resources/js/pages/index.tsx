@@ -32,6 +32,7 @@ const Index: React.FC = () => {
     const [selectedCategory, setSelectedCategory] = useState<string>("Vše");
     const filteredArtworks = useFilteredArtworks(artworks, selectedCategory);
 
+
     return (
         <LoadingProvider>
             <div className="min-h-screen bg-background text-foreground">
