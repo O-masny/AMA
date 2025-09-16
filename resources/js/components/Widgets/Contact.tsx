@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useForm } from "@inertiajs/react";
 import { motion, useMotionTemplate, useScroll, useTransform } from "framer-motion";
 import { Facebook, Instagram } from "lucide-react";
 import { useRef } from "react";
@@ -14,15 +15,26 @@ const Contact = () => {
         offset: ["start start", "end end"],
     });
 
-    // postupné zobrazení kroků
+    // Animace kroků
     const step1 = useTransform(scrollYProgress, [0, 0.2, 0.3], [1, 1, 0]);
     const step2 = useTransform(scrollYProgress, [0.3, 0.45, 0.55], [0, 1, 0]);
     const step3 = useTransform(scrollYProgress, [0.55, 0.7, 0.8], [0, 1, 0]);
     const formOpacity = useTransform(scrollYProgress, [0.8, 1], [0, 1]);
 
-    // hue shift pro pozadí
     const hue = useTransform(scrollYProgress, [0, 1], [0, 90]);
     const filter = useMotionTemplate`hue-rotate(${hue}deg)`;
+
+    // Inertia form
+    const { data, setData, post, processing, errors } = useForm({
+        name: "",
+        email: "",
+        message: "",
+    });
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        post(route("contact.send"));
+    };
 
     return (
         <section ref={ref} id="contact" className="relative h-[300vh]">
@@ -42,12 +54,8 @@ const Contact = () => {
                     style={{ opacity: step1 }}
                     className="absolute inset-0 flex flex-col items-center justify-center text-center space-y-4"
                 >
-                    <h3 className="font-playfair text-6xl md:text-7xl font-extrabold text-primary">
-                        Email
-                    </h3>
-                    <p className="text-lg md:text-xl text-muted-foreground">
-                        atelier@example.com
-                    </p>
+                    <h3 className="font-playfair text-6xl md:text-7xl font-extrabold text-primary">Email</h3>
+                    <p className="text-lg md:text-xl text-muted-foreground">atelier@example.com</p>
                 </motion.div>
 
                 {/* Step 2 */}
@@ -55,12 +63,8 @@ const Contact = () => {
                     style={{ opacity: step2 }}
                     className="absolute inset-0 flex flex-col items-center justify-center text-center space-y-4"
                 >
-                    <h3 className="font-playfair text-6xl md:text-7xl font-extrabold text-primary">
-                        Telefon
-                    </h3>
-                    <p className="text-lg md:text-xl text-muted-foreground">
-                        +420 123 456 789
-                    </p>
+                    <h3 className="font-playfair text-6xl md:text-7xl font-extrabold text-primary">Telefon</h3>
+                    <p className="text-lg md:text-xl text-muted-foreground">+420 123 456 789</p>
                 </motion.div>
 
                 {/* Step 3 */}
@@ -68,12 +72,8 @@ const Contact = () => {
                     style={{ opacity: step3 }}
                     className="absolute inset-0 flex flex-col items-center justify-center text-center space-y-4"
                 >
-                    <h3 className="font-playfair text-6xl md:text-7xl font-extrabold text-primary">
-                        Ateliér
-                    </h3>
-                    <p className="text-lg md:text-xl text-muted-foreground">
-                        Umělecká čtvrť, Praha 7
-                    </p>
+                    <h3 className="font-playfair text-6xl md:text-7xl font-extrabold text-primary">Ateliér</h3>
+                    <p className="text-lg md:text-xl text-muted-foreground">Umělecká čtvrť, Praha 7</p>
                     <div className="flex gap-4 pt-6">
                         <Button variant="outline" size="icon" className="rounded-full">
                             <Instagram className="w-5 h-5" />
@@ -84,8 +84,7 @@ const Contact = () => {
                     </div>
                 </motion.div>
 
-                {/* Form as final step */}
-                {/* Form as final step */}
+                {/* Form */}
                 <motion.div
                     style={{ opacity: formOpacity }}
                     className="absolute inset-0 flex flex-col items-center justify-center px-6"
@@ -93,38 +92,48 @@ const Contact = () => {
                     <h3 className="font-playfair font-extrabold text-5xl md:text-7xl text-center text-foreground mb-12">
                         Napište mi
                     </h3>
-                    <form className="w-full max-w-3xl space-y-6">
+                    <form onSubmit={handleSubmit} className="w-full max-w-3xl space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <Input
                                 placeholder="Jméno"
+                                value={data.name}
+                                onChange={(e) => setData("name", e.target.value)}
                                 className="rounded-xl bg-white/10 border border-white/20 focus:ring-2 focus:ring-primary/50 text-lg py-4"
                             />
+                            {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+
                             <Input
                                 type="email"
                                 placeholder="Email"
+                                value={data.email}
+                                onChange={(e) => setData("email", e.target.value)}
                                 className="rounded-xl bg-white/10 border border-white/20 focus:ring-2 focus:ring-primary/50 text-lg py-4"
                             />
+                            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                         </div>
-                        <Input
-                            placeholder="Předmět"
-                            className="rounded-xl bg-white/10 border border-white/20 focus:ring-2 focus:ring-primary/50 text-lg py-4"
-                        />
+
                         <Textarea
                             rows={8}
                             placeholder="Vaše zpráva..."
+                            value={data.message}
+                            onChange={(e) => setData("message", e.target.value)}
                             className="rounded-xl bg-white/10 border border-white/20 focus:ring-2 focus:ring-primary/50 text-lg resize-none py-4"
                         />
+                        {errors.message && <p className="text-red-500 text-sm">{errors.message}</p>}
+
                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
-                            <Button className="w-full rounded-full bg-gradient-to-r from-primary to-art-rose text-white font-semibold py-6 text-xl shadow-lg hover:shadow-xl transition-all">
-                                Odeslat zprávu
+                            <Button
+                                type="submit"
+                                disabled={processing}
+                                className="w-full rounded-full bg-gradient-to-r from-primary to-art-rose text-white font-semibold py-6 text-xl shadow-lg hover:shadow-xl transition-all"
+                            >
+                                {processing ? "Odesílám..." : "Odeslat zprávu"}
                             </Button>
                         </motion.div>
                     </form>
                 </motion.div>
-
             </div>
         </section>
-
     );
 };
 
