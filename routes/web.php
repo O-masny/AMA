@@ -19,4 +19,3 @@ Route::get('/gallery/{artwork}', [GalleryController::class, 'show'])->name('gall
 Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
 
 require __DIR__ . '/settings.php';
-require __DIR__ . '/auth.php';

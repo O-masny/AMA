@@ -7,7 +7,6 @@ use Filament\Resources\Pages\CreateRecord;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Encoders\WebpEncoder;
 
 class CreateGallery extends CreateRecord
@@ -20,45 +19,47 @@ class CreateGallery extends CreateRecord
 
         error_log("ℹ️ Spuštěno afterCreate pro záznam ID: {$record->id}");
 
+        // Logneme celý model pro kontrolu
+        error_log("🔍 Obsah record->toArray(): " . print_r($record->toArray(), true));
+
         // Kontrola, jestli je nahraný obrázek
         if (!$record->image) {
             error_log("❌ Žádný obrázek k převedení");
             return;
         }
 
-        $originalPath = storage_path('app/public/galleries/' . $record->image);
+        // Pozor: $record->image může už obsahovat 'galleries/xxx.jpg'
+        $originalPath = storage_path('app/public/' . ltrim($record->image, '/'));
         error_log("ℹ️ Kontrola existence souboru: {$originalPath}");
 
         if (!file_exists($originalPath)) {
-            error_log("❌ Soubor neexistuje: {$originalPath}");
+            error_log("❌ Soubor neexistuje na {$originalPath}");
             return;
         }
 
         try {
             // Vytvoříme název WebP souboru
             $originalInfo = pathinfo($record->image);
+            error_log("🔍 Info o původním souboru: " . print_r($originalInfo, true));
+
             $webpFilename = Str::slug($originalInfo['filename']) . '-' . time() . '.webp';
             $webpPath = storage_path('app/public/galleries/' . $webpFilename);
 
-            error_log("ℹ️ Původní soubor: {$record->image}");
-            error_log("ℹ️ Nový WebP soubor: {$webpFilename}");
+            error_log("ℹ️ Původní soubor (DB): {$record->image}");
+            error_log("ℹ️ Nový WebP soubor (jen jméno): {$webpFilename}");
+            error_log("ℹ️ Plná cesta k WebP: {$webpPath}");
 
             // Konverze na WebP pomocí Intervention Image
             $manager = new ImageManager(new Driver());
             $image = $manager->read($originalPath);
-
-            // Volitelné: resize
-            // $image->resize(1920, 1080, function ($constraint) {
-            //     $constraint->aspectRatio();
-            //     $constraint->upsize();
-            // });
+            error_log("✅ Obrázek načten pomocí Intervention");
 
             $image->encode(new WebpEncoder(quality: 90))
                 ->save($webpPath);
             error_log("✅ Obrázek uložen jako WebP: {$webpPath}");
 
             // Smažeme původní soubor až po úspěšném uložení WebP
-            if (unlink($originalPath)) {
+            if (@unlink($originalPath)) {
                 error_log("🗑️ Původní soubor smazán: {$originalPath}");
             } else {
                 error_log("⚠️ Nepodařilo se smazat původní soubor: {$originalPath}");
@@ -66,7 +67,7 @@ class CreateGallery extends CreateRecord
 
             // Aktualizujeme databázi
             $record->update([
-                'image' => $webpFilename,
+                'image' => 'galleries/' . $webpFilename,
                 'file_name' => $webpFilename,
                 'slider_image' => $webpFilename,
                 'detail_image' => $webpFilename,
@@ -76,6 +77,7 @@ class CreateGallery extends CreateRecord
 
         } catch (\Throwable $e) {
             error_log("❌ Chyba při konverzi do WebP: " . $e->getMessage());
+            error_log("📂 Trace: " . $e->getTraceAsString());
             error_log("Původní cesta: {$originalPath}");
 
             // Zachováváme původní soubor
