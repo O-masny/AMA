@@ -4,6 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState } from "react";
 
 import { Artwork } from "@/components/data/artworks";
+import { Exhibition } from "@/components/data/exhibitions";
 import About from "@/components/Widgets/About";
 import Contact from "@/components/Widgets/Contact";
 import Exhibitions from "@/components/Widgets/Exhibitions";
@@ -16,10 +17,11 @@ import SplashScreen from "./splash";
 gsap.registerPlugin(ScrollTrigger);
 
 interface IndexProps {
-    artworks: Artwork[];
+    artworks: Artwork[],
+    exhibitions: Exhibition[]
 }
 
-export const Index = ({ artworks }: IndexProps) => {
+export const Index = ({ artworks, exhibitions }: IndexProps) => {
     const bgRef = useRef<HTMLDivElement>(null);
     const [heroReady, setHeroReady] = useState(false);
 
@@ -91,8 +93,8 @@ export const Index = ({ artworks }: IndexProps) => {
                     <Gallery artworks={artworks} />
                     <About />
 
-                    <Exhibitions />
-                    <Contact />
+                    <Exhibitions exhibitions={exhibitions} />
+                        <Contact />
                 </main>
                 <Footer />
             </div>

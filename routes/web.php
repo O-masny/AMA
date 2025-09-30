@@ -1,18 +1,31 @@
 <?php
 
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ExhibitionController;
 use App\Http\Controllers\GalleryController;
+use App\Models\Exhibition;
 use App\Models\Gallery;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
     $artworks = Gallery::latest()->take(6)->get();
+    $exhibitions = Exhibition::with('images')->orderBy('date', 'desc')->get();
+
     return Inertia::render('index', [
-        'artworks' => $artworks
+        'artworks' => $artworks,
+        'exhibitions' => $exhibitions
+
+
     ]);
 })->name('home');
-
+Route::get('/exhibitions', [ExhibitionController::class, 'index'])->name('exhibitions.index');
+Route::get('/exhibitions/{exhibition}', function (App\Models\Exhibition $exhibition) {
+    $exhibition->load('images');
+    return Inertia::render('Exhibitions/Show', [
+        'exhibition' => $exhibition,
+    ]);
+});
 
 Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
 Route::get('/gallery/{artwork}', [GalleryController::class, 'show'])->name('gallery.show');

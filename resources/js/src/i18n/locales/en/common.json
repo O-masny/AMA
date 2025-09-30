@@ -1,0 +1,64 @@
+{
+    "splash": {
+        "loading": "Loading the world...",
+        "welcome": "Welcome back!",
+        "ready": "Ready to begin!"
+    },
+    "exhibitions": {
+        "title": "EXHIBITIONS",
+        "items": [
+            {
+                "title": "Pastel Visions",
+                "gallery": "Moderna Gallery",
+                "date": "Sept 15 – Nov 30, 2024",
+                "location": "Prague",
+                "visitors": "2,400+ visitors"
+            },
+            {
+                "title": "Colors of Emotion",
+                "gallery": "Kunsthalle Brno",
+                "date": "May 3 – July 15, 2024",
+                "location": "Brno",
+                "visitors": "3,100+ visitors"
+            },
+            {
+                "title": "Dialogues with Canvas",
+                "gallery": "City Gallery",
+                "date": "Jan 12 – Mar 28, 2024",
+                "location": "Ostrava",
+                "visitors": "1,800+ visitors"
+            }
+        ]
+    },
+    "about": {
+        "title": "ABOUT ME",
+        "steps": [
+            {
+                "title": "Experiments with Color",
+                "text": "A dialogue between color and emotion – sometimes gentle, sometimes explosive."
+            },
+            {
+                "title": "Blending Reality and Fantasy",
+                "text": "Painting is a tool for transforming reality into a dreamlike world."
+            },
+            {
+                "title": "My Mission",
+                "text": "I aim to create visual stories that touch emotions."
+            }
+        ]
+    },
+    "contact": {
+        "title": "Write to Me",
+        "email": "atelier@example.com",
+        "phone": "+420 123 456 789",
+        "address": "Art District, Prague 7",
+        "privacy": "Privacy Policy",
+        "button": "Send Message",
+        "sending": "Sending..."
+    },
+    "footer": {
+        "brand": "Atelier AMA",
+        "tagline": "Art that speaks to the heart. Every work tells a story.",
+        "rights": "© 2024 Atelier Adéla Masná Bočková. All rights reserved."
+    }
+}

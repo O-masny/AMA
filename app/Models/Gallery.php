@@ -13,7 +13,7 @@ class Gallery extends Model
     protected $fillable = [
         'title',
         'description',
-        'image', // hlavní obrázek
+        'image', // jeden obrázek = jedno dílo
         'year',
         'technique',
         'dimensions',
@@ -23,10 +23,13 @@ class Gallery extends Model
         'story',
     ];
 
+    protected $casts = [
+        'image' => 'array', // nech to klidně tak — pokud ukládáš různé velikosti (thumb, full)
+    ];
 
-    // Vztah Many-to-Many s Tag
-    public function tags()
+    public function exhibitions()
     {
-        return $this->belongsToMany(Tag::class, 'gallery_tag');
+        return $this->belongsToMany(Exhibition::class, 'exhibition_gallery')
+            ->withPivot('order');
     }
 }

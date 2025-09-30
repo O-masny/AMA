@@ -1,0 +1,64 @@
+{
+    "splash": {
+        "loading": "Načítám svět...",
+        "welcome": "Vítej zpátky!",
+        "ready": "Připraveno začít!"
+    },
+    "exhibitions": {
+        "title": "VÝSTAVY",
+        "items": [
+            {
+                "title": "Pastelové vize",
+                "gallery": "Galerie Moderna",
+                "date": "15. září – 30. listopadu 2024",
+                "location": "Praha",
+                "visitors": "2 400+ návštěvníků"
+            },
+            {
+                "title": "Barvy emocí",
+                "gallery": "Kunsthalle Brno",
+                "date": "3. května – 15. července 2024",
+                "location": "Brno",
+                "visitors": "3 100+ návštěvníků"
+            },
+            {
+                "title": "Dialogy s plátnami",
+                "gallery": "Městská galerie",
+                "date": "12. ledna – 28. března 2024",
+                "location": "Ostrava",
+                "visitors": "1 800+ návštěvníků"
+            }
+        ]
+    },
+    "about": {
+        "title": "O MĚ",
+        "steps": [
+            {
+                "title": "Experimenty s barvou",
+                "text": "Dialog mezi barvou a emocí – někdy jemně, někdy explozivně."
+            },
+            {
+                "title": "Spojení reality a fantazie",
+                "text": "Malba je nástrojem, jak realitu přetavit do snového světa."
+            },
+            {
+                "title": "Moje mise",
+                "text": "Chci vytvářet vizuální příběhy, které se dotýkají emocí."
+            }
+        ]
+    },
+    "contact": {
+        "title": "Napište mi",
+        "email": "atelier@example.com",
+        "phone": "+420 123 456 789",
+        "address": "Umělecká čtvrť, Praha 7",
+        "privacy": "Zásady ochrany osobních údajů",
+        "button": "Odeslat zprávu",
+        "sending": "Odesílám..."
+    },
+    "footer": {
+        "brand": "Ateliér AMA",
+        "tagline": "Umění, které mluví k srdci. Každé dílo je příběhem.",
+        "rights": "© 2024 Ateliér Adéla Masná Bočková. Všechna práva vyhrazena."
+    }
+}
