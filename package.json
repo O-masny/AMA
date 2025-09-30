@@ -9,6 +9,7 @@
         "format:check": "prettier --check resources/",
         "lint": "eslint . --fix",
         "tailwind:init": "tailwindcss init",
+        "build:favicons": "ts-node scripts/generate-favicons.ts",
         "types": "tsc --noEmit"
     },
     "devDependencies": {
