@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Exhibitions\RelationManagers;
+namespace App\Filament\Resources\Galleries\RelationManagers;
 
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
