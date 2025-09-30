@@ -31,35 +31,32 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
             {show && (
                 <motion.section
                     initial={{ opacity: 1 }}
-                    exit={{ opacity: 0, transition: { duration: 0.6 } }}
-                    className={`splash-screen fixed inset-0 flex items-center justify-center z-50 ${bgColor}`}
+                    exit={{ opacity: 0, transition: { duration: 0.5 } }}
+                    className={`fixed inset-0 flex items-center justify-center ${bgColor} z-50 overflow-hidden`}
                 >
-                    {/* LOGO */}
+                    {/* Background morph */}
+                    <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{
+                            scale: [0, 1.2, 10],
+                            borderRadius: ["50%", "20%", "0%"],
+                            backgroundColor: [accent, "hsl(var(--background))"],
+                        }}
+                        transition={{ duration: 2.6, ease: "easeInOut" }}
+                        className="absolute inset-0"
+                    />
+
+                    {/* Logo entrance */}
                     <motion.img
                         src={logoSrc}
                         alt="Logo"
-                        className="relative z-50 w-28 md:w-40 h-auto"
-                        initial={{ scale: 0.9, opacity: 0 }}
-                        animate={{ scale: [0.9, 1.05, 1], opacity: 1 }}
-                        transition={{
-                            duration: 1.6,
-                            ease: "easeInOut",
-                            times: [0, 0.6, 1],
-                        }}
-                    />
-
-                    {/* ANIMOVANÝ BACKDROP */}
-                    <motion.div
-                        initial={{ scale: 0, borderRadius: "50%" }}
-                        animate={{
-                            scale: [0, 2, 20],
-                            borderRadius: ["50%", "30%", "0%"],
-                            backgroundColor: [accent, "hsl(var(--background))", accent],
-                        }}
-                        transition={{ duration: 2.2, ease: "easeInOut" }}
-                        className="absolute inset-0 z-20"
+                        className="relative z-10 w-32 h-auto"
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 1.2, ease: "easeOut" }}
                     />
                 </motion.section>
+
             )}
         </AnimatePresence>
     );

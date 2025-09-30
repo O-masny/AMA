@@ -1,11 +1,60 @@
 @import 'tailwindcss';
-
 @plugin 'tailwindcss-animate';
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 
+/* ===================== */
+/*      FONT FACES       */
+/* ===================== */
 
+/* Boska – pro výrazné nadpisy, branding, velké formáty */
+@font-face {
+    font-family: "Boska";
+    src:
+        url("/fonts/boska/Boska-Variable.woff2") format("woff2"),
+        url("/fonts/boska/Boska-Variable.woff") format("woff"),
+        url("/fonts/boska/Boska-Regular.ttf") format("truetype");
+    font-weight: 100 900;
+    font-display: swap;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Boska";
+    src:
+        url("/fonts/boska/Boska-VariableItalic.woff2") format("woff2"),
+        url("/fonts/boska/Boska-VariableItalic.woff") format("woff"),
+        url("/fonts/boska/Boska-Italic.ttf") format("truetype");
+    font-weight: 100 900;
+    font-display: swap;
+    font-style: italic;
+}
+
+/* Synonym – moderní, čitelný textový font */
+@font-face {
+    font-family: "Synonym";
+    src:
+        url("/fonts/synonym/Synonym-Variable.woff2") format("woff2"),
+        url("/fonts/synonym/Synonym-Variable.woff") format("woff"),
+        url("/fonts/synonym/Synonym-Regular.ttf") format("truetype");
+    font-weight: 100 900;
+    font-display: swap;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Synonym";
+    src:
+        url("/fonts/synonym/Synonym-Bold.woff2") format("woff2"),
+        url("/fonts/synonym/Synonym-Bold.woff") format("woff"),
+        url("/fonts/synonym/Synonym-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-display: swap;
+    font-style: normal;
+}
+
+/* Volitelně nech Adelia pro ruční akcenty (podpis, hero elementy) */
 @font-face {
     font-family: "Adelia";
     src: url("/fonts/adelia_3/adelia.otf") format("opentype"),
@@ -14,8 +63,12 @@
     font-style: normal;
 }
 
+/* ===================== */
+/*   DESIGN UTILITIES    */
+/* ===================== */
+
 .shadow-artistic {
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 4px 6px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 10px 25px rgba(8, 5, 5, 0.08), 0 4px 6px rgba(0, 0, 0, 0.06);
 }
 
 .bg-gradient-hero {
@@ -26,9 +79,14 @@
     background: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)) 100%);
 }
 
+/* ===================== */
+/*        THEME          */
+/* ===================== */
+
 @theme {
-    --font-sans:
-        'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Synonym', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Boska', 'Times New Roman', serif;
+    --font-signature: 'Adelia', cursive;
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -36,118 +94,71 @@
 
     --color-background: hsl(var(--background));
     --color-foreground: hsl(var(--foreground));
-
     --color-card: hsl(var(--card));
     --color-card-foreground: hsl(var(--card-foreground));
-
     --color-popover: hsl(var(--popover));
     --color-popover-foreground: hsl(var(--popover-foreground));
-
     --color-primary: hsl(var(--primary));
     --color-primary-foreground: hsl(var(--primary-foreground));
-
     --color-secondary: hsl(var(--secondary));
     --color-secondary-foreground: hsl(var(--secondary-foreground));
-
     --color-muted: hsl(var(--muted));
     --color-muted-foreground: hsl(var(--muted-foreground));
-
     --color-accent: hsl(var(--accent));
     --color-accent-foreground: hsl(var(--accent-foreground));
-
-    --color-destructive: hsl(var(--destructive));
-    --color-destructive-foreground: hsl(var(--destructive-foreground));
-
     --color-border: hsl(var(--border));
     --color-input: hsl(var(--input));
     --color-ring: hsl(var(--ring));
-
-    --color-sidebar: hsl(var(--sidebar));
-    --color-sidebar-foreground: hsl(var(--sidebar-foreground));
-    --color-sidebar-primary: hsl(var(--sidebar-primary));
-    --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
-    --color-sidebar-accent: hsl(var(--sidebar-accent));
-    --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
-    --color-sidebar-border: hsl(var(--sidebar-border));
-    --color-sidebar-ring: hsl(var(--sidebar-ring));
 }
+
+/* ===================== */
+/*     LIGHT THEME       */
+/* ===================== */
 
 :root {
-    --background: 350 15% 98%;
-    --foreground: 240 15% 25%;
-
-    --card: 350 20% 96%;
-    --card-foreground: 240 15% 25%;
-
-    --popover: 350 15% 98%;
-    --popover-foreground: 240 15% 25%;
-
-    --primary: 315 25% 65%;
-    --primary-foreground: 350 15% 98%;
-
-    --secondary: 260 20% 85%;
-    --secondary-foreground: 240 15% 25%;
-
-    --muted: 180 15% 92%;
-    --muted-foreground: 240 10% 50%;
-
-    --accent: 200 25% 80%;
-    --accent-foreground: 240 15% 25%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 350 15% 98%;
-
-    --border: 320 15% 90%;
-    --input: 320 15% 90%;
-    --ring: 315 25% 65%;
-
+    --background: 15 40% 97%;
+    --foreground: 250 20% 20%;
+    --card: 15 35% 98%;
+    --card-foreground: 250 20% 25%;
+    --primary: 340 60% 70%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 260 25% 65%;
+    --secondary-foreground: 350 15% 98%;
+    --accent: 20 65% 75%;
+    --accent-foreground: 20 30% 20%;
+    --muted: 15 15% 92%;
+    --muted-foreground: 260 10% 45%;
+    --border: 20 10% 85%;
+    --input: 20 10% 85%;
+    --ring: 340 70% 65%;
     --radius: 1rem;
-
-    --sidebar: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
 }
+
+/* ===================== */
+/*      DARK THEME       */
+/* ===================== */
 
 .dark {
-    --background: 240 15% 8%;
-    --foreground: 350 15% 95%;
-
-    --card: 240 15% 10%;
-    --card-foreground: 350 15% 95%;
-
-    --primary: 315 25% 75%;
-    --primary-foreground: 350 15% 98%;
-
-    --secondary: 260 20% 30%;
+    --background: 250 25% 8%;
+    --foreground: 15 35% 95%;
+    --card: 250 25% 12%;
+    --card-foreground: 15 35% 95%;
+    --primary: 340 55% 70%;
+    --primary-foreground: 250 25% 10%;
+    --secondary: 270 25% 40%;
     --secondary-foreground: 350 15% 95%;
-
-    --muted: 260 10% 20%;
-    --muted-foreground: 350 10% 85%;
-
-    --accent: 200 15% 25%;
-    --accent-foreground: 350 15% 95%;
-
-    --destructive: 0 60% 40%;
-    --destructive-foreground: 350 15% 98%;
-
-    --border: 260 10% 20%;
-    --input: 260 10% 20%;
-    --ring: 315 25% 65%;
-
-    --sidebar: 240 15% 10%;
-    --sidebar-foreground: 350 15% 95%;
-    --sidebar-primary: 350 15% 95%;
-    --sidebar-primary-foreground: 350 15% 95%;
-    --sidebar-accent: 260 15% 25%;
-    --sidebar-accent-foreground: 350 15% 95%;
-    --sidebar-border: 260 15% 20%;
-    --sidebar-ring: 260 15% 50%;
+    --accent: 20 55% 65%;
+    --accent-foreground: 15 30% 10%;
+    --muted: 250 20% 20%;
+    --muted-foreground: 15 20% 85%;
+    --border: 250 20% 25%;
+    --input: 250 20% 25%;
+    --ring: 340 70% 65%;
 }
+
+/* ===================== */
+/*      BASE LAYER       */
+/* ===================== */
 
 @layer base {
     * {
@@ -158,7 +169,19 @@
         @apply bg-background text-foreground font-sans;
     }
 
-    /* Chrome, Edge, Safari */
+    h1,
+    h2,
+    h3,
+    h4 {
+        font-family: var(--font-display);
+        letter-spacing: -0.02em;
+    }
+
+    .signature {
+        font-family: var(--font-signature);
+    }
+
+    /* Scrollbar styling */
     ::-webkit-scrollbar {
         width: 10px;
         height: 10px;
@@ -172,7 +195,6 @@
         background-color: hsl(var(--accent));
         border-radius: var(--radius);
         border: 2px solid hsl(var(--muted));
-        /* mezera kolem */
         transition: background-color 0.3s ease;
     }
 
@@ -180,7 +202,6 @@
         background-color: hsl(var(--accent-foreground));
     }
 
-    /* Firefox */
     * {
         scrollbar-width: thin;
         scrollbar-color: hsl(var(--accent)) hsl(var(--muted));

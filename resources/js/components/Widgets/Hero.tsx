@@ -1,91 +1,116 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+import { motion, useMotionTemplate, useScroll, useSpring, useTransform } from "framer-motion";
+import { useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { MagneticButton } from "../magnetic-button";
 
 const Hero = ({ isReady }: { isReady: boolean }) => {
+    const { t } = useTranslation("common");
+    const ref = useRef<HTMLDivElement>(null);
+
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start start", "end start"],
+    });
+
+    const smooth = useSpring(scrollYProgress, { stiffness: 90, damping: 25, mass: 0.3 });
+    const hueShift = useTransform(smooth, [0, 1], [0, 45]);
+
+    const background = useMotionTemplate`
+    linear-gradient(
+      130deg,
+      hsl(var(--primary) / 1) 0%,
+      hsl(var(--accent) / 1) 100%
+    ) hue-rotate(${hueShift}deg)
+  `;
+
+    const title = t("hero.title");
+
     return (
         <motion.section
-            className="relative flex flex-col items-center justify-center w-full min-h-screen px-6 text-center bg-background"
+            ref={ref}
+            className="relative flex flex-col items-center justify-center w-full min-h-screen px-6 text-center overflow-hidden"
+            style={{ background }}
             initial="hidden"
             animate={isReady ? "visible" : "hidden"}
             variants={{
-                hidden: { opacity: 0, y: 60 },
-                visible: {
-                    opacity: 1,
-                    y: 0,
-                    transition: { duration: 1, ease: "easeOut" },
-                },
+                hidden: { opacity: 0, y: 80 },
+                visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: "easeOut" } },
             }}
         >
-            {/* --- Dramatic Title --- */}
+            {/* Jemný overlay pro hloubku */}
+            <motion.div
+                aria-hidden
+                className="absolute inset-0 pointer-events-none bg-[hsl(var(--background))]"
+                style={{
+                    opacity: useTransform(smooth, [0, 0.6, 1], [0.25, 0.12, 0.06]),
+                    mixBlendMode: "soft-light",
+                }}
+            />
+
+            {/* Title */}
             <motion.h1
-                className="text-[6rem] lg:text-[10rem] font-playfair font-extrabold leading-none tracking-tight text-foreground"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ staggerChildren: 0.08 }}
+                className="text-[clamp(3rem,9vw,10rem)] font-display font-black leading-[0.9] tracking-tight text-[hsl(var(--foreground))]"
             >
-                {Array.from("UMĚNÍ").map((char, i) => (
+                {Array.from(title).map((char, i) => (
                     <motion.span
                         key={i}
                         className="inline-block"
-                        initial={{ opacity: 0, y: 60 }}
+                        initial={{ opacity: 0, y: 80 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.1, duration: 0.6 }}
+                        transition={{
+                            delay: i * 0.045,
+                            duration: 0.6,
+                            ease: [0.25, 0.1, 0.25, 1],
+                        }}
                     >
-                        {char}
+                        {char === " " ? "\u00A0" : char}
                     </motion.span>
                 ))}
             </motion.h1>
 
-            {/* --- Subheadline --- */}
+            {/* Subtitle */}
             <motion.h2
-                className="mt-6 text-3xl lg:text-5xl font-playfair italic font-light text-muted-foreground"
+                className="mt-10 text-2xl md:text-4xl font-sans text-[hsl(var(--muted-foreground))] tracking-wide"
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.6 }}
+                transition={{ duration: 1, delay: 0.7 }}
             >
-                které mluví
+                {t("hero.subtitle")}
             </motion.h2>
 
-            {/* --- Supporting Text --- */}
+            {/* Description */}
             <motion.p
-                className="max-w-2xl mt-6 text-lg lg:text-xl font-inter text-muted-foreground leading-relaxed"
+                className="max-w-2xl mt-8 text-lg md:text-xl font-sans text-[hsl(var(--muted-foreground))]/90 leading-relaxed"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1 }}
             >
-                Objevte svět barev, emocí a příběhů skrze má plátna.
-                Každé dílo je jedinečným oknem do světa fantazie a reality.
+                {t("hero.description")}
             </motion.p>
 
-            {/* --- CTA Buttons --- */}
+            {/* CTA Buttons */}
             <motion.div
-                className="flex flex-wrap gap-4 mt-12"
+                className="flex flex-wrap gap-6 mt-14"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1.3 }}
             >
-                <Button
-                    size="lg"
-                    className="border-2 border-foreground bg-transparent text-foreground px-10 py-4 text-lg font-light tracking-wider rounded-full hover:bg-foreground hover:text-background transition-all"
-                    onClick={() =>
-                        document.getElementById("gallery")?.scrollIntoView({ behavior: "smooth" })
-                    }
+                <MagneticButton
+                    href="#gallery"
+                    className="text-lg font-sans font-medium px-10 py-4"
                 >
-                    Prohlédnout galerii
-                </Button>
+                    {t("hero.ctaGallery")}
+                </MagneticButton>
 
-                <Button
+                <MagneticButton
+                    href="#about"
                     variant="outline"
-                    size="lg"
-                    className="border-2 border-foreground text-foreground px-10 py-4 text-lg font-light tracking-wider rounded-full hover:bg-foreground hover:text-background transition-all"
-                    onClick={() =>
-                        document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })
-                    }
+                    className="text-lg font-sans font-medium px-10 py-4"
                 >
-                    O autorovi
-                </Button>
+                    {t("hero.ctaAbout")}
+                </MagneticButton>
             </motion.div>
         </motion.section>
     );

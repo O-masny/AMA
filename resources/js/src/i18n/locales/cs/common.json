@@ -5,60 +5,94 @@
         "ready": "Připraveno začít!"
     },
     "exhibitions": {
-        "title": "VÝSTAVY",
-        "items": [
-            {
-                "title": "Pastelové vize",
-                "gallery": "Galerie Moderna",
-                "date": "15. září – 30. listopadu 2024",
-                "location": "Praha",
-                "visitors": "2 400+ návštěvníků"
-            },
-            {
-                "title": "Barvy emocí",
-                "gallery": "Kunsthalle Brno",
-                "date": "3. května – 15. července 2024",
-                "location": "Brno",
-                "visitors": "3 100+ návštěvníků"
-            },
-            {
-                "title": "Dialogy s plátnami",
-                "gallery": "Městská galerie",
-                "date": "12. ledna – 28. března 2024",
-                "location": "Ostrava",
-                "visitors": "1 800+ návštěvníků"
-            }
-        ]
+        "title": "SÉRIE",
+        "description": "Každá série představuje jedinečné téma – od introspektivních portrétů po abstraktní krajiny. Tyto cykly nejsou jen malby, ale rozhovory mezi barvou, světlem a vnitřním prostorem.",
+        "cta_title": "Další série",
+        "cta_text": "Objevte všechny série v kompletní výstavě – příběhy, které propojuje světlo, barva a introspekce. Každý obraz je fragmentem širšího příběhu o hledání rovnováhy mezi emocí a tichem.",
+        "cta_button": "Zobrazit všechny"
     },
-    "about": {
-        "title": "O MĚ",
-        "steps": [
-            {
-                "title": "Experimenty s barvou",
-                "text": "Dialog mezi barvou a emocí – někdy jemně, někdy explozivně."
-            },
-            {
-                "title": "Spojení reality a fantazie",
-                "text": "Malba je nástrojem, jak realitu přetavit do snového světa."
-            },
-            {
-                "title": "Moje mise",
-                "text": "Chci vytvářet vizuální příběhy, které se dotýkají emocí."
-            }
-        ]
+    "brand": {
+        "name": "Ateliér AMA",
+        "tagline": "Umění, které mluví k srdci. <1>Každé dílo je příběhem.</1>"
+    },
+    "social": {
+        "instagram": "Instagram",
+        "facebook": "Facebook",
+        "twitter": "Twitter",
+        "linkedin": "LinkedIn"
     },
     "contact": {
-        "title": "Napište mi",
-        "email": "atelier@example.com",
-        "phone": "+420 123 456 789",
-        "address": "Umělecká čtvrť, Praha 7",
-        "privacy": "Zásady ochrany osobních údajů",
-        "button": "Odeslat zprávu",
-        "sending": "Odesílám..."
+        "steps": {
+            "email": {
+                "title": "Email",
+                "value": "atelier@example.com"
+            },
+            "phone": {
+                "title": "Telefon",
+                "value": "+420 123 456 789"
+            },
+            "studio": {
+                "title": "Ateliér",
+                "value": "Umělecká čtvrť, Praha 7"
+            }
+        },
+        "form": {
+            "heading": "Napište mi",
+            "name": "Jméno",
+            "email": "Email",
+            "message": "Vaše zpráva...",
+            "privacy": "Odesláním zprávy potvrzujete, že vaše údaje (jméno, e-mail, text zprávy) budou použity pouze k vyřízení vaší žádosti. Více informací najdete v <1>zásadách ochrany osobních údajů</1>.",
+            "send": "Odeslat zprávu",
+            "sending": "Odesílám..."
+        }
     },
-    "footer": {
-        "brand": "Ateliér AMA",
-        "tagline": "Umění, které mluví k srdci. Každé dílo je příběhem.",
-        "rights": "© 2024 Ateliér Adéla Masná Bočková. Všechna práva vyhrazena."
-    }
+    "hero": {
+        "title": "UMĚNÍ",
+        "subtitle": "které dýchá prostorem",
+        "description": "Barvy nejsou jen pigmenty. Jsou to emoce, které se rozhodly zůstat na plátně. Každé dílo je rozhovor – mezi světlem, tichem a mnou.",
+        "ctaGallery": "Prohlédnout galerii",
+        "ctaAbout": "O mně"
+    },
+    "artwork": {
+        "notFound": "Dílo nenalezeno",
+        "backToGallery": "Zpět do galerie",
+        "back": "Zpět",
+        "hideOverlay": "Skrýt náhled",
+        "showOverlay": "Zobrazit náhled",
+        "technique": "Technika",
+        "dimensions": "Rozměry",
+        "year": "Rok vzniku",
+        "availability": "Dostupnost",
+        "available": "Dostupné",
+        "sold": "Prodáno",
+        "price": "Cena",
+        "addToFavorites": "Přidat mezi oblíbené",
+        "share": "Sdílet",
+        "storyTitle": "Příběh obrazu",
+        "nextWorks": "Další díla",
+        "previous": "Předchozí dílo",
+        "next": "Další dílo"
+    },
+    "about": {
+        "title": "Malba je můj způsob, jak slyšet světlo.",
+        "text": "Tvořím obrazy, ve kterých se barva stává pamětí a ticho prostorem. Každý tah štětce je rozhovor se světlem, které přichází i odchází. Hledám okamžik mezi klidem a pohybem – tam, kde vzniká dech obrazu.",
+        "signature": "Ateliér — 2025"
+    },
+    "nav": {
+        "gallery": "Galerie",
+        "exhibitions": "Vernisáže",
+        "about": "O mně",
+        "contact": "Kontakt",
+        "home": "Domů"
+    },
+    "gallery": {
+        "title": "GALERIE",
+        "intro": "Kolekce děl zachycující různé období a styly mé tvorby.",
+        "cta": {
+            "title": "Prozkoumej více",
+            "text": "Objev celou galerii s více než 50 originálními díly.",
+            "button": "Zobrazit celou galerii"
+        }
+    },
+    "rights": "© 2025 Atelier Adéla Masná Bočková. All rights reserved."
 }

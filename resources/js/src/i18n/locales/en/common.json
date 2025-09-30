@@ -4,61 +4,95 @@
         "welcome": "Welcome back!",
         "ready": "Ready to begin!"
     },
-    "exhibitions": {
-        "title": "EXHIBITIONS",
-        "items": [
-            {
-                "title": "Pastel Visions",
-                "gallery": "Moderna Gallery",
-                "date": "Sept 15 – Nov 30, 2024",
-                "location": "Prague",
-                "visitors": "2,400+ visitors"
+    "contact": {
+        "steps": {
+            "email": {
+                "title": "Email",
+                "value": "atelier@example.com"
             },
-            {
-                "title": "Colors of Emotion",
-                "gallery": "Kunsthalle Brno",
-                "date": "May 3 – July 15, 2024",
-                "location": "Brno",
-                "visitors": "3,100+ visitors"
+            "phone": {
+                "title": "Phone",
+                "value": "+420 123 456 789"
             },
-            {
-                "title": "Dialogues with Canvas",
-                "gallery": "City Gallery",
-                "date": "Jan 12 – Mar 28, 2024",
-                "location": "Ostrava",
-                "visitors": "1,800+ visitors"
+            "studio": {
+                "title": "Studio",
+                "value": "Art District, Prague 7"
             }
-        ]
+        },
+        "form": {
+            "heading": "Write to me",
+            "name": "Name",
+            "email": "Email",
+            "message": "Your message...",
+            "privacy": "By sending this message you confirm that your data (name, e-mail, message text) will be used solely to respond to your inquiry. Learn more in our <1>privacy policy</1>.",
+            "send": "Send Message",
+            "sending": "Sending..."
+        }
+    },
+    "hero": {
+        "title": "ART",
+        "subtitle": "that breathes through space",
+        "description": "Colors are not just pigments. They’re emotions that decided to stay on the canvas. Each piece is a conversation — between light, silence, and you.",
+        "ctaGallery": "Explore Gallery",
+        "ctaAbout": "About the Artist"
+    },
+    "brand": {
+        "name": "AMA Studio",
+        "tagline": "Art that speaks to the heart. <1>Every piece tells a story.</1>"
+    },
+    "social": {
+        "instagram": "Instagram",
+        "facebook": "Facebook",
+        "twitter": "Twitter",
+        "linkedin": "LinkedIn"
+    },
+    "nav": {
+        "gallery": "Gallery",
+        "exhibitions": "Exhibitions",
+        "about": "About",
+        "contact": "Contact",
+        "home": "Home"
+    },
+    "artwork": {
+        "notFound": "Artwork not found",
+        "backToGallery": "Back to gallery",
+        "back": "Back",
+        "hideOverlay": "Hide overlay",
+        "showOverlay": "Show overlay",
+        "technique": "Technique",
+        "dimensions": "Dimensions",
+        "year": "Year created",
+        "availability": "Availability",
+        "available": "Available",
+        "sold": "Sold",
+        "price": "Price",
+        "addToFavorites": "Add to favorites",
+        "share": "Share",
+        "storyTitle": "The story behind the work",
+        "nextWorks": "More works",
+        "previous": "Previous",
+        "next": "Next"
     },
     "about": {
-        "title": "ABOUT ME",
-        "steps": [
-            {
-                "title": "Experiments with Color",
-                "text": "A dialogue between color and emotion – sometimes gentle, sometimes explosive."
-            },
-            {
-                "title": "Blending Reality and Fantasy",
-                "text": "Painting is a tool for transforming reality into a dreamlike world."
-            },
-            {
-                "title": "My Mission",
-                "text": "I aim to create visual stories that touch emotions."
-            }
-        ]
+        "title": "Painting is my way to listen to light.",
+        "text": "I create paintings where color becomes memory and silence becomes space. Every brushstroke is a conversation with light as it comes and goes. I search for the moment between stillness and motion — where the breath of a painting begins.",
+        "signature": "Studio — 2025"
     },
-    "contact": {
-        "title": "Write to Me",
-        "email": "atelier@example.com",
-        "phone": "+420 123 456 789",
-        "address": "Art District, Prague 7",
-        "privacy": "Privacy Policy",
-        "button": "Send Message",
-        "sending": "Sending..."
+    "gallery": {
+        "title": "GALLERY",
+        "intro": "A collection of works capturing different periods and styles of my art.",
+        "cta": {
+            "title": "Explore More",
+            "text": "Discover the full gallery with over 50 original pieces.",
+            "button": "View Full Gallery"
+        }
     },
-    "footer": {
-        "brand": "Atelier AMA",
-        "tagline": "Art that speaks to the heart. Every work tells a story.",
-        "rights": "© 2024 Atelier Adéla Masná Bočková. All rights reserved."
-    }
+    "exhibitions": {
+        "title": "SERIES",
+        "description": "Each series embodies a distinct theme – from introspective portraits to abstract landscapes. These cycles are not just paintings, but dialogues between color, light, and inner space.",
+        "cta_title": "Full Exhibition",
+        "cta_text": "Explore all series in the complete exhibition – stories bound by light, color, and introspection. Every painting is a fragment of a larger search for balance between emotion and silence.",
+        "cta_button": "All Series"
+    },
+    "rights": "© 2025 Adéla Masná Bočková Studio. All rights reserved."
 }
