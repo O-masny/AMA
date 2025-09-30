@@ -10,7 +10,7 @@ class ExhibitionController extends Controller
     {
         $exhibitions = Exhibition::with('images')->orderBy('date', 'desc')->get();
 
-        return Inertia::render('Exhibitions', [
+        return Inertia::render('Exhibitions/Index', [
             'exhibitions' => $exhibitions,
         ]);
     }

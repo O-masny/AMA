@@ -176,7 +176,7 @@ const Exhibitions = ({ exhibitions }: ExhibitionsProps) => {
                         "Objevte všechny série v kompletní výstavě – příběhy, které spojuje světlo, barva a introspekce."
                     )}
                 </p>
-                <Link href="/exhibition">
+                <Link href="/exhibitions">
                     <MagneticButton className="text-lg">
                         {t("exhibitions.cta_button", "Zobrazit výstavu")}
                     </MagneticButton>
