@@ -8,15 +8,11 @@
         "steps": {
             "email": {
                 "title": "Email",
-                "value": "atelier@example.com"
+                "value": "adebock331@seznam.cz"
             },
             "phone": {
                 "title": "Phone",
-                "value": "+420 123 456 789"
-            },
-            "studio": {
-                "title": "Studio",
-                "value": "Art District, Prague 7"
+                "value": "+420 739 495 365"
             }
         },
         "form": {

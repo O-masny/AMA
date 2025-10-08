@@ -25,15 +25,11 @@
         "steps": {
             "email": {
                 "title": "Email",
-                "value": "atelier@example.com"
+                "value": "adebock331@seznam.cz"
             },
             "phone": {
                 "title": "Telefon",
-                "value": "+420 123 456 789"
-            },
-            "studio": {
-                "title": "Ateliér",
-                "value": "Umělecká čtvrť, Praha 7"
+                "value": "+420 739 495 365"
             }
         },
         "form": {

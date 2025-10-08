@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "@inertiajs/react";
 import { motion, useMotionTemplate, useScroll, useTransform } from "framer-motion";
-import { Facebook, Instagram } from "lucide-react";
 import { useRef } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -75,26 +74,7 @@ const Contact = () => {
                     </p>
                 </motion.div>
 
-                {/* Step 3 */}
-                <motion.div
-                    style={{ opacity: step3 }}
-                    className="absolute inset-0 flex flex-col items-center justify-center text-center space-y-4"
-                >
-                    <h3 className="font-playfair text-6xl md:text-7xl font-extrabold text-primary">
-                        {t("contact.steps.studio.title")}
-                    </h3>
-                    <p className="text-lg md:text-xl text-muted-foreground">
-                        {t("contact.steps.studio.value")}
-                    </p>
-                    <div className="flex gap-4 pt-6">
-                        <Button variant="outline" size="icon" className="rounded-full">
-                            <Instagram className="w-5 h-5" />
-                        </Button>
-                        <Button variant="outline" size="icon" className="rounded-full">
-                            <Facebook className="w-5 h-5" />
-                        </Button>
-                    </div>
-                </motion.div>
+
 
                 {/* Form */}
                 <motion.div
