@@ -18,9 +18,10 @@ export default defineConfig({
         jsx: "automatic",
     },
     build: {
+        manifest: true, // musí být true
         outDir: 'public/build',
-        manifest: true,
         emptyOutDir: true,
+        ssrManifest: false, // <--- přidej tohle
     },
     resolve: {
         alias: {
