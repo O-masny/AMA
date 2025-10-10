@@ -2,15 +2,14 @@
 
 import { motion } from "framer-motion";
 import { Trans, useTranslation } from "react-i18next";
-import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa";
+import { FaInstagram, FaTiktok } from "react-icons/fa";
 
 const Footer = () => {
     const { t } = useTranslation("common");
 
     const socialLinks = [
-        { icon: <FaInstagram />, href: "https://instagram.com", label: t("social.instagram") },
-        { icon: <FaFacebookF />, href: "https://facebook.com", label: t("social.facebook") },
-        { icon: <FaTiktok />, href: "https://tiktok.com", label: t("social.tiktok") },
+        { icon: <FaInstagram />, href: "https://www.instagram.com/adebscure", label: t("social.instagram") },
+        { icon: <FaTiktok />, href: "https://www.tiktok.com/@adebscure", label: t("social.tiktok") },
     ];
 
     return (
