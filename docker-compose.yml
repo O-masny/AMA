@@ -39,7 +39,6 @@ services:
     env_file:
       - ./.env.production
     volumes:
-      - ./public:/var/www/public:cached        # mount frontend z hostu
       - database_data:/var/www/database
       - storage_data:/var/www/storage
       - ./.env.production:/var/www/.env:ro
