@@ -24,12 +24,14 @@ class Gallery extends Model
     ];
 
     protected $casts = [
-        'image' => 'array', // nech to klidně tak — pokud ukládáš různé velikosti (thumb, full)
+        'available' => 'boolean',
     ];
+
 
     public function exhibitions()
     {
         return $this->belongsToMany(Exhibition::class, 'exhibition_gallery')
-            ->withPivot('order');
+            ->withPivot('order')
+            ->orderBy('pivot_order');
     }
 }

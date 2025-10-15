@@ -4,22 +4,9 @@ import { Link, usePage } from "@inertiajs/react";
 import { AnimatePresence, motion, useSpring } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ExhibitionsProps } from "../data/exhibitions";
 import { MagneticButton } from "../magnetic-button";
 
-export type Exhibition = {
-    id: number;
-    title: string;
-    gallery: string;
-    date: string;
-    location: string;
-    description: string;
-    visitors?: string;
-    images: { id: number; image: string; caption?: string }[];
-};
-
-export interface ExhibitionsProps {
-    exhibitions: Exhibition[];
-}
 
 const Exhibitions = ({ exhibitions }: ExhibitionsProps) => {
     const { t } = useTranslation();
@@ -59,7 +46,7 @@ const Exhibitions = ({ exhibitions }: ExhibitionsProps) => {
     };
 
     const a = exhibitions.find((e) => e.id === active);
-
+    console.log(exhibitions)
     const touchX = typeof window !== "undefined" ? window.innerWidth / 2 - 192 : 0;
     const touchY = typeof window !== "undefined" ? window.innerHeight / 2 - 240 : 0;
 
@@ -135,7 +122,7 @@ const Exhibitions = ({ exhibitions }: ExhibitionsProps) => {
                             >
                                 <div className="relative w-[24rem] h-[30rem] overflow-hidden rounded-3xl shadow-artistic">
                                     <motion.img
-                                        src={`/storage/${a.images[0].image}`}
+                                        src={`/storage/${a.galleries[0].image}`}
                                         alt={a.title}
                                         className="w-full h-full object-cover"
                                         initial={{ scale: 1 }}

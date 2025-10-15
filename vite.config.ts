@@ -22,6 +22,16 @@ export default defineConfig({
         outDir: 'public/build',
         emptyOutDir: true,
     },
+    server: {
+        host: '0.0.0.0',
+        port: 5173,
+        strictPort: true,
+        hmr: {
+            host: 'localhost', // nebo tvá doména, pokud jedeš přes HTTPS
+            protocol: 'ws',
+            port: 5173,
+        },
+    },
     resolve: {
         alias: {
             "@": resolve(__dirname, "resources/js"), // <— DŮLEŽITÉ

@@ -1,32 +1,22 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Link } from "@inertiajs/react";
+import { ExhibitionProps } from "@/components/data/exhibitions";
 import { MagneticButton } from "@/components/magnetic-button";
+import { Link } from "@inertiajs/react";
+import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
-export interface Exhibition {
-    id: number;
-    title: string;
-    description: string;
-    location: string;
-    date: string;
-    images: { id: number; image: string; caption?: string }[];
-}
 
-interface Props {
-    exhibition: Exhibition;
-}
 
-export default function ExhibitionShow({ exhibition }: Props) {
+export default function ExhibitionShow({ exhibition }: ExhibitionProps) {
     const { t } = useTranslation("common");
-
+    console.log(exhibition)
     return (
         <section className="relative min-h-screen bg-background text-foreground overflow-hidden">
             {/* Header */}
             <div className="relative h-[90vh] overflow-hidden">
                 <motion.img
-                    src={exhibition.images[0]?.image}
+                    src={`/storage/${exhibition.galleries[0]?.image}`}
                     alt={exhibition.title}
                     className="w-full h-full object-cover"
                     initial={{ scale: 1.2 }}
@@ -64,7 +54,7 @@ export default function ExhibitionShow({ exhibition }: Props) {
 
             {/* Image gallery */}
             <div className="grid md:grid-cols-2 gap-10 max-w-6xl mx-auto pb-32 px-6 md:px-0">
-                {exhibition.images.slice(1).map((img) => (
+                {exhibition.galleries.slice(1).map((img) => (
                     <motion.div
                         key={img.id}
                         className="relative overflow-hidden rounded-2xl"
@@ -73,9 +63,15 @@ export default function ExhibitionShow({ exhibition }: Props) {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
                     >
-                        <img src={img.image} alt={img.caption} className="w-full h-[70vh] object-cover" />
-                        {img.caption && (
-                            <p className="absolute bottom-4 left-4 text-sm text-white/80 italic">{img.caption}</p>
+                        <img
+                            src={`/storage/${img.image}`}
+                            alt={img.title || exhibition.title}
+                            className="w-full h-[70vh] object-cover"
+                        />
+                        {img.description && (
+                            <p className="absolute bottom-4 left-4 text-sm text-white/80 italic">
+                                {img.description}
+                            </p>
                         )}
                     </motion.div>
                 ))}

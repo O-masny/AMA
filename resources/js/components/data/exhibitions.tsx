@@ -1,3 +1,5 @@
+import { Artwork } from "./artworks";
+
 export type Exhibition = {
     id: number;
     title: string;
@@ -6,9 +8,13 @@ export type Exhibition = {
     location: string;
     description: string;
     visitors?: string;
-    images: { id: number; image: string; caption?: string }[];
+    galleries: Artwork[];
 };
 export
     interface ExhibitionsProps {
     exhibitions: Exhibition[];
+}
+export
+    interface ExhibitionProps {
+    exhibition: Exhibition;
 }

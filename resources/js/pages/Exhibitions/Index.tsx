@@ -1,23 +1,11 @@
 "use client";
 
+import { ExhibitionsProps } from "@/components/data/exhibitions";
 import { Link } from "@inertiajs/react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
-export interface Exhibition {
-    id: number;
-    title: string;
-    description: string;
-    cover: string;
-    date: string;
-    location: string;
-}
-
-interface Props {
-    exhibitions: Exhibition[];
-}
-
-export default function ExhibitionsIndex({ exhibitions }: Props) {
+export default function ExhibitionsIndex({ exhibitions }: ExhibitionsProps) {
     const { t } = useTranslation("common");
 
     return (
@@ -59,7 +47,7 @@ export default function ExhibitionsIndex({ exhibitions }: Props) {
                         {/* Image */}
                         <div className="overflow-hidden relative">
                             <motion.img
-                                src={ex.cover}
+                                src={`/storage/${ex.galleries[0].image}`}
                                 alt={ex.title}
                                 className="w-full h-[70vh] object-cover transition-transform duration-[3000ms] group-hover:scale-105"
                             />
