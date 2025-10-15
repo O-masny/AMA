@@ -21,7 +21,6 @@ export default defineConfig({
         manifest: true, // musí být true
         outDir: 'public/build',
         emptyOutDir: true,
-        ssrManifest: false, // <--- přidej tohle
     },
     resolve: {
         alias: {

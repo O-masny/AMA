@@ -135,7 +135,7 @@ const Exhibitions = ({ exhibitions }: ExhibitionsProps) => {
                             >
                                 <div className="relative w-[24rem] h-[30rem] overflow-hidden rounded-3xl shadow-artistic">
                                     <motion.img
-                                        src={a.images[0]?.image}
+                                        src={`/storage/${a.images[0].image}`}
                                         alt={a.title}
                                         className="w-full h-full object-cover"
                                         initial={{ scale: 1 }}
