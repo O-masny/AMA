@@ -2,26 +2,26 @@
 FROM node:20-alpine AS node-builder
 WORKDIR /app
 
-# Kopíruj package.json + lock a nainstaluj deps
+# Install dependencies
 COPY package*.json ./
 RUN npm ci
 
-# Zkopíruj zdrojáky (jen to, co je potřeba pro build)
+# Copy frontend sources
 COPY resources ./resources
 COPY vite.config.* ./
 COPY tsconfig*.json ./
 COPY public ./public
 
-# Proveď build
+# Build frontend
 RUN npm run build
 
 
-# --- Stage 2: Base image s PHP 8.3 ---
+# --- Stage 2: Base image with PHP 8.3 ---
 FROM php:8.3-fpm-alpine
 
 WORKDIR /var/www
 
-# Systémové závislosti + intl + GD s WebP
+# System deps + PHP extensions (including FIX: pdo_mysql)
 RUN apk add --no-cache \
         libzip-dev \
         unzip \
@@ -39,21 +39,22 @@ RUN apk add --no-cache \
         --with-freetype \
         --with-jpeg \
         --with-webp \
-    && docker-php-ext-install pdo pdo_sqlite bcmath zip intl gd
+    && docker-php-ext-install \
+        pdo pdo_mysql pdo_sqlite bcmath zip intl gd
 
 # Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Kopírování aplikace
+# Copy whole Laravel app
 COPY . .
 
-# Composer dependencies (production)
+# Composer production install
 RUN composer install --no-dev --optimize-autoloader
 
-# Překopíruj frontend build z node stage
+# Copy frontend build artifacts
 COPY --from=node-builder /app/public/build ./public/build
 
-# Hotfix: Vite 7 generuje manifest do .vite/, Laravel ho hledá v root
+# Vite 7 manifest hotfix
 RUN if [ -f public/build/.vite/manifest.json ]; then \
         cp public/build/.vite/manifest.json public/build/manifest.json && \
         echo "Manifest hotfix applied"; \
@@ -64,11 +65,11 @@ RUN if [ -f public/build/.vite/manifest.json ]; then \
 # Storage symlink
 RUN php artisan storage:link || true
 
-# Nastavení práv
+# Permissions
 RUN chown -R www-data:www-data storage bootstrap/cache database public/build && \
     chmod -R 775 storage bootstrap/cache
 
-# PHP konfigurace - OPRAVENA CESTA
+# PHP config
 RUN echo "upload_max_filesize=50M" > /usr/local/etc/php/conf.d/uploads.ini && \
     echo "post_max_size=55M" >> /usr/local/etc/php/conf.d/uploads.ini
 
