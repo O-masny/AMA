@@ -1,13 +1,37 @@
+version: "3.9"
+
 services:
+  app:
+    container_name: ama_app
+    build:
+      context: ../
+      dockerfile: docker/prod/Dockerfile
+    image: ama-prod:latest
+    working_dir: /var/www
+    env_file:
+      - ../.env.production
+    volumes:
+      - storage_data:/var/www/storage          # perzistence pro uploads
+      - database_data:/var/www/database        # perzistence pro DB
+      - ../.env.production:/var/www/.env:ro   # environment
+    expose:
+      - "9000"
+    networks:
+      - ama
+    restart: unless-stopped
+    command: >
+      sh -c "php artisan optimize:clear &&
+             php-fpm -F"
+
   nginx:
     image: nginx:1.25-alpine
     container_name: ama_nginx
     depends_on:
       - app
     volumes:
-      - ./docker/prod/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-      - app_public:/var/www/public:ro  # ← PŘIDÁNO
-      - storage_data:/var/www/storage:ro  # ← PŘIDÁNO :ro
+      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
+      - /var/www/public:ro                     # použít build z image
+      - storage_data:/var/www/storage:ro       # mount storage pro uploady
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.ama.rule=Host(`amatelier.cz`) || Host(`www.amatelier.cz`)"
@@ -23,31 +47,7 @@ services:
       - ama
     restart: unless-stopped
 
-  app:
-    container_name: ama_app
-    build:
-      context: .
-      dockerfile: docker/prod/Dockerfile
-    image: ama-prod:latest
-    working_dir: /var/www
-    env_file:
-      - ./.env.production
-    volumes:
-      - app_public:/var/www/public  # ← PŘIDÁNO
-      - database_data:/var/www/database
-      - storage_data:/var/www/storage
-      - ./.env.production:/var/www/.env:ro
-    expose:
-      - "9000"
-    networks:
-      - ama
-    restart: unless-stopped
-    command: >
-      sh -c "php artisan optimize:clear &&
-             php-fpm -F"
-
 volumes:
-  app_public: 
   storage_data:
   database_data:
 

@@ -15,13 +15,12 @@ COPY public ./public
 # Build frontend
 RUN npm run build
 
-
 # --- Stage 2: Base image with PHP 8.3 ---
 FROM php:8.3-fpm-alpine
 
 WORKDIR /var/www
 
-# System deps + PHP extensions (PDO MySQL fix included)
+# System deps + PHP extensions
 RUN apk add --no-cache \
         libzip-dev \
         unzip \
