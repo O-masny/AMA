@@ -10,6 +10,8 @@ export default defineConfig({
             input: ["resources/css/app.css", "resources/js/app.tsx"],
             ssr: "resources/js/ssr.tsx",
             refresh: true,
+            // ↓ PŘIDEJ TOTO - řekni pluginu o .vite/ adresáři
+            buildDirectory: 'build',
         }),
         react(),
         tailwindcss(),
@@ -18,7 +20,7 @@ export default defineConfig({
         jsx: "automatic",
     },
     build: {
-        manifest: true, // musí být true
+        manifest: '.vite/manifest.json', // ← Explicitně nastav cestu
         outDir: 'public/build',
         emptyOutDir: true,
     },
@@ -27,14 +29,14 @@ export default defineConfig({
         port: 5173,
         strictPort: true,
         hmr: {
-            host: 'localhost', // nebo tvá doména, pokud jedeš přes HTTPS
+            host: 'localhost',
             protocol: 'ws',
             port: 5173,
         },
     },
     resolve: {
         alias: {
-            "@": resolve(__dirname, "resources/js"), // <— DŮLEŽITÉ
+            "@": resolve(__dirname, "resources/js"),
             "ziggy-js": resolve(__dirname, "vendor/tightenco/ziggy"),
         },
     },
