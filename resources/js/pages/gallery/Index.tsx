@@ -1,6 +1,7 @@
 "use client"
 
 import { Artwork } from "@/components/data/artworks";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import CTAButton from "@/components/ui/CTAButton";
 import Footer from "@/components/Widgets/Footer";
 import CategoryFilter from "@/components/Widgets/Gallery/Filter";
@@ -10,9 +11,8 @@ import Navigation from "@/components/Widgets/Nav";
 import { usePage } from "@inertiajs/react";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import LoadingProvider from "../loading_provider";
-import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { useTranslation } from "react-i18next";
+import LoadingProvider from "../loading_provider";
 
 interface PageProps {
     artworks: Artwork[];

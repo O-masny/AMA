@@ -60,7 +60,7 @@ export const Parallax = ({ children, speed = 0.5, className = "" }: ParallaxProp
     const targetRef = ref.current ? ({ current: ref.current } as React.RefObject<HTMLDivElement>) : undefined;
     const { scrollYProgress } = useScroll({
         target: targetRef,
-        offset: ["start end", "end start"]
+        offset: ["start end", "end start"],
     });
 
     const y = useTransform(scrollYProgress, [0, 1], [0, speed * 100]);
@@ -97,9 +97,9 @@ interface HorizontalScrollProps {
 
 export const HorizontalScroll = ({ children, className = "" }: HorizontalScrollProps) => {
     const targetRef = useRef<HTMLDivElement | null>(null);
-    const targetRefWrapped = targetRef.current ? ({ current: targetRef.current } as React.RefObject<HTMLDivElement>) : undefined;
+    const wrapped = targetRef.current ? ({ current: targetRef.current } as React.RefObject<HTMLDivElement>) : undefined;
     const { scrollYProgress } = useScroll({
-        target: targetRefWrapped,
+        target: wrapped,
     });
 
     const x = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);

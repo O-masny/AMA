@@ -1,4 +1,5 @@
 "use client";
+import { usePage } from "@inertiajs/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState } from "react";
@@ -17,11 +18,15 @@ import SplashScreen from "./splash";
 gsap.registerPlugin(ScrollTrigger);
 
 interface IndexProps {
-    artworks: Artwork[],
-    exhibitions: Exhibition[]
+    artworks?: Artwork[];
+    exhibitions?: Exhibition[];
 }
 
-export const Index = ({ artworks, exhibitions }: IndexProps) => {
+export const Index = (serverProps: IndexProps) => {
+    // prefer Inertia-provided props on client; fall back to server-provided args
+    const { props: pageProps } = usePage<any>();
+    const artworks: Artwork[] = (pageProps && pageProps.artworks) || serverProps.artworks || [];
+    const exhibitions: Exhibition[] = (pageProps && pageProps.exhibitions) || serverProps.exhibitions || [];
     const bgRef = useRef<HTMLDivElement>(null);
     const [heroReady, setHeroReady] = useState(false);
 

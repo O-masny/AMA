@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { Link } from "@inertiajs/react";
 
 type Crumb = {

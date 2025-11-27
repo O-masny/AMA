@@ -16,13 +16,8 @@ const Contact: React.FC<ContactProps> = ({ standalone = false }) => {
     const { t } = useTranslation("common");
     const ref = useRef<HTMLElement | null>(null);
     const nameRef = useRef<HTMLInputElement | null>(null);
-    // pass the actual DOM element (if present) to useScroll to avoid the
-    // 'Target ref is defined but not hydrated' error which occurs when a
-    // RefObject is provided but its `.current` is still null during render.
-    // Build a temporary RefObject only when the element is available so we
-    // satisfy both framer-motion's runtime check and TypeScript's expected
-    // type for `useScroll` without passing an unhydrated RefObject.
     const targetRef = ref.current ? ({ current: ref.current } as React.RefObject<HTMLElement>) : undefined;
+
     const { scrollYProgress } = useScroll({
         target: targetRef,
         offset: ["start start", "end end"],

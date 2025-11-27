@@ -1,32 +1,22 @@
 "use client";
 
-import { motion, useMotionTemplate, useScroll, useSpring, useTransform } from "framer-motion";
+import CTAButton from "@/components/ui/CTAButton";
+import { motion, useMotionTemplate, useSpring, useTransform, useScroll } from "framer-motion";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { MagneticButton } from "../magnetic-button";
 
 const Hero = ({ isReady }: { isReady: boolean }) => {
     const { t } = useTranslation("common");
     const ref = useRef<HTMLDivElement | null>(null);
     const targetRef = ref.current ? ({ current: ref.current } as React.RefObject<HTMLDivElement>) : undefined;
 
-    const { scrollYProgress } = useScroll({
-        target: targetRef,
-        offset: ["start start", "end start"],
-    });
-
-    const smooth = useSpring(scrollYProgress, { stiffness: 90, damping: 25, mass: 0.3 });
-    const hueShift = useTransform(smooth, [0, 1], [0, 45]);
-
+    // subtle hue shift driven by scroll for liveliness
+    const { scrollYProgress } = useScroll({ target: targetRef, offset: ["start start", "end start"] });
+    const hue = useTransform(scrollYProgress, [0, 1], [0, 20]);
+    const hueShift = useSpring(hue, { stiffness: 100, damping: 20 });
     const background = useMotionTemplate`
-    linear-gradient(
-      130deg,
-      hsl(var(--primary) / 1) 0%,
-      hsl(var(--accent) / 1) 100%
-    ) hue-rotate(${hueShift}deg)
-  `;
-
-    const title = t("hero.title");
+      linear-gradient(130deg, hsl(var(--primary) / 1) 0%, hsl(var(--accent) / 1) 100%) hue-rotate(${hueShift}deg)
+    `;
 
     return (
         <motion.section
@@ -35,62 +25,25 @@ const Hero = ({ isReady }: { isReady: boolean }) => {
             style={{ background }}
             initial="hidden"
             animate={isReady ? "visible" : "hidden"}
-            variants={{
-                hidden: { opacity: 0, y: 80 },
-                visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: "easeOut" } },
-            }}
+            variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 0.9 } } }}
         >
-            {/* Diagonal split: left visual, right content (desktop). Mobile remains stacked and centered. */}
-            <div className="relative w-full min-h-screen flex flex-col md:flex-row">
-                {/* Left visual pane */}
-                <div
-                    className="hidden md:block md:w-1/2 h-[80vh] relative"
-                    style={{
-                        clipPath: 'polygon(0 0, 70% 0, 100% 100%, 0 100%)',
-                        backgroundImage: `linear-gradient(130deg, rgba(0,0,0,0.05), rgba(0,0,0,0.15)), url('/assets/hero.jpg')`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                    }}
-                />
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-8 py-24 md:py-36">
+                <div className="md:w-1/2 w-full order-2 md:order-1 px-6 md:px-0">
+                    <h1 className="font-display huge-display font-extrabold leading-tight text-foreground">
+                        {t("hero.title")}
+                    </h1>
+                    <p className="mt-6 text-body text-muted-foreground max-w-2xl">
+                        {t("hero.subtitle")}
+                    </p>
 
-                {/* Right content pane */}
-                <div className="w-full md:w-1/2 flex items-center justify-center text-center md:text-left px-6 md:px-20 py-24">
-                    <div className="max-w-3xl">
-                        <motion.h1 className="text-display huge-display font-display font-extrabold leading-[0.9] tracking-tight text-[hsl(var(--foreground))]">
-                            {Array.from(title).map((char, i) => (
-                                <motion.span
-                                    key={i}
-                                    className="inline-block"
-                                    initial={{ opacity: 0, y: 80 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{
-                                        delay: i * 0.03,
-                                        duration: 0.5,
-                                    }}
-                                >
-                                    {char === ' ' ? '\u00A0' : char}
-                                </motion.span>
-                            ))}
-                        </motion.h1>
-
-                        <motion.h2 className="mt-10 text-title md:text-heading font-sans text-[hsl(var(--muted-foreground))] tracking-wide" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.7 }}>
-                            {t('hero.subtitle')}
-                        </motion.h2>
-
-                        <motion.p className="max-w-2xl mt-8 text-body md:text-body font-sans text-[hsl(var(--muted-foreground))]/90 leading-relaxed" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1 }}>
-                            {t('hero.description')}
-                        </motion.p>
-
-                        <motion.div className="flex flex-wrap gap-6 mt-14" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.3 }}>
-                            <MagneticButton href="#gallery" className="text-lg font-sans font-medium px-10 py-4">
-                                {t('hero.ctaGallery')}
-                            </MagneticButton>
-
-                            <MagneticButton href="#about" variant="outline" className="text-lg font-sans font-medium px-10 py-4">
-                                {t('hero.ctaAbout')}
-                            </MagneticButton>
-                        </motion.div>
+                    <div className="flex gap-4 mt-8">
+                        <CTAButton href="#gallery">{t("hero.ctaGallery")}</CTAButton>
+                        <CTAButton href="#about" className="bg-transparent border border-white/10 text-foreground">{t("hero.ctaAbout")}</CTAButton>
                     </div>
+                </div>
+
+                <div className="md:w-1/2 w-full order-1 md:order-2 px-6 md:px-0">
+                    <div className="rounded-2xl overflow-hidden shadow-xl h-64 md:h-96 bg-cover bg-center" style={{ backgroundImage: "url('/assets/hero.jpg')" }} />
                 </div>
             </div>
         </motion.section>

@@ -1,12 +1,12 @@
 "use client";
 
 import { ExhibitionsProps } from "@/components/data/exhibitions";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import CTAButton from "@/components/ui/CTAButton";
 import Footer from "@/components/Widgets/Footer";
 import { Link } from "@inertiajs/react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 export default function ExhibitionsIndex({ exhibitions }: ExhibitionsProps) {
     const { t } = useTranslation("common");

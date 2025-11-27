@@ -12,8 +12,8 @@ interface GalleryProps {
 
 const Gallery = ({ artworks }: GalleryProps) => {
     const { t } = useTranslation("common");
-    const ref = useRef<HTMLElement | null>(null);
-    const targetRef = ref.current ? ({ current: ref.current } as React.RefObject<HTMLElement>) : undefined;
+    const ref = useRef<HTMLDivElement | null>(null);
+    const targetRef = ref.current ? ({ current: ref.current } as React.RefObject<HTMLDivElement>) : undefined;
 
     const { scrollYProgress } = useScroll({
         target: targetRef,
