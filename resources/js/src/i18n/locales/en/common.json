@@ -23,8 +23,7 @@
             "privacy": "By sending this message you confirm that your data (name, e-mail, message text) will be used solely to respond to your inquiry. Learn more in our <1>privacy policy</1>.",
             "send": "Send Message",
             "sending": "Sending..."
-        }
-        ,
+        },
         "cta": "Contact"
     },
     "hero": {

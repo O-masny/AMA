@@ -26,7 +26,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
                                 <motion.button
                                     key={category}
                                     onClick={() => setSelectedCategory(category)}
-                                    className={`relative px-6 py-3 rounded-full font-sans font-medium text-base md:text-lg transition-all duration-500 whitespace-nowrap
+                                    className={`relative px-6 py-3 rounded-none font-sans font-medium text-base md:text-lg transition-all duration-500 whitespace-nowrap
                   ${isSelected
                                             ? "text-primary-foreground"
                                             : "text-card-foreground hover:text-foreground"
@@ -41,7 +41,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
                                     {isSelected && (
                                         <motion.span
                                             layoutId="activeCategory"
-                                            className="absolute inset-0 rounded-full bg-primary shadow-md -z-10"
+                                            className="absolute inset-0 rounded-none bg-primary shadow-md -z-10"
                                             transition={{
                                                 type: "spring",
                                                 bounce: 0.3,

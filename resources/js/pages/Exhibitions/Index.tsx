@@ -1,10 +1,11 @@
 "use client";
 
 import { ExhibitionsProps } from "@/components/data/exhibitions";
+import Footer from "@/components/Widgets/Footer";
+import CTAButton from "@/components/ui/CTAButton";
 import { Link } from "@inertiajs/react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import Footer from "@/components/Widgets/Footer";
 
 export default function ExhibitionsIndex({ exhibitions }: ExhibitionsProps) {
     const { t } = useTranslation("common");
@@ -85,7 +86,7 @@ export default function ExhibitionsIndex({ exhibitions }: ExhibitionsProps) {
                                     </motion.h3>
                                     <p className="text-white/80 text-body max-w-lg mb-4">{ex.description}</p>
                                     <Link href={`/exhibitions/${ex.id}`} className="inline-block">
-                                        <span className="text-primary font-sans text-sm md:text-base underline underline-offset-4 decoration-primary/50">{t("exhibitions.view_series", "Zobrazit sérii →")}</span>
+                                        <CTAButton href={`/exhibitions/${ex.id}`} className="px-4 py-2 bg-[hsl(var(--background))] text-primary">{t("exhibitions.view_series", "Zobrazit sérii →")}</CTAButton>
                                     </Link>
                                 </div>
                             </motion.div>

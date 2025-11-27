@@ -11,13 +11,27 @@ use App\Models\Category;
 
 class GalleryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $artworks = Gallery::all();
+        $perPage = 12;
+        $category = $request->input('category', 'Vše');
+
+        $query = Gallery::query();
+        if ($category && $category !== 'Vše') {
+            $query->where('category', $category);
+        }
+
+        $paginator = $query->orderBy('created_at', 'desc')->paginate($perPage)->withQueryString();
 
         return Inertia::render('gallery/Index', [
-            'artworks' => $artworks,
+            'artworks' => $paginator->items(),
+            'pagination' => [
+                'current_page' => $paginator->currentPage(),
+                'last_page' => $paginator->lastPage(),
+                'total' => $paginator->total(),
+            ],
             'categories' => array_merge(['Vše'], Tag::pluck('name')->toArray()),
+            'selectedCategory' => $category,
         ]);
     }
 

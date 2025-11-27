@@ -11,6 +11,7 @@ interface MagneticButtonProps {
     className?: string;
     strength?: number; // magnet strength multiplier
     variant?: "default" | "outline" | "light";
+    style?: React.CSSProperties;
 }
 
 export const MagneticButton = ({
@@ -19,6 +20,7 @@ export const MagneticButton = ({
     className = "",
     strength = 0.45,
     variant = "default",
+    style,
 }: MagneticButtonProps) => {
     const ref = useRef<HTMLDivElement>(null);
 
@@ -55,7 +57,7 @@ export const MagneticButton = ({
     };
 
     const baseStyle =
-        "relative inline-flex items-center justify-center px-10 py-5 rounded-full font-sans font-medium tracking-wide select-none cursor-pointer transition-all duration-300 active:scale-[0.97]";
+        "relative inline-flex items-center justify-center px-10 py-5 rounded-none font-sans font-medium tracking-wide select-none cursor-pointer transition-all duration-300 active:scale-[0.97]";
 
     const variants = {
         default: `
@@ -77,19 +79,21 @@ export const MagneticButton = ({
     `,
     };
 
+    const mergedStyle = { x: springX, y: springY, ...(style || {}) } as any;
+
     const ButtonContent = (
         <motion.div
             ref={ref}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            style={{ x: springX, y: springY }}
+            style={mergedStyle}
             className={clsx(baseStyle, variants[variant], className)}
         >
             <span className="relative z-10 text-lg">{children}</span>
 
             {/* Glow aura */}
             <motion.div
-                className="absolute inset-0 rounded-full bg-[hsl(var(--primary))/40] blur-xl"
+                className="absolute inset-0 rounded-none bg-[hsl(var(--primary))/40] blur-xl"
                 animate={{ opacity: [0.2, 0.6, 0.2], scale: [1, 1.05, 1] }}
                 transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
             />

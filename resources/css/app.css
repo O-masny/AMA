@@ -239,10 +239,21 @@
 
 /* Semantic section spacing utilities for consistent vertical rhythm */
 @layer components {
-    .section { @apply py-24 md:py-32; }
-    .section--sm { @apply py-12 md:py-16; }
-    .section--lg { @apply py-32 md:py-40; }
-    .section--hero { @apply py-20 md:py-36; }
+    .section {
+        @apply py-24 md:py-32;
+    }
+
+    .section--sm {
+        @apply py-12 md:py-16;
+    }
+
+    .section--lg {
+        @apply py-32 md:py-40;
+    }
+
+    .section--hero {
+        @apply py-20 md:py-36;
+    }
 
     /* Larger display helpers for headline scaling — responsive and layout-safe.
        Use a container- and viewport-aware sizing strategy to avoid overflow.
@@ -269,4 +280,23 @@
         word-break: break-word;
         hyphens: auto;
     }
+
+    /* CTA fill animation: a left-to-right color fill that visually inverts the label.
+       Apply to elements by adding `cta-fill` and ensure label has `cta-label`.
+    */
+    .cta-fill { position: relative; overflow: hidden; }
+    .cta-fill::before {
+        content: "";
+        position: absolute;
+        left: 0; right: 0; top: 0; bottom: 0;
+        background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)));
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 350ms cubic-bezier(.2,.9,.2,1);
+        z-index: 0;
+        opacity: 0.98;
+    }
+    .cta-fill .cta-label { position: relative; z-index: 10; transition: color 220ms ease; }
+    .cta-fill:hover::before { transform: scaleX(1); }
+    .cta-fill:hover .cta-label { color: hsl(var(--primary-foreground)); }
 }

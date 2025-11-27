@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link, usePage } from "@inertiajs/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { FaInstagram, FaTiktok } from "react-icons/fa";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -50,6 +51,14 @@ const Navigation = ({ isReady }: { isReady: boolean }) => {
     }, []);
 
     const getHref = (hash: string) => (url === "/" ? `#${hash}` : `/#${hash}`);
+
+    useEffect(() => {
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") setIsMenuOpen(false);
+        };
+        window.addEventListener("keydown", onKey);
+        return () => window.removeEventListener("keydown", onKey);
+    }, []);
 
     return (
         <motion.section
@@ -168,19 +177,38 @@ const Navigation = ({ isReady }: { isReady: boolean }) => {
                         initial="hidden"
                         animate="show"
                         exit="exit"
-                        className="fixed inset-0 bg-background/95 backdrop-blur-2xl z-40 flex flex-col items-center justify-center space-y-10"
+                        className="fixed inset-0 bg-background/95 backdrop-blur-2xl z-40 flex flex-col items-center justify-center"
+                        onClick={() => setIsMenuOpen(false)}
                     >
-                        {navItems.map((item) => (
-                            <motion.div key={item.hash} variants={itemVariants}>
-                                <Link
-                                    href={getHref(item.hash)}
-                                    onClick={() => setIsMenuOpen(false)}
-                                    className="text-title font-bold text-foreground hover:text-primary transition-colors"
-                                >
-                                    {item.name}
-                                </Link>
-                            </motion.div>
-                        ))}
+                        <motion.div className="w-full max-w-lg px-8" onClick={(e) => e.stopPropagation()}>
+                            <div className="flex flex-col items-start space-y-6 py-8">
+                                {navItems.map((item) => (
+                                    <motion.div key={item.hash} variants={itemVariants}>
+                                        <Link
+                                            href={getHref(item.hash)}
+                                            onClick={() => setIsMenuOpen(false)}
+                                            className="text-title font-bold text-foreground hover:text-primary transition-colors block"
+                                        >
+                                            {item.name}
+                                        </Link>
+                                    </motion.div>
+                                ))}
+                            </div>
+
+                            {/* Social links + dismiss hint */}
+                            <div className="mt-8 pt-6 border-t border-border flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                        <a href="https://www.instagram.com/adebscure" target="_blank" rel="noopener noreferrer" className="text-2xl text-primary-foreground hover:text-accent transition" aria-label="Instagram">
+                                            <FaInstagram />
+                                        </a>
+                                        <a href="https://www.tiktok.com/@adebscure" target="_blank" rel="noopener noreferrer" className="text-2xl text-primary-foreground hover:text-accent transition" aria-label="TikTok">
+                                            <FaTiktok />
+                                        </a>
+                                </div>
+
+                                <div className="text-sm text-muted-foreground/80">Tap outside to dismiss</div>
+                            </div>
+                        </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>

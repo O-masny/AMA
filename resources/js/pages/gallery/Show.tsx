@@ -8,7 +8,7 @@ import Footer from "@/components/Widgets/Footer";
 import { ScrollReveal } from "@/components/Widgets/ScrollAnimations";
 import { Link, usePage } from "@inertiajs/react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ChevronLeft, ChevronRight, Eye, EyeOff, Heart, Share2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Eye, EyeOff, Heart, Share2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -101,7 +101,7 @@ const Show: React.FC = () => {
                 <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
                     <button
                         onClick={() => setShowOverlay(!showOverlay)}
-                        className="px-5 py-3 bg-popover/60 rounded-full flex items-center gap-2 text-white hover:bg-popover/80 transition"
+                        className="px-5 py-3 bg-popover/60 rounded-none flex items-center gap-2 text-white hover:bg-popover/80 transition"
                     >
                         {showOverlay ? (
                             <>
@@ -252,9 +252,9 @@ const Show: React.FC = () => {
                                             />
                                             <div className={`absolute top-4 ${idx === 0 ? "left-4" : "right-4"}`}>
                                                 {idx === 0 ? (
-                                                    <ChevronLeft className="w-6 h-6 text-white bg-popover/50 rounded-full p-1" />
+                                                        <ChevronLeft className="w-6 h-6 text-white bg-popover/50 rounded-none p-1" />
                                                 ) : (
-                                                    <ChevronRight className="w-6 h-6 text-white bg-popover/50 rounded-full p-1" />
+                                                    <ChevronRight className="w-6 h-6 text-white bg-popover/50 rounded-none p-1" />
                                                 )}
                                             </div>
                                         </div>

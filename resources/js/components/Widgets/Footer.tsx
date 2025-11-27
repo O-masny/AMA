@@ -1,8 +1,8 @@
 "use client";
 
+import CTAButton from "@/components/ui/CTAButton";
 import { motion } from "framer-motion";
 import { Trans, useTranslation } from "react-i18next";
-import CTAButton from "@/components/ui/CTAButton";
 import { FaInstagram, FaTiktok } from "react-icons/fa";
 
 const Footer = () => {
@@ -40,7 +40,7 @@ const Footer = () => {
                         </motion.div>
 
                         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.3 }}>
-                            <CTAButton href="/contact" className="px-6 py-2 rounded-full bg-[hsl(var(--background))] text-foreground shadow-sm hover:shadow-md">
+                            <CTAButton href="/contact" className="px-6 py-2 bg-[hsl(var(--background))] text-foreground shadow-sm hover:shadow-md">
                                 {t("contact.cta", "Kontaktovat")}
                             </CTAButton>
                         </motion.div>

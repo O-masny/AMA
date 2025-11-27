@@ -1,8 +1,8 @@
 "use client";
 
-import Navigation from "@/components/Widgets/Nav";
 import Contact from "@/components/Widgets/Contact";
 import Footer from "@/components/Widgets/Footer";
+import Navigation from "@/components/Widgets/Nav";
 import LoadingProvider from "./loading_provider";
 
 const ContactPage: React.FC = () => {
