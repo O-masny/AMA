@@ -1,7 +1,5 @@
 "use client";
 import { Artwork } from "@/components/data/artworks";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
 
 interface HeroSectionProps {
     artworks?: Artwork[];

@@ -14,13 +14,14 @@ import { useTranslation } from "react-i18next";
 
 interface PageProps {
     artwork: Artwork;
-    artworks: Artwork[];
+    previousArtwork?: Artwork | null;
+    nextArtwork?: Artwork | null;
     [key: string]: any;
 }
 
 const Show: React.FC = () => {
     const { props } = usePage<PageProps>();
-    const { artwork, artworks } = props;
+    const { artwork, previousArtwork, nextArtwork } = props;
     const { t } = useTranslation("common");
 
     const [showOverlay, setShowOverlay] = useState(true);
@@ -47,11 +48,9 @@ const Show: React.FC = () => {
         );
     }
 
-    const currentIndex = artworks.findIndex((a) => a.id === artwork.id);
-    const previousArtwork =
-        currentIndex > 0 ? artworks[currentIndex - 1] : artworks[artworks.length - 1];
-    const nextArtwork =
-        currentIndex < artworks.length - 1 ? artworks[currentIndex + 1] : artworks[0];
+    // previousArtwork and nextArtwork are provided by the server
+    const prev = previousArtwork || null;
+    const next = nextArtwork || null;
 
     return (
         <div className="min-h-screen bg-background text-foreground font-sans">
@@ -240,33 +239,39 @@ const Show: React.FC = () => {
                         </h2>
                     </ScrollReveal>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {[previousArtwork, nextArtwork].map((item, idx) => (
-                            <motion.div key={item.id} whileHover={{ scale: 1.02, y: -8 }} transition={{ duration: 0.4 }}>
-                                <Link href={`/gallery/${item.id}`}>
-                                    <Card className="group overflow-hidden bg-card shadow-artistic hover:shadow-lg transition-all duration-500 cursor-pointer">
-                                        <div className="relative h-64 overflow-hidden">
-                                            <img
-                                                src={`/storage/${item.image}`}
-                                                alt={item.title}
-                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                            />
-                                            <div className={`absolute top-4 ${idx === 0 ? "left-4" : "right-4"}`}>
-                                                {idx === 0 ? (
+                        {[prev, next].map((item, idx) => (
+                            item ? (
+                                <motion.div key={item.id} whileHover={{ scale: 1.02, y: -8 }} transition={{ duration: 0.4 }}>
+                                    <Link href={`/gallery/${item.id}`}>
+                                        <Card className="group overflow-hidden bg-card shadow-artistic hover:shadow-lg transition-all duration-500 cursor-pointer">
+                                            <div className="relative h-64 overflow-hidden">
+                                                <img
+                                                    src={`/storage/${item.image}`}
+                                                    alt={item.title}
+                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                                />
+                                                <div className={`absolute top-4 ${idx === 0 ? "left-4" : "right-4"}`}>
+                                                    {idx === 0 ? (
                                                         <ChevronLeft className="w-6 h-6 text-white bg-popover/50 rounded-none p-1" />
-                                                ) : (
-                                                    <ChevronRight className="w-6 h-6 text-white bg-popover/50 rounded-none p-1" />
-                                                )}
+                                                    ) : (
+                                                        <ChevronRight className="w-6 h-6 text-white bg-popover/50 rounded-none p-1" />
+                                                    )}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="p-6">
-                                            <h3 className="font-display font-bold text-xl mb-2">{item.title}</h3>
-                                            <p className="text-muted-foreground text-sm">
-                                                {idx === 0 ? t("artwork.previous") : t("artwork.next")}
-                                            </p>
-                                        </div>
-                                    </Card>
-                                </Link>
-                            </motion.div>
+                                            <div className="p-6">
+                                                <h3 className="font-display font-bold text-xl mb-2">{item.title}</h3>
+                                                <p className="text-muted-foreground text-sm">
+                                                    {idx === 0 ? t("artwork.previous") : t("artwork.next")}
+                                                </p>
+                                            </div>
+                                        </Card>
+                                    </Link>
+                                </motion.div>
+                            ) : (
+                                <div key={idx} className="p-6 bg-card rounded-2xl">
+                                    <p className="text-muted-foreground">{t('artwork.noMore')}</p>
+                                </div>
+                            )
                         ))}
                     </div>
                 </div>

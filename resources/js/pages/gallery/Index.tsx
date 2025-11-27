@@ -1,16 +1,18 @@
 "use client"
 
 import { Artwork } from "@/components/data/artworks";
+import CTAButton from "@/components/ui/CTAButton";
 import Footer from "@/components/Widgets/Footer";
 import CategoryFilter from "@/components/Widgets/Gallery/Filter";
 import GalleryGrid from "@/components/Widgets/Gallery/GalleryGrid";
 import HeroSection from "@/components/Widgets/Gallery/HeroSection";
-import OutroSection from "@/components/Widgets/Gallery/OutroSection";
 import Navigation from "@/components/Widgets/Nav";
+import { usePage } from "@inertiajs/react";
 import { motion } from "framer-motion";
-import { useState } from "react";
-import { Link, usePage } from "@inertiajs/react";
+import { useEffect, useRef, useState } from "react";
 import LoadingProvider from "../loading_provider";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import { useTranslation } from "react-i18next";
 
 interface PageProps {
     artworks: Artwork[];
@@ -27,14 +29,54 @@ function useFilteredArtworks(artworks: Artwork[], selectedCategory: string) {
 const Index: React.FC = () => {
     const { props } = usePage<PageProps>();
     const { artworks, categories } = props;
+    const { t } = useTranslation("common");
 
     // selectedCategory comes from server or defaults to 'Vše'
     const selectedCategoryFromServer = (props as any).selectedCategory || 'Vše';
     const pagination = (props as any).pagination || { current_page: 1, last_page: 1 };
     const [selectedCategory, setSelectedCategory] = useState<string>(selectedCategoryFromServer);
-    const pagedArtworks = artworks; // server provides current page items
-    const totalPages = pagination.last_page || 1;
-    const currentPage = pagination.current_page || 1;
+
+    // client-side managed list beginning with server-provided first page
+    const [artworksList, setArtworksList] = useState<any[]>(artworks || []);
+    const [currentPage, setCurrentPage] = useState<number>(pagination.current_page || 1);
+    const [lastPage, setLastPage] = useState<number>(pagination.last_page || 1);
+    const [loadingMore, setLoadingMore] = useState<boolean>(false);
+    const [loadError, setLoadError] = useState<string | null>(null);
+
+    const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+    // auto-load when sentinel becomes visible
+    useEffect(() => {
+        if (!sentinelRef.current) return;
+        const el = sentinelRef.current;
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting && !loadingMore && currentPage < lastPage) {
+                    // trigger same logic as the button
+                    (async () => {
+                        setLoadingMore(true);
+                        setLoadError(null);
+                        try {
+                            const nextPage = currentPage + 1;
+                            const res = await fetch(`/gallery/more?page=${nextPage}&category=${encodeURIComponent(selectedCategory)}`);
+                            if (!res.ok) throw new Error('Chyba při načítání');
+                            const data = await res.json();
+                            setArtworksList((s) => [...s, ...(data.items || [])]);
+                            setCurrentPage(data.pagination.current_page || nextPage);
+                            setLastPage(data.pagination.last_page || lastPage);
+                        } catch (e: any) {
+                            setLoadError(e.message || 'Network error');
+                        } finally {
+                            setLoadingMore(false);
+                        }
+                    })();
+                }
+            });
+        }, { rootMargin: '200px' });
+
+        obs.observe(el);
+        return () => obs.disconnect();
+    }, [sentinelRef.current, loadingMore, currentPage, lastPage, selectedCategory]);
 
     return (
         <LoadingProvider>
@@ -42,6 +84,9 @@ const Index: React.FC = () => {
                 <Navigation isReady={true} />
 
                 {/* HERO */}
+                <div className="max-w-7xl mx-auto px-6 pt-6">
+                    <Breadcrumbs items={[{ label: t("nav.home", "Domů"), href: "/" }, { label: t("gallery.title", "Galerie") }]} />
+                </div>
                 <HeroSection artworks={artworks} />
 
                 {/* Featured strip (simplified) */}
@@ -74,41 +119,43 @@ const Index: React.FC = () => {
                     }}
                 />
 
-                <GalleryGrid artworks={pagedArtworks} />
+                <GalleryGrid artworks={artworksList} />
 
-                {/* Pagination controls (server-side links) */}
-                {totalPages > 1 && (
-                    <div className="max-w-7xl mx-auto px-6 py-8 flex items-center justify-center gap-3">
-                        <Link
-                            href={`/gallery?page=${Math.max(1, currentPage - 1)}&category=${encodeURIComponent(selectedCategory)}`}
-                            className={`px-4 py-2 bg-card text-foreground rounded-none ${currentPage === 1 ? 'opacity-50 pointer-events-none' : ''}`}
+                {/* Infinite scroll / Load more */}
+                <div className="max-w-7xl mx-auto px-6 py-8">
+                    {loadError && <div className="text-sm text-destructive mb-4">{loadError}</div>}
+
+                    <div className="flex items-center justify-center">
+                        <CTAButton
+                            onClick={async () => {
+                                if (loadingMore || currentPage >= lastPage) return;
+                                setLoadingMore(true);
+                                setLoadError(null);
+                                try {
+                                    const nextPage = currentPage + 1;
+                                    const res = await fetch(`/gallery/more?page=${nextPage}&category=${encodeURIComponent(selectedCategory)}`);
+                                    if (!res.ok) throw new Error('Chyba při načítání');
+                                    const data = await res.json();
+                                    setArtworksList((s) => [...s, ...(data.items || [])]);
+                                    setCurrentPage(data.pagination.current_page || nextPage);
+                                    setLastPage(data.pagination.last_page || lastPage);
+                                } catch (e: any) {
+                                    setLoadError(e.message || 'Network error');
+                                } finally {
+                                    setLoadingMore(false);
+                                }
+                            }}
+                            disabled={loadingMore || currentPage >= lastPage}
+                            className=""
                         >
-                            ← Předchozí
-                        </Link>
-
-                        <div className="flex items-center gap-2">
-                            {Array.from({ length: totalPages }).map((_, i) => (
-                                <Link
-                                    key={i}
-                                    href={`/gallery?page=${i + 1}&category=${encodeURIComponent(selectedCategory)}`}
-                                    className={`px-3 py-2 ${currentPage === i + 1 ? 'bg-primary text-primary-foreground' : 'bg-card text-foreground'} rounded-none`}
-                                >
-                                    {i + 1}
-                                </Link>
-                            ))}
-                        </div>
-
-                        <Link
-                            href={`/gallery?page=${Math.min(totalPages, currentPage + 1)}&category=${encodeURIComponent(selectedCategory)}`}
-                            className={`px-4 py-2 bg-card text-foreground rounded-none ${currentPage === totalPages ? 'opacity-50 pointer-events-none' : ''}`}
-                        >
-                            Další →
-                        </Link>
+                            {loadingMore ? 'Načítám…' : currentPage >= lastPage ? 'Nic víc' : 'Načíst další'}
+                        </CTAButton>
                     </div>
-                )}
 
-                {/* OUTRO + FOOTER */}
-                <OutroSection />
+                    {/* sentinel for auto-load */}
+                    <div ref={sentinelRef} className="mt-6" />
+                </div>
+
                 <Footer />
             </div>
         </LoadingProvider>

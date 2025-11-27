@@ -1,11 +1,12 @@
 "use client";
 
 import { ExhibitionsProps } from "@/components/data/exhibitions";
-import Footer from "@/components/Widgets/Footer";
 import CTAButton from "@/components/ui/CTAButton";
+import Footer from "@/components/Widgets/Footer";
 import { Link } from "@inertiajs/react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 export default function ExhibitionsIndex({ exhibitions }: ExhibitionsProps) {
     const { t } = useTranslation("common");
@@ -14,6 +15,9 @@ export default function ExhibitionsIndex({ exhibitions }: ExhibitionsProps) {
         <section className="relative w-full min-h-screen bg-gradient-to-b from-[hsl(var(--background))] to-[hsl(var(--muted))] overflow-hidden">
             {/* Hero intro */}
             <div className="max-w-6xl mx-auto px-6 md:px-0 pt-20 pb-12">
+                <div className="pt-6">
+                    <Breadcrumbs items={[{ label: t("nav.home", "Domů"), href: "/" }, { label: t("exhibitions.index_title", "Výstavy") }]} />
+                </div>
                 <div className="grid md:grid-cols-12 gap-8 items-center">
                     <div className="md:col-span-7">
                         <motion.h1

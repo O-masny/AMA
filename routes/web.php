@@ -27,7 +27,11 @@ Route::get('/exhibitions/{exhibition}', function (App\Models\Exhibition $exhibit
 });
 
 Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
+Route::get('/gallery/more', [GalleryController::class, 'more'])->name('gallery.more');
 Route::get('/gallery/{artwork}', [GalleryController::class, 'show'])->name('gallery.show');
+Route::get('/contact', function () {
+    return Inertia::render('contact');
+})->name('contact');
 Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
 
 require __DIR__ . '/settings.php';

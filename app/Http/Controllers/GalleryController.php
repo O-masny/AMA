@@ -37,10 +37,49 @@ class GalleryController extends Controller
 
     public function show(Gallery $artwork)
     {
-        $artworks = Gallery::all(); // nebo podle potřeby filtrovat/paginovat
+        // Determine previous and next artwork based on created_at desc ordering
+        $ordered = Gallery::orderBy('created_at', 'desc')->pluck('id')->toArray();
+        $index = array_search($artwork->id, $ordered, true);
+
+        $prevId = null;
+        $nextId = null;
+
+        if ($index !== false) {
+            $prevId = $ordered[$index - 1] ?? null;
+            $nextId = $ordered[$index + 1] ?? null;
+        }
+
+        $previous = $prevId ? Gallery::find($prevId) : null;
+        $next = $nextId ? Gallery::find($nextId) : null;
+
         return Inertia::render('gallery/Show', [
             'artwork' => $artwork,
-            'artworks' => $artworks
+            'previousArtwork' => $previous,
+            'nextArtwork' => $next,
+        ]);
+    }
+
+    // JSON endpoint for incremental "load more" (server-side pagination)
+    public function more(Request $request)
+    {
+        $perPage = $request->input('perPage', 12);
+        $page = max(1, (int) $request->input('page', 1));
+        $category = $request->input('category', 'Vše');
+
+        $query = Gallery::query();
+        if ($category && $category !== 'Vše') {
+            $query->where('category', $category);
+        }
+
+        $paginator = $query->orderBy('created_at', 'desc')->paginate($perPage, ['*'], 'page', $page);
+
+        return response()->json([
+            'items' => $paginator->items(),
+            'pagination' => [
+                'current_page' => $paginator->currentPage(),
+                'last_page' => $paginator->lastPage(),
+                'total' => $paginator->total(),
+            ],
         ]);
     }
 }

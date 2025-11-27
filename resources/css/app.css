@@ -198,6 +198,24 @@
         @apply bg-background text-foreground font-sans;
     }
 
+    /* Prevent accidental horizontal scroll caused by large transforms, vw-based elements, or images
+       - hide x-overflow globally (modals use fixed positioning and 100vw when needed)
+       - ensure media elements never exceed their containers
+    */
+    html,
+    body {
+        overflow-x: hidden;
+    }
+
+    img,
+    picture,
+    video,
+    iframe {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
     h1,
     h2,
     h3,
@@ -284,19 +302,37 @@
     /* CTA fill animation: a left-to-right color fill that visually inverts the label.
        Apply to elements by adding `cta-fill` and ensure label has `cta-label`.
     */
-    .cta-fill { position: relative; overflow: hidden; }
+    .cta-fill {
+        position: relative;
+        overflow: hidden;
+    }
+
     .cta-fill::before {
         content: "";
         position: absolute;
-        left: 0; right: 0; top: 0; bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
         background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)));
         transform: scaleX(0);
         transform-origin: left;
-        transition: transform 350ms cubic-bezier(.2,.9,.2,1);
+        transition: transform 350ms cubic-bezier(.2, .9, .2, 1);
         z-index: 0;
         opacity: 0.98;
     }
-    .cta-fill .cta-label { position: relative; z-index: 10; transition: color 220ms ease; }
-    .cta-fill:hover::before { transform: scaleX(1); }
-    .cta-fill:hover .cta-label { color: hsl(var(--primary-foreground)); }
+
+    .cta-fill .cta-label {
+        position: relative;
+        z-index: 10;
+        transition: color 220ms ease;
+    }
+
+    .cta-fill:hover::before {
+        transform: scaleX(1);
+    }
+
+    .cta-fill:hover .cta-label {
+        color: hsl(var(--primary-foreground));
+    }
 }

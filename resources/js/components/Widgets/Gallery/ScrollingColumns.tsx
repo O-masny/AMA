@@ -9,9 +9,10 @@ interface SpatialGalleryProps {
 }
 
 const SpatialGallery: React.FC<SpatialGalleryProps> = ({ artworks }) => {
-    const ref = useRef(null);
+    const ref = useRef<HTMLElement | null>(null);
+    const targetRef = ref.current ? ({ current: ref.current } as React.RefObject<HTMLElement>) : undefined;
     const { scrollYProgress } = useScroll({
-        target: ref,
+        target: targetRef,
         offset: ["start start", "end end"],
     });
 

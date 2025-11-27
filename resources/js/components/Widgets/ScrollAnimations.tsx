@@ -1,6 +1,6 @@
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useInView } from "react-intersection-observer";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { ReactNode, useRef } from "react";
+import { useInView } from "react-intersection-observer";
 
 interface ScrollRevealProps {
     children: ReactNode;
@@ -56,9 +56,10 @@ interface ParallaxProps {
 }
 
 export const Parallax = ({ children, speed = 0.5, className = "" }: ParallaxProps) => {
-    const ref = useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLDivElement | null>(null);
+    const targetRef = ref.current ? ({ current: ref.current } as React.RefObject<HTMLDivElement>) : undefined;
     const { scrollYProgress } = useScroll({
-        target: ref,
+        target: targetRef,
         offset: ["start end", "end start"]
     });
 
@@ -95,9 +96,10 @@ interface HorizontalScrollProps {
 }
 
 export const HorizontalScroll = ({ children, className = "" }: HorizontalScrollProps) => {
-    const targetRef = useRef<HTMLDivElement>(null);
+    const targetRef = useRef<HTMLDivElement | null>(null);
+    const targetRefWrapped = targetRef.current ? ({ current: targetRef.current } as React.RefObject<HTMLDivElement>) : undefined;
     const { scrollYProgress } = useScroll({
-        target: targetRef,
+        target: targetRefWrapped,
     });
 
     const x = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);

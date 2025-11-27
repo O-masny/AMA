@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Link, usePage } from "@inertiajs/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { FaInstagram, FaTiktok } from "react-icons/fa";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { FaInstagram, FaTiktok } from "react-icons/fa";
 
-const MotionMenu = motion(Menu);
-const MotionX = motion(X);
+const MotionMenu = motion.create ? motion.create(Menu) : motion(Menu);
+const MotionX = motion.create ? motion.create(X) : motion(X);
 
 const overlayVariants = {
     hidden: { opacity: 0 },
@@ -50,7 +50,31 @@ const Navigation = ({ isReady }: { isReady: boolean }) => {
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
-    const getHref = (hash: string) => (url === "/" ? `#${hash}` : `/#${hash}`);
+    // When on the homepage, return a fragment so clicks scroll locally.
+    // When off-homepage: for `contact` navigate to dedicated `/contact` page;
+    // for other anchors navigate to the homepage with fragment so the index can scroll on mount.
+    const getHref = (hash: string) => {
+        if (url === "/") return `#${hash}`;
+        if (hash === "contact") return "/contact";
+        return `/#${hash}`;
+    };
+
+    const handleAnchorClick = (e: React.MouseEvent, hash: string) => {
+        // If we're already on the homepage, intercept and smooth-scroll
+        if (url === "/") {
+            e.preventDefault();
+            const id = hash;
+            const el = document.getElementById(id);
+            if (el) {
+                el.scrollIntoView({ behavior: "smooth", block: "start" });
+            } else {
+                // fallback: set the hash so other handlers may pick it up
+                window.location.hash = `#${id}`;
+            }
+            setIsMenuOpen(false);
+        }
+        // otherwise allow Link/Inertia to navigate to the home or contact page
+    };
 
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
@@ -95,6 +119,7 @@ const Navigation = ({ isReady }: { isReady: boolean }) => {
                             <Link
                                 key={item.hash}
                                 href={getHref(item.hash)}
+                                onClick={(e) => handleAnchorClick(e, item.hash)}
                                 className="font-medium text-lg text-foreground relative group"
                             >
                                 {item.name}
@@ -129,6 +154,7 @@ const Navigation = ({ isReady }: { isReady: boolean }) => {
                             <Link
                                 key={item.hash}
                                 href={getHref(item.hash)}
+                                onClick={(e) => handleAnchorClick(e, item.hash)}
                                 className="font-medium text-lg text-foreground relative group"
                             >
                                 {item.name}
@@ -186,7 +212,7 @@ const Navigation = ({ isReady }: { isReady: boolean }) => {
                                     <motion.div key={item.hash} variants={itemVariants}>
                                         <Link
                                             href={getHref(item.hash)}
-                                            onClick={() => setIsMenuOpen(false)}
+                                            onClick={(e) => { handleAnchorClick(e, item.hash); /* also close menu */ setIsMenuOpen(false); }}
                                             className="text-title font-bold text-foreground hover:text-primary transition-colors block"
                                         >
                                             {item.name}
@@ -198,12 +224,12 @@ const Navigation = ({ isReady }: { isReady: boolean }) => {
                             {/* Social links + dismiss hint */}
                             <div className="mt-8 pt-6 border-t border-border flex items-center justify-between">
                                 <div className="flex items-center gap-4">
-                                        <a href="https://www.instagram.com/adebscure" target="_blank" rel="noopener noreferrer" className="text-2xl text-primary-foreground hover:text-accent transition" aria-label="Instagram">
-                                            <FaInstagram />
-                                        </a>
-                                        <a href="https://www.tiktok.com/@adebscure" target="_blank" rel="noopener noreferrer" className="text-2xl text-primary-foreground hover:text-accent transition" aria-label="TikTok">
-                                            <FaTiktok />
-                                        </a>
+                                    <a href="https://www.instagram.com/adebscure" target="_blank" rel="noopener noreferrer" className="text-2xl text-primary-foreground hover:text-accent transition" aria-label="Instagram">
+                                        <FaInstagram />
+                                    </a>
+                                    <a href="https://www.tiktok.com/@adebscure" target="_blank" rel="noopener noreferrer" className="text-2xl text-primary-foreground hover:text-accent transition" aria-label="TikTok">
+                                        <FaTiktok />
+                                    </a>
                                 </div>
 
                                 <div className="text-sm text-muted-foreground/80">Tap outside to dismiss</div>

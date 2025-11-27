@@ -66,6 +66,25 @@ export const Index = ({ artworks, exhibitions }: IndexProps) => {
         });
     }, []);
 
+    // If we navigate to the homepage with a hash (or the splash finishes),
+    // scroll to the target section. Wait for `heroReady` so SplashScreen finished.
+    useEffect(() => {
+        if (!heroReady) return;
+        try {
+            const hash = window.location.hash;
+            if (hash) {
+                const id = hash.replace('#', '');
+                const el = document.getElementById(id);
+                if (el) {
+                    // small delay to let layout settle after splash
+                    setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+                }
+            }
+        } catch (e) {
+            // ignore (SSR safety)
+        }
+    }, [heroReady]);
+
     return (
         <LoadingProvider>
             {/* SplashScreen přidaný před obsahem */}

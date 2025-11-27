@@ -7,10 +7,11 @@ import { MagneticButton } from "../magnetic-button";
 
 const Hero = ({ isReady }: { isReady: boolean }) => {
     const { t } = useTranslation("common");
-    const ref = useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLDivElement | null>(null);
+    const targetRef = ref.current ? ({ current: ref.current } as React.RefObject<HTMLDivElement>) : undefined;
 
     const { scrollYProgress } = useScroll({
-        target: ref,
+        target: targetRef,
         offset: ["start start", "end start"],
     });
 

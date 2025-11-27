@@ -5,14 +5,26 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "@inertiajs/react";
 import { motion, useMotionTemplate, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
-const Contact = () => {
+type ContactProps = {
+    standalone?: boolean;
+};
+
+const Contact: React.FC<ContactProps> = ({ standalone = false }) => {
     const { t } = useTranslation("common");
     const ref = useRef<HTMLElement | null>(null);
+    const nameRef = useRef<HTMLInputElement | null>(null);
+    // pass the actual DOM element (if present) to useScroll to avoid the
+    // 'Target ref is defined but not hydrated' error which occurs when a
+    // RefObject is provided but its `.current` is still null during render.
+    // Build a temporary RefObject only when the element is available so we
+    // satisfy both framer-motion's runtime check and TypeScript's expected
+    // type for `useScroll` without passing an unhydrated RefObject.
+    const targetRef = ref.current ? ({ current: ref.current } as React.RefObject<HTMLElement>) : undefined;
     const { scrollYProgress } = useScroll({
-        target: ref,
+        target: targetRef,
         offset: ["start start", "end end"],
     });
 
@@ -35,6 +47,79 @@ const Contact = () => {
         post(route("contact.send"));
     };
 
+    // if standalone, focus the name input on mount
+    useEffect(() => {
+        if (standalone) {
+            setTimeout(() => nameRef.current?.focus(), 120);
+        }
+    }, [standalone]);
+
+    if (standalone) {
+        // Compact standalone form page
+        return (
+            <section id="contact" className="relative py-20 min-h-screen flex items-center bg-background text-foreground">
+                <div className="max-w-3xl mx-auto w-full px-6">
+                    <div className="mb-8 text-center">
+                        <h1 className="font-display huge-heading font-extrabold mb-4">{t("contact.form.heading")}</h1>
+                        <p className="text-muted-foreground">{t("contact.form.subheading", "Máš dotaz?")}</p>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="w-full space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <Input
+                                ref={nameRef as any}
+                                placeholder={t("contact.form.name")}
+                                value={data.name}
+                                onChange={(e) => setData("name", e.target.value)}
+                                className="rounded-xl bg-white/6 border border-white/10 focus:ring-2 focus:ring-primary/50 text-lg py-4"
+                            />
+                            {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+
+                            <Input
+                                type="email"
+                                placeholder={t("contact.form.email")}
+                                value={data.email}
+                                onChange={(e) => setData("email", e.target.value)}
+                                className="rounded-xl bg-white/6 border border-white/10 focus:ring-2 focus:ring-primary/50 text-lg py-4"
+                            />
+                            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+                        </div>
+
+                        <Textarea
+                            rows={8}
+                            placeholder={t("contact.form.message")}
+                            value={data.message}
+                            onChange={(e) => setData("message", e.target.value)}
+                            className="rounded-xl bg-white/6 border border-white/10 focus:ring-2 focus:ring-primary/50 text-lg resize-none py-4"
+                        />
+                        {errors.message && <p className="text-red-500 text-sm">{errors.message}</p>}
+
+                        <p className="text-xs text-muted-foreground">
+                            <Trans
+                                i18nKey="contact.form.privacy"
+                                components={{
+                                    1: (
+                                        <a href="/privacy" className="underline hover:text-primary">
+                                            _
+                                        </a>
+                                    ),
+                                }}
+                            />
+                        </p>
+
+                        <div className="flex justify-center">
+                            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                                <CTAButton type="submit" disabled={processing}>
+                                    {processing ? t("contact.form.sending") : t("contact.form.send")}
+                                </CTAButton>
+                            </motion.div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        );
+    }
+
     return (
         <section ref={ref} id="contact" className="relative h-[300vh]">
             {/* background blobs */}
@@ -47,7 +132,7 @@ const Contact = () => {
                 style={{ filter }}
             />
 
-            <div className="sticky top-0 h-screen relative">
+            <div className="sticky top-0 h-screen">
                 {/* Step 1 */}
                 <motion.div
                     style={{ opacity: step1 }}
@@ -88,6 +173,7 @@ const Contact = () => {
                     <form onSubmit={handleSubmit} className="w-full max-w-3xl space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <Input
+                                ref={nameRef as any}
                                 placeholder={t("contact.form.name")}
                                 value={data.name}
                                 onChange={(e) => setData("name", e.target.value)}
