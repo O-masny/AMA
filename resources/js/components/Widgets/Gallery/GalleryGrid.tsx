@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Link } from "@inertiajs/react";
 import { motion, Variants } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 interface GalleryGridProps {
     artworks: Artwork[];
@@ -25,11 +26,13 @@ const cardVariants: Variants = {
 };
 
 const GalleryGrid: React.FC<GalleryGridProps> = ({ artworks }) => {
+    const { t } = useTranslation("common");
+
     return (
         <section className="section section--lg bg-background/95">
             <div className="max-w-7xl mx-auto px-6">
                 <h2 className="text-heading md:text-display font-display font-bold text-center text-primary mb-20">
-                    Kompletní kolekce
+                    {t("gallery.completeCollection", "Kompletní kolekce")}
                 </h2>
 
                 <motion.div

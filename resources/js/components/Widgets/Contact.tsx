@@ -208,11 +208,13 @@ const Contact: React.FC<ContactProps> = ({ standalone = false }) => {
                             />
                         </p>
 
-                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
-                            <CTAButton type="submit" disabled={processing}>
-                                {processing ? t("contact.form.sending") : t("contact.form.send")}
-                            </CTAButton>
-                        </motion.div>
+                        <div className="flex justify-center">
+                            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
+                                <CTAButton type="submit" disabled={processing}>
+                                    {processing ? t("contact.form.sending") : t("contact.form.send")}
+                                </CTAButton>
+                            </motion.div>
+                        </div>
                     </form>
                 </motion.div>
             </div>

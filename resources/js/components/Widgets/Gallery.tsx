@@ -64,7 +64,7 @@ const Gallery = ({ artworks }: GalleryProps) => {
                                 style={{ opacity, scale, y }}
                                 className="absolute inset-0 flex items-center justify-center"
                             >
-                                <div className="relative w-[70vw] md:w-[40vw] h-[70vh] rounded-3xl overflow-hidden shadow-2xl">
+                                <div className="relative w-[88vw] md:w-[60vw] lg:w-[48vw] h-[60vh] md:h-[70vh] rounded-3xl overflow-hidden shadow-2xl">
                                     <motion.img
                                         src={`/storage/${artwork.image}`}
                                         alt={artwork.title}

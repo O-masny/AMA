@@ -90,6 +90,41 @@ export const Index = (serverProps: IndexProps) => {
         }
     }, [heroReady]);
 
+    // Global delegated handler: when clicking anchors that reference an ID
+    // present on the current document, smooth-scroll instead of navigating.
+    useEffect(() => {
+        const onClick = (e: MouseEvent) => {
+            const target = e.target as HTMLElement | null;
+            if (!target) return;
+            const anchor = target.closest('a') as HTMLAnchorElement | null;
+            if (!anchor) return;
+            const href = anchor.getAttribute('href');
+            if (!href) return;
+
+            const m = href.match(/#(.+)$/);
+            if (!m) return;
+            const id = m[1];
+
+            // If the target element exists on the current page, intercept
+            // and smooth-scroll. Otherwise allow normal navigation (e.g. to
+            // the homepage with fragment or external pages).
+            try {
+                const el = document.getElementById(id);
+                if (el) {
+                    e.preventDefault();
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // update the URL hash without triggering navigation
+                    history.replaceState(null, '', `#${id}`);
+                }
+            } catch (err) {
+                // ignore
+            }
+        };
+
+        document.addEventListener('click', onClick);
+        return () => document.removeEventListener('click', onClick);
+    }, []);
+
     return (
         <LoadingProvider>
             {/* SplashScreen přidaný před obsahem */}

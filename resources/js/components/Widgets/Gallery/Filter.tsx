@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 interface CategoryFilterProps {
     categories?: string[] | null;
@@ -13,6 +14,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
     selectedCategory,
     setSelectedCategory,
 }) => {
+    const { t } = useTranslation("common");
     const hasCategories = categories && categories.length > 0;
 
     return (
@@ -58,7 +60,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                         >
-                            Žádné kategorie k dispozici
+                            {t("gallery.noCategories", "Žádné kategorie k dispozici")}
                         </motion.span>
                     )}
                 </div>

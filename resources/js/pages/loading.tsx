@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface LoadingScreenProps {
     isActive: boolean;
@@ -26,6 +27,8 @@ const LoadingScreen = ({ isActive, onFinish }: LoadingScreenProps) => {
         }, 2600);
         return () => clearTimeout(timer);
     }, [visible, onFinish]);
+
+    const { t } = useTranslation("common");
 
     return (
         <AnimatePresence>
@@ -67,7 +70,7 @@ const LoadingScreen = ({ isActive, onFinish }: LoadingScreenProps) => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 1.6, duration: 0.6 }}
                             >
-                                Atelier AMA
+                                {t("brand.name")}
                             </motion.text>
                         </svg>
 
@@ -89,7 +92,7 @@ const LoadingScreen = ({ isActive, onFinish }: LoadingScreenProps) => {
                             ))}
                         </div>
 
-                        <div className="text-sm text-muted-foreground/80">Malířská paleta se připravuje…</div>
+                        <div className="text-sm text-muted-foreground/80">{t("splash.loading")}</div>
                     </div>
                 </motion.div>
             )}

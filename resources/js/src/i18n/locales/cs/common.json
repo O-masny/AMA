@@ -51,6 +51,8 @@
     "hero": {
         "title": "UMĚNÍ",
         "subtitle": "kde se sen a soumrak setkávají",
+        "mainHeading": "Amatelier - Adéla Bočková Ateliér",
+        "portfolio": "PORTFOLIO 2025",
         "description": "Mezi soumrakem a snem se pigment stává pamětí. Moje tvorba stojí na hraně mezi skutečným a snovým — intimními, surrealními gesty, která zkoumají život a jeho stín. Plátna zvou k cítění, otázkám a tichu, které po nich zůstává.",
         "ctaGallery": "Prohlédnout sbírku",
         "ctaAbout": "O umělkyni"
@@ -95,6 +97,9 @@
             "text": "Objev celou galerii s více než 50 originálními díly.",
             "button": "Zobrazit celou galerii"
         }
+        ,
+        "noCategories": "Žádné kategorie k dispozici",
+        "completeCollection": "Kompletní kolekce"
     },
     "rights": "© 2025 Ateliér Adéla Masná Bočková. Všechna práva vyhrazena.",
     "footer": {

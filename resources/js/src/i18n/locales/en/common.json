@@ -29,6 +29,8 @@
     "hero": {
         "title": "ART",
         "subtitle": "where dream and dusk converse",
+        "mainHeading": "Amatelier - Adéla Bočková Atelier",
+        "portfolio": "PORTFOLIO 2025",
         "description": "Between dusk and dream, pigment becomes memory. My work lives at the edge of the real and the imagined — intimate, surreal gestures that examine life and its shadow. These canvases are invitations to feel, to question, and to sit with the quiet that follows.",
         "ctaGallery": "Explore the Collection",
         "ctaAbout": "About the Artist"
@@ -84,6 +86,9 @@
             "text": "Discover the full gallery with over 50 original pieces.",
             "button": "View Full Gallery"
         }
+        ,
+        "noCategories": "No categories available",
+        "completeCollection": "Complete Collection"
     },
     "exhibitions": {
         "title": "SERIES",
