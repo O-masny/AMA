@@ -22,46 +22,54 @@ if [[ ! -f .env.production ]]; then
 fi
 info ".env.production nalezen"
 
-# ---- Pull latest code (optional, pokud běžíte na serveru) ----
+# ---- Git pull (optional) ----
 if [[ -d .git ]]; then
   info "Pulluji nejnovější kód z gitu..."
   git pull || warn "Git pull selhal, pokračuji s lokálním kódem"
 fi
 
-# ---- Build Docker image (app) ----
-info "Builduji Docker image pro app..."
-docker compose -f docker-compose.yml build --pull --no-cache app
+# ---- Build Docker image ----
+info "Builduji Docker image..."
+docker compose build --no-cache app
+
 success "Docker image postaven"
 
-# ---- Verify Vite build exists in image ----
-info "Ověřuji Vite build v image..."
-if docker compose -f docker-compose.yml run --rm app test -f /var/www/public/build/manifest.json; then
-  success "Vite build manifest nalezen v image"
+# ---- Ověř manifest v image (OPRAVENO - hledá .vite/ i root) ----
+info "Ověřuji Vite manifest v image..."
+MANIFEST_CHECK=$(docker compose run --rm app sh -c '
+  if [ -f /var/www/public/build/manifest.json ]; then
+    echo "root"
+  elif [ -f /var/www/public/build/.vite/manifest.json ]; then
+    echo "vite"
+  else
+    echo "none"
+  fi
+' 2>/dev/null | tail -1)
+
+if [[ "$MANIFEST_CHECK" == "root" ]]; then
+  success "✅ Vite manifest nalezen v public/build/manifest.json"
+elif [[ "$MANIFEST_CHECK" == "vite" ]]; then
+  success "✅ Vite manifest nalezen v public/build/.vite/manifest.json"
 else
-  error "Vite build manifest CHYBÍ v image! Build selhal."
+  error "❌ Vite manifest CHYBÍ! Build selhal."
 fi
 
-# ---- Stop old containers gracefully ----
+# ---- Stop old containers ----
 info "Zastavuji staré kontejnery..."
-docker compose -f docker-compose.yml down || true
+docker compose down --remove-orphans
 
-# ---- Spuštění služeb ----
-info "Spouštím kontejnery (app + nginx)..."
-docker compose -f docker-compose.yml up -d app nginx
+# ---- Start services ----
+info "Spouštím kontejnery..."
+docker compose up -d app nginx
 success "Kontejnery běží"
 
-# ---- Wait for app to be ready ----
-info "Čekám na start PHP-FPM (5s)..."
+# ---- Wait for startup ----
+info "Čekám na start služeb (5s)..."
 sleep 5
-
-# ---- Check if containers are running ----
-if ! docker compose -f docker-compose.yml ps | grep -q "Up"; then
-  error "Kontejnery neběží! Zkontrolujte logy: docker compose logs"
-fi
 
 # ---- Laravel optimalizace ----
 info "Optimalizuji Laravel cache..."
-docker compose -f docker-compose.yml exec -T app bash -c "
+docker compose exec -T app bash -c "
   php artisan config:clear &&
   php artisan cache:clear &&
   php artisan view:clear &&
@@ -72,40 +80,35 @@ docker compose -f docker-compose.yml exec -T app bash -c "
 " || error "Laravel cache optimalizace selhala"
 success "Laravel cache optimalizována"
 
-# ---- Migrace databáze ----
+# ---- Migrace ----
 info "Spouštím migrace..."
-docker compose -f docker-compose.yml exec -T app php artisan migrate --force || error "Migrace selhaly"
+docker compose exec -T app php artisan migrate --force || error "Migrace selhaly"
 success "Migrace hotové"
 
-# ---- Verify storage permissions ----
-info "Kontroluji práva na storage..."
-docker compose -f docker-compose.yml exec -T app chown -R www-data:www-data storage bootstrap/cache || true
+# ---- Storage permissions ----
+info "Kontroluji práva..."
+docker compose exec -T app chown -R www-data:www-data storage bootstrap/cache || true
 
 # ---- Health check ----
 APP_URL=$(grep -E '^APP_URL=' .env.production | cut -d '=' -f2)
-info "Testuji dostupnost aplikace na $APP_URL ..."
-
-# Počkej chvíli, než se aplikace probudí
+info "Testuji aplikaci na $APP_URL ..."
 sleep 3
 
 STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$APP_URL" || true)
 
-if [[ "$STATUS" =~ ^2 ]]; then
-  success "✅ Aplikace dostupná: $APP_URL (HTTP $STATUS)"
+if [[ "$STATUS" == "200" ]]; then
+  success "🎉 Aplikace dostupná: $APP_URL (HTTP $STATUS)"
 elif [[ "$STATUS" =~ ^3 ]]; then
   success "✅ Aplikace přesměrovává: $APP_URL (HTTP $STATUS)"
 else
-  warn "⚠️  Aplikace vrací neočekávaný stav: HTTP $STATUS"
-  warn "Zkontrolujte logy: docker compose logs -f app nginx"
-  
-  # Zobraz posledních 20 řádků logů
-  info "Posledních 20 řádků z app logů:"
-  docker compose -f docker-compose.yml logs --tail=20 app
+  warn "⚠️  Neočekávaný HTTP status: $STATUS"
+  info "Poslední logy:"
+  docker compose logs --tail=30 app
 fi
 
 # ---- Summary ----
 echo ""
 success "🚀 Deployment dokončen!"
 info "URL: $APP_URL"
-info "Sledování logů: docker compose logs -f"
+info "Logy: docker compose logs -f"
 info "Status: docker compose ps"
