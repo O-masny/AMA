@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Intervention\Image\Image;
 
+/**
+ * @property int $id
+ */
 class Gallery extends Model
 {
     use HasFactory;
