@@ -198,24 +198,6 @@
         @apply bg-background text-foreground font-sans;
     }
 
-    /* Prevent accidental horizontal scroll caused by large transforms, vw-based elements, or images
-       - hide x-overflow globally (modals use fixed positioning and 100vw when needed)
-       - ensure media elements never exceed their containers
-    */
-    html,
-    body {
-        overflow-x: hidden;
-    }
-
-    img,
-    picture,
-    video,
-    iframe {
-        max-width: 100%;
-        height: auto;
-        display: block;
-    }
-
     h1,
     h2,
     h3,
