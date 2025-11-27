@@ -21,7 +21,7 @@ FROM php:8.3-fpm-alpine
 
 WORKDIR /var/www
 
-# System deps + PHP extensions (including FIX: pdo_mysql)
+# System deps + PHP extensions (PDO MySQL fix included)
 RUN apk add --no-cache \
         libzip-dev \
         unzip \
@@ -45,7 +45,7 @@ RUN apk add --no-cache \
 # Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copy whole Laravel app
+# Copy Laravel app
 COPY . .
 
 # Composer production install
@@ -54,24 +54,16 @@ RUN composer install --no-dev --optimize-autoloader
 # Copy frontend build artifacts
 COPY --from=node-builder /app/public/build ./public/build
 
-# Vite 7 manifest hotfix
-RUN if [ -f public/build/.vite/manifest.json ]; then \
-        cp public/build/.vite/manifest.json public/build/manifest.json && \
-        echo "Manifest hotfix applied"; \
-    else \
-        echo "No manifest found!" && exit 1; \
-    fi
-
 # Storage symlink
 RUN php artisan storage:link || true
 
 # Permissions
-RUN chown -R www-data:www-data storage bootstrap/cache database public/build && \
-    chmod -R 775 storage bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache database public/build \
+    && chmod -R 775 storage bootstrap/cache
 
 # PHP config
-RUN echo "upload_max_filesize=50M" > /usr/local/etc/php/conf.d/uploads.ini && \
-    echo "post_max_size=55M" >> /usr/local/etc/php/conf.d/uploads.ini
+RUN echo "upload_max_filesize=50M" > /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "post_max_size=55M" >> /usr/local/etc/php/conf.d/uploads.ini
 
 EXPOSE 9000
 CMD ["php-fpm"]
