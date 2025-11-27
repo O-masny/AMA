@@ -1,7 +1,7 @@
 "use client";
 
 import CTAButton from "@/components/ui/CTAButton";
-import { motion, useMotionTemplate, useSpring, useTransform, useScroll } from "framer-motion";
+import { motion, useMotionTemplate, useScroll, useSpring, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
