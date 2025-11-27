@@ -30,7 +30,7 @@ const Hero = ({ isReady }: { isReady: boolean }) => {
     return (
         <motion.section
             ref={ref}
-            className="relative flex flex-col items-center justify-center w-full min-h-screen px-6 text-center overflow-hidden"
+            className="relative w-full min-h-screen px-6 overflow-hidden"
             style={{ background }}
             initial="hidden"
             animate={isReady ? "visible" : "hidden"}
@@ -39,79 +39,59 @@ const Hero = ({ isReady }: { isReady: boolean }) => {
                 visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: "easeOut" } },
             }}
         >
-            {/* Jemný overlay pro hloubku */}
-            <motion.div
-                aria-hidden
-                className="absolute inset-0 pointer-events-none bg-[hsl(var(--background))]"
-                style={{
-                    opacity: useTransform(smooth, [0, 0.6, 1], [0.25, 0.12, 0.06]),
-                    mixBlendMode: "soft-light",
-                }}
-            />
+            {/* Diagonal split: left visual, right content (desktop). Mobile remains stacked and centered. */}
+            <div className="relative w-full min-h-screen flex flex-col md:flex-row">
+                {/* Left visual pane */}
+                <div
+                    className="hidden md:block md:w-1/2 h-[80vh] relative"
+                    style={{
+                        clipPath: 'polygon(0 0, 70% 0, 100% 100%, 0 100%)',
+                        backgroundImage: `linear-gradient(130deg, rgba(0,0,0,0.05), rgba(0,0,0,0.15)), url('/assets/hero.jpg')`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                    }}
+                />
 
-            {/* Title */}
-            <motion.h1
-                className="text-display font-display font-extrabold leading-[0.9] tracking-tight text-[hsl(var(--foreground))]"
-            >
-                {Array.from(title).map((char, i) => (
-                    <motion.span
-                        key={i}
-                        className="inline-block"
-                        initial={{ opacity: 0, y: 80 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{
-                            delay: i * 0.045,
-                            duration: 0.6,
-                            ease: [0.25, 0.1, 0.25, 1],
-                        }}
-                    >
-                        {char === " " ? "\u00A0" : char}
-                    </motion.span>
-                ))}
-            </motion.h1>
+                {/* Right content pane */}
+                <div className="w-full md:w-1/2 flex items-center justify-center text-center md:text-left px-6 md:px-20 py-24">
+                    <div className="max-w-3xl">
+                        <motion.h1 className="text-display huge-display font-display font-extrabold leading-[0.9] tracking-tight text-[hsl(var(--foreground))]">
+                            {Array.from(title).map((char, i) => (
+                                <motion.span
+                                    key={i}
+                                    className="inline-block"
+                                    initial={{ opacity: 0, y: 80 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{
+                                        delay: i * 0.03,
+                                        duration: 0.5,
+                                    }}
+                                >
+                                    {char === ' ' ? '\u00A0' : char}
+                                </motion.span>
+                            ))}
+                        </motion.h1>
 
-            {/* Subtitle */}
-            <motion.h2
-                className="mt-10 text-title md:text-heading font-sans text-[hsl(var(--muted-foreground))] tracking-wide"
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.7 }}
-            >
-                {t("hero.subtitle")}
-            </motion.h2>
+                        <motion.h2 className="mt-10 text-title md:text-heading font-sans text-[hsl(var(--muted-foreground))] tracking-wide" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.7 }}>
+                            {t('hero.subtitle')}
+                        </motion.h2>
 
-            {/* Description */}
-            <motion.p
-                className="max-w-2xl mt-8 text-body md:text-body font-sans text-[hsl(var(--muted-foreground))]/90 leading-relaxed"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 1 }}
-            >
-                {t("hero.description")}
-            </motion.p>
+                        <motion.p className="max-w-2xl mt-8 text-body md:text-body font-sans text-[hsl(var(--muted-foreground))]/90 leading-relaxed" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1 }}>
+                            {t('hero.description')}
+                        </motion.p>
 
-            {/* CTA Buttons */}
-            <motion.div
-                className="flex flex-wrap gap-6 mt-14"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 1.3 }}
-            >
-                <MagneticButton
-                    href="#gallery"
-                    className="text-lg font-sans font-medium px-10 py-4"
-                >
-                    {t("hero.ctaGallery")}
-                </MagneticButton>
+                        <motion.div className="flex flex-wrap gap-6 mt-14" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.3 }}>
+                            <MagneticButton href="#gallery" className="text-lg font-sans font-medium px-10 py-4">
+                                {t('hero.ctaGallery')}
+                            </MagneticButton>
 
-                <MagneticButton
-                    href="#about"
-                    variant="outline"
-                    className="text-lg font-sans font-medium px-10 py-4"
-                >
-                    {t("hero.ctaAbout")}
-                </MagneticButton>
-            </motion.div>
+                            <MagneticButton href="#about" variant="outline" className="text-lg font-sans font-medium px-10 py-4">
+                                {t('hero.ctaAbout')}
+                            </MagneticButton>
+                        </motion.div>
+                    </div>
+                </div>
+            </div>
         </motion.section>
     );
 };

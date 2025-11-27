@@ -7,13 +7,13 @@ export default function AboutArtist() {
     const { t, i18n } = useTranslation("common");
 
     return (
-        <section id="#about" className="relative min-h-screen flex flex-col items-center justify-center bg-neutral-950 text-neutral-200 px-8 py-32 ">
+        <section id="#about" className="relative min-h-screen flex flex-col items-center justify-center bg-neutral-950 text-neutral-200 px-8 section section--lg">
             {/* headline */}
             <motion.h1
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, ease: "easeOut" }}
-                className="text-display font-display font-extrabold tracking-tight text-center text-white leading-[1.1]"
+                className="text-display huge-display font-display font-extrabold tracking-tight text-center text-white leading-[1.1]"
             >
                 {t("about.title")}
             </motion.h1>

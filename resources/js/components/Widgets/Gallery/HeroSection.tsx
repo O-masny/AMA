@@ -11,7 +11,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ artworks = [] }) => {
     if (artworks.length === 0) {
         return (
             <section className="relative h-[80vh] flex items-center justify-center bg-black">
-                <h1 className="text-4xl md:text-6xl font-bold text-white">
+                <h1 className="text-heading md:text-display font-bold text-white">
                     Žádná díla nejsou k dispozici
                 </h1>
             </section>
@@ -49,7 +49,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ artworks = [] }) => {
                     </motion.h1>
                     <motion.p
                         style={{ opacity: subtitleOpacity }}
-                        className="mt-6 text-lg md:text-2xl text-white/80 max-w-2xl mx-auto"
+                        className="mt-6 text-body md:text-title text-white/80 max-w-2xl mx-auto"
                     >
                         Vstup do vizuálního prostoru, kde obrazy ožívají.
                     </motion.p>

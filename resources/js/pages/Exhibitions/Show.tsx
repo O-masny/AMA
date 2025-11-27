@@ -2,6 +2,7 @@
 
 import { ExhibitionProps } from "@/components/data/exhibitions";
 import { MagneticButton } from "@/components/magnetic-button";
+import Footer from "@/components/Widgets/Footer";
 import { Link } from "@inertiajs/react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -14,7 +15,7 @@ export default function ExhibitionShow({ exhibition }: ExhibitionProps) {
     return (
         <section className="relative min-h-screen bg-background text-foreground overflow-hidden">
             {/* Header */}
-            <div className="relative h-[90vh] overflow-hidden">
+            <div className="relative h-[90vh] pt-20 overflow-hidden">
                 <motion.img
                     src={`/storage/${exhibition.galleries[0]?.image}`}
                     alt={exhibition.title}
@@ -23,18 +24,29 @@ export default function ExhibitionShow({ exhibition }: ExhibitionProps) {
                     animate={{ scale: 1 }}
                     transition={{ duration: 1.8, ease: "easeOut" }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+
+                <div className="absolute top-6 left-6">
+                    {/* Breadcrumbs */}
+                    <nav className="text-sm text-white/90" aria-label="Breadcrumb">
+                        <Link href="/" className="underline underline-offset-2 mr-2">{t("nav.home", "Domů")}</Link>
+                        <span className="opacity-60">/</span>
+                        <Link href="/exhibitions" className="underline underline-offset-2 mx-2">{t("exhibitions.index_title", "Výstavy")}</Link>
+                        <span className="mx-2">/</span>
+                        <span className="opacity-90">{exhibition.title}</span>
+                    </nav>
+                </div>
 
                 <div className="absolute bottom-16 left-10 max-w-4xl">
                     <motion.h1
-                        className="font-display text-display leading-none font-bold tracking-tight text-primary mb-4"
+                        className="font-display text-display leading-none font-bold tracking-tight text-white mb-4"
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1 }}
                     >
                         {exhibition.title}
                     </motion.h1>
-                    <p className="font-sans text-lg md:text-xl text-muted-foreground">
+                    <p className="font-sans text-body md:text-title text-white/90">
                         {exhibition.date} · {exhibition.location}
                     </p>
                 </div>
@@ -43,7 +55,7 @@ export default function ExhibitionShow({ exhibition }: ExhibitionProps) {
             {/* Description */}
             <div className="max-w-4xl mx-auto py-24 px-6 md:px-0">
                 <motion.p
-                    className="font-sans text-lg md:text-2xl leading-relaxed text-muted-foreground"
+                    className="font-sans text-body md:text-title leading-relaxed text-muted-foreground"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
@@ -78,13 +90,15 @@ export default function ExhibitionShow({ exhibition }: ExhibitionProps) {
             </div>
 
             {/* CTA back */}
-            <div className="flex justify-center pb-32">
+            <div className="flex justify-center pb-10">
                 <Link href="/exhibitions">
                     <MagneticButton strength={0.4}>
                         {t("exhibitions.back", "← Zpět na výstavy")}
                     </MagneticButton>
                 </Link>
             </div>
+
+            <Footer />
         </section>
     );
 }

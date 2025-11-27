@@ -175,7 +175,7 @@ const Navigation = ({ isReady }: { isReady: boolean }) => {
                                 <Link
                                     href={getHref(item.hash)}
                                     onClick={() => setIsMenuOpen(false)}
-                                    className="text-3xl font-bold text-foreground hover:text-primary transition-colors"
+                                    className="text-title font-bold text-foreground hover:text-primary transition-colors"
                                 >
                                     {item.name}
                                 </Link>

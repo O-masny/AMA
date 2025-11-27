@@ -10,7 +10,7 @@ interface FeaturedArtworksProps {
 
 const FeaturedArtworks: React.FC<FeaturedArtworksProps> = ({ artworks }) => {
     return (
-        <HorizontalScroll className="bg-background/95 py-16">
+        <HorizontalScroll className="bg-background/95 section--sm">
             {artworks.map((artwork) => (
                 <motion.div
                     key={artwork.id}

@@ -57,13 +57,16 @@ const Show: React.FC = () => {
         <div className="min-h-screen bg-background text-foreground font-sans">
             {/* HERO */}
             <section className="relative h-screen overflow-hidden">
-                <button
-                    onClick={() => window.history.back()}
-                    className="absolute top-6 left-6 z-30 flex items-center gap-2 px-4 py-2 bg-popover/60 hover:bg-popover/80 text-white rounded-full transition"
-                >
-                    <ArrowLeft className="w-4 h-4" />
-                    <span className="text-sm font-medium">{t("artwork.back")}</span>
-                </button>
+                <div className="absolute top-6 left-6 z-30">
+                    {/* Breadcrumbs for better navigation */}
+                    <nav className="text-sm text-white/90 flex items-center gap-2" aria-label="Breadcrumb">
+                        <Link href="/" className="underline underline-offset-2 mr-2">{t("nav.home", "Domů")}</Link>
+                        <span className="opacity-60">/</span>
+                        <Link href="/gallery" className="underline underline-offset-2 mx-2">{t("gallery.title", "Galerie")}</Link>
+                        <span className="opacity-60">/</span>
+                        <span className="opacity-90">{artwork.title}</span>
+                    </nav>
+                </div>
 
                 <motion.div
                     className="absolute inset-0 bg-cover bg-center"
@@ -116,7 +119,7 @@ const Show: React.FC = () => {
             </section>
 
             {/* CONTENT */}
-            <section className="relative overflow-hidden bg-gradient-subtle py-32">
+            <section className="relative overflow-hidden bg-gradient-subtle section section--lg">
                 <div className="relative z-10 max-w-7xl mx-auto px-6">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
                         {/* LEFT COLUMN */}
@@ -172,7 +175,7 @@ const Show: React.FC = () => {
                                     className="p-8 bg-gradient-to-r from-primary/90 to-primary rounded-2xl shadow-xl text-white"
                                 >
                                     <h3 className="font-display font-bold text-xl mb-2">{t("artwork.price")}</h3>
-                                    <p className="font-bold text-3xl">{artwork.price}</p>
+                                    <p className="font-bold text-title">{artwork.price}</p>
                                 </motion.div>
                             )}
 
@@ -209,7 +212,7 @@ const Show: React.FC = () => {
             </section>
 
             {artwork.story && (
-                <section className="py-32 bg-gradient-hero text-primary-foreground">
+                <section className="section section--lg bg-gradient-hero text-primary-foreground">
                     <div className="max-w-4xl mx-auto px-6">
                         <ScrollReveal>
                             <div className="text-center mb-16">
@@ -229,7 +232,7 @@ const Show: React.FC = () => {
                 </section>
             )}
 
-            <section className="py-20 bg-background">
+            <section className="section section--sm bg-background">
                 <div className="max-w-7xl mx-auto px-6">
                     <ScrollReveal>
                         <h2 className="text-heading font-display font-bold text-primary text-center mb-16">

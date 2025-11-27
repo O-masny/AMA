@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import CTAButton from "@/components/ui/CTAButton";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -54,7 +53,7 @@ const Contact = () => {
                     style={{ opacity: step1 }}
                     className="absolute inset-0 flex flex-col items-center justify-center text-center space-y-4"
                 >
-                    <h3 className="font-display text-heading md:text-heading font-extrabold text-primary">
+                    <h3 className="font-display huge-heading font-extrabold text-primary">
                         {t("contact.steps.email.title")}
                     </h3>
                     <p className="text-lg md:text-xl text-muted-foreground">
@@ -67,7 +66,7 @@ const Contact = () => {
                     style={{ opacity: step2 }}
                     className="absolute inset-0 flex flex-col items-center justify-center text-center space-y-4"
                 >
-                    <h3 className="font-display text-heading md:text-heading font-extrabold text-primary">
+                    <h3 className="font-display huge-heading font-extrabold text-primary">
                         {t("contact.steps.phone.title")}
                     </h3>
                     <p className="text-lg md:text-xl text-muted-foreground">
@@ -82,7 +81,7 @@ const Contact = () => {
                     style={{ opacity: formOpacity }}
                     className="absolute inset-0 flex flex-col items-center justify-center px-6"
                 >
-                    <h3 className="font-display font-extrabold text-heading md:text-heading text-center text-foreground mb-12">
+                    <h3 className="font-display huge-display font-extrabold text-center text-foreground mb-12">
                         {t("contact.form.heading")}
                     </h3>
 

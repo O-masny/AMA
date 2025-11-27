@@ -4,91 +4,97 @@ import { ExhibitionsProps } from "@/components/data/exhibitions";
 import { Link } from "@inertiajs/react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import Footer from "@/components/Widgets/Footer";
 
 export default function ExhibitionsIndex({ exhibitions }: ExhibitionsProps) {
     const { t } = useTranslation("common");
 
     return (
         <section className="relative w-full min-h-screen bg-gradient-to-b from-[hsl(var(--background))] to-[hsl(var(--muted))] overflow-hidden">
-            {/* Header */}
-            <div className="text-center pt-32 pb-16">
-                <motion.h1
-                    className="font-display text-display font-black text-foreground tracking-tight leading-none"
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1 }}
-                >
-                    {t("exhibitions.index_title", "Výstavy & Série")}
-                </motion.h1>
-                <motion.p
-                    className="font-sans text-muted-foreground text-lg md:text-xl mt-6 max-w-2xl mx-auto leading-relaxed"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 }}
-                >
-                    {t(
-                        "exhibitions.index_intro",
-                        "Každá výstava je kapitola – prostor, kde se barva, světlo a introspekce potkávají ve fyzické formě."
-                    )}
-                </motion.p>
+            {/* Hero intro */}
+            <div className="max-w-6xl mx-auto px-6 md:px-0 pt-20 pb-12">
+                <div className="grid md:grid-cols-12 gap-8 items-center">
+                    <div className="md:col-span-7">
+                        <motion.h1
+                            className="font-display text-display font-black text-foreground tracking-tight leading-none"
+                            initial={{ opacity: 0, y: 40 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 1 }}
+                        >
+                            {t("exhibitions.index_title", "Výstavy & Série")}
+                        </motion.h1>
+                        <motion.p
+                            className="font-sans text-muted-foreground text-body md:text-title mt-6 max-w-2xl leading-relaxed"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.2 }}
+                        >
+                            {t(
+                                "exhibitions.index_intro",
+                                "Každá výstava je kapitola – prostor, kde se barva, světlo a introspekce potkávají ve fyzické formě."
+                            )}
+                        </motion.p>
+                    </div>
+                    <div className="md:col-span-5 hidden md:block">
+                        <div className="relative rounded-2xl overflow-hidden h-48">
+                            <img src={`/storage/${exhibitions[0]?.galleries?.[0]?.image}`} alt="hero" className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            {/* Grid */}
-            <div className="relative grid md:grid-cols-2 gap-24 px-6 md:px-16 pb-48">
-                {exhibitions.map((ex, i) => (
-                    <motion.div
-                        key={ex.id}
-                        initial={{ opacity: 0, y: 60 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: i * 0.1 }}
-                        className="group relative overflow-hidden rounded-3xl shadow-artistic bg-background"
-                    >
-                        {/* Image */}
-                        <div className="overflow-hidden relative">
-                            <motion.img
-                                src={`/storage/${ex.galleries[0].image}`}
-                                alt={ex.title}
-                                className="w-full h-[70vh] object-cover transition-transform duration-[3000ms] group-hover:scale-105"
-                            />
-                            <motion.div
-                                className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700"
-                            />
-                        </div>
+            {/* Mosaic Grid */}
+            <div className="max-w-6xl mx-auto px-6 md:px-0 pb-24">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-6 auto-rows-fr">
+                    {exhibitions.map((ex, i) => {
+                        // pattern for asymmetric mosaic
+                        const pattern = i % 6;
+                        // default small-screen layout: full width items
+                        let spanClass = "col-span-1 row-span-1";
+                        // small screens: 2-column pattern
+                        if (pattern === 0) spanClass = "sm:col-span-2 md:col-span-3 md:row-span-2";
+                        if (pattern === 1) spanClass = "sm:col-span-1 md:col-span-3 md:row-span-1";
+                        if (pattern === 2) spanClass = "sm:col-span-1 md:col-span-2 md:row-span-1";
+                        if (pattern === 3) spanClass = "sm:col-span-2 md:col-span-4 md:row-span-2";
+                        if (pattern === 4) spanClass = "sm:col-span-1 md:col-span-2 md:row-span-1";
+                        if (pattern === 5) spanClass = "sm:col-span-2 md:col-span-6 md:row-span-1";
 
-                        {/* Text Overlay */}
-                        <div className="absolute bottom-0 left-0 p-10 text-white">
-                            <motion.h2
-                                className="font-display text-heading md:text-display mb-4 leading-none tracking-tight"
-                                initial={{ opacity: 0, y: 20 }}
+                        return (
+                            <motion.div
+                                key={ex.id}
+                                initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
+                                transition={{ duration: 0.8, delay: i * 0.06 }}
+                                className={`${spanClass} group relative overflow-hidden rounded-2xl shadow-lg bg-background`}
                             >
-                                {ex.title}
-                            </motion.h2>
-                            <motion.p
-                                className="font-sans text-lg max-w-md text-white/80"
-                                initial={{ opacity: 0 }}
-                                whileInView={{ opacity: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: 0.1 }}
-                            >
-                                {ex.description}
-                            </motion.p>
+                                <div className="absolute inset-0">
+                                    <img
+                                        src={`/storage/${ex.galleries[0]?.image}`}
+                                        alt={ex.title}
+                                        className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
+                                    />
+                                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+                                </div>
 
-                            <Link href={`/exhibitions/${ex.id}`}>
-                                <motion.span
-                                    className="inline-block mt-6 text-primary font-sans text-xl underline underline-offset-4 decoration-primary/50 hover:decoration-primary"
-                                    whileHover={{ x: 4 }}
-                                    transition={{ type: "spring", stiffness: 300 }}
-                                >
-                                    {t("exhibitions.view_series", "Zobrazit sérii →")}
-                                </motion.span>
-                            </Link>
-                        </div>
-                    </motion.div>
-                ))}
+                                {/* Text Overlay */}
+                                <div className="relative z-10 p-6 md:p-8 h-full flex flex-col justify-end">
+                                    <motion.h3 className="font-display text-title md:text-heading text-white mb-2 tracking-tight">
+                                        {ex.title}
+                                    </motion.h3>
+                                    <p className="text-white/80 text-body max-w-lg mb-4">{ex.description}</p>
+                                    <Link href={`/exhibitions/${ex.id}`} className="inline-block">
+                                        <span className="text-primary font-sans text-sm md:text-base underline underline-offset-4 decoration-primary/50">{t("exhibitions.view_series", "Zobrazit sérii →")}</span>
+                                    </Link>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
+                </div>
             </div>
+
+            <Footer />
         </section>
     );
 }

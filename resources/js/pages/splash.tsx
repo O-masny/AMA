@@ -12,7 +12,7 @@ export type SplashScreenProps = {
 
 const SplashScreen: React.FC<SplashScreenProps> = ({
     onComplete,
-    logoSrc = "/assets/logo.svg",
+    logoSrc = "/assets/logo_white.svg",
     bgColor = "bg-primary",
     accent = "var(--color-accent)",
 }) => {

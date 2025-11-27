@@ -16,7 +16,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
     const hasCategories = categories && categories.length > 0;
 
     return (
-        <section className="py-8 bg-background/90 sticky top-0 z-30 backdrop-blur-sm">
+        <section className="section--sm bg-background/90 sticky top-0 z-30 backdrop-blur-sm">
             <div className="max-w-7xl mx-auto px-6">
                 <div className="flex justify-center gap-4 overflow-x-auto scrollbar-hide">
                     {hasCategories ? (

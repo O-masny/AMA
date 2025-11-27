@@ -37,15 +37,13 @@ const Gallery = ({ artworks }: GalleryProps) => {
                     style={{ opacity: introOpacity }}
                     className="absolute inset-0 flex flex-col items-center justify-center text-center"
                 >
-                    <h2 className="font-display font-extrabold text-display md:text-heading text-foreground tracking-tight">
+                    <h2 className="font-display font-extrabold text-display huge-display md:text-heading text-foreground tracking-tight">
                         {t("gallery.title")}
                     </h2>
                     <p className="mt-6 text-lg md:text-xl max-w-xl text-muted-foreground">
                         {t("gallery.intro")}
                     </p>
                 </motion.div>
-
-                {/* IMAGE SEQUENCE */}
                 <div className="relative w-full h-full">
                     {artworks.slice(0, 4).map((artwork, i) => {
                         const start = 0.2 + i * 0.15;
@@ -103,11 +101,11 @@ const Gallery = ({ artworks }: GalleryProps) => {
                     style={{ opacity: ctaOpacity, scale: ctaScale }}
                     className="absolute inset-0 flex flex-col items-center justify-center text-center bg-background px-6"
                 >
-                    <h2 className="font-display font-extrabold text-heading md:text-display text-foreground tracking-tight leading-none mb-6">
+                    <h2 className="font-display font-extrabold text-display huge-display text-foreground tracking-tight leading-none mb-6">
                         {t("gallery.cta.title")}
                     </h2>
 
-                    <p className="max-w-xl text-balance text-muted-foreground/90 text-lg md:text-2xl leading-relaxed font-light mb-12">
+                    <p className="max-w-xl text-balance text-muted-foreground/90 text-body md:text-title leading-relaxed font-light mb-12">
                         {t("gallery.cta.text")}
                     </p>
 

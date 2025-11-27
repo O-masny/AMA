@@ -6,14 +6,19 @@
     },
     "exhibitions": {
         "title": "SÉRIE",
-        "description": "Každá série představuje jedinečné téma – od introspektivních portrétů po abstraktní krajiny. Tyto cykly nejsou jen malby, ale rozhovory mezi barvou, světlem a vnitřním prostorem.",
-        "cta_title": "Další série",
-        "cta_text": "Objevte všechny série v kompletní výstavě – příběhy, které propojuje světlo, barva a introspekce. Každý obraz je fragmentem širšího příběhu o hledání rovnováhy mezi emocí a tichem.",
-        "cta_button": "Zobrazit všechny"
+        "index_title": "Výstavy & Série",
+        "index_intro": "Každá výstava je kapitola – prostor, kde se barva, světlo a introspekce potkávají.",
+        "view_series": "Zobrazit sérii →",
+        "description": "Série jako atmosférické pasáže — od intimních, introspektivních portrétů po snové, abstraktní krajiny. Tyto cykly nejsou pouhými obrazy, ale tichými rituály: dialogy mezi barvou, dechem a smyslem.",
+        "cta_title": "Kompletní výstava",
+        "cta_text": "Projděte celou výstavu — sled fragmentů, které sledují, jak spolu mluví světlo, forma a pomíjivost. Každé plátno je uzlem v širší meditaci o bytí a stopách, které zanecháváme.",
+        "cta_button": "Zobrazit sérii",
+        "back": "← Zpět na výstavy"
     },
     "brand": {
         "name": "Ateliér AMA",
-        "tagline": "Umění, které mluví k srdci. <1>Každé dílo je příběhem.</1>"
+        "mono": "Ateliér",
+        "tagline": "Umění, které naslouchá. Každé dílo zve k zamyšlení."
     },
     "social": {
         "instagram": "Instagram",
@@ -41,13 +46,15 @@
             "send": "Odeslat zprávu",
             "sending": "Odesílám..."
         }
+        ,
+        "cta": "Kontaktovat"
     },
     "hero": {
         "title": "UMĚNÍ",
-        "subtitle": "které dýchá prostorem",
-        "description": "Barvy nejsou jen pigmenty. Jsou to emoce, které se rozhodly zůstat na plátně. Každé dílo je rozhovor – mezi světlem, tichem a mnou.",
-        "ctaGallery": "Prohlédnout galerii",
-        "ctaAbout": "O mně"
+        "subtitle": "kde se sen a soumrak setkávají",
+        "description": "Mezi soumrakem a snem se pigment stává pamětí. Moje tvorba stojí na hraně mezi skutečným a snovým — intimními, surrealními gesty, která zkoumají život a jeho stín. Plátna zvou k cítění, otázkám a tichu, které po nich zůstává.",
+        "ctaGallery": "Prohlédnout sbírku",
+        "ctaAbout": "O umělkyni"
     },
     "artwork": {
         "notFound": "Dílo nenalezeno",
@@ -70,8 +77,8 @@
         "next": "Další dílo"
     },
     "about": {
-        "title": "Malba je můj způsob, jak slyšet světlo.",
-        "text": "Tvořím obrazy, ve kterých se barva stává pamětí a ticho prostorem. Každý tah štětce je rozhovor se světlem, které přichází i odchází. Hledám okamžik mezi klidem a pohybem – tam, kde vzniká dech obrazu.",
+        "title": "Malba jako jazyk přítomnosti a ztráty.",
+        "text": "Tvořím práce, kde se obrazové a poetické setkávají — praxi povrchů, které nesou paměť, zvláštní intimity a tichá vyrovnání. Moje plátna sledují prahy: života a jeho ozvěny, něhy a rozkladu.",
         "signature": "Ateliér — 2025"
     },
     "nav": {
@@ -90,5 +97,10 @@
             "button": "Zobrazit celou galerii"
         }
     },
-    "rights": "© 2025 Atelier Adéla Masná Bočková. All rights reserved."
+    "rights": "© 2025 Ateliér Adéla Masná Bočková. Všechna práva vyhrazena.",
+    "footer": {
+        "credits": "Design a vývoj",
+        "privacy": "Ochrana soukromí",
+        "terms": "Podmínky"
+    }
 }

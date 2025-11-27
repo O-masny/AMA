@@ -24,17 +24,20 @@
             "send": "Send Message",
             "sending": "Sending..."
         }
+        ,
+        "cta": "Contact"
     },
     "hero": {
         "title": "ART",
-        "subtitle": "that breathes through space",
-        "description": "Colors are not just pigments. They’re emotions that decided to stay on the canvas. Each piece is a conversation — between light, silence, and you.",
-        "ctaGallery": "Explore Gallery",
+        "subtitle": "where dream and dusk converse",
+        "description": "Between dusk and dream, pigment becomes memory. My work lives at the edge of the real and the imagined — intimate, surreal gestures that examine life and its shadow. These canvases are invitations to feel, to question, and to sit with the quiet that follows.",
+        "ctaGallery": "Explore the Collection",
         "ctaAbout": "About the Artist"
     },
     "brand": {
         "name": "AMA Studio",
-        "tagline": "Art that speaks to the heart. <1>Every piece tells a story.</1>"
+        "mono": "Studio",
+        "tagline": "Art that listens. Each work invites a moment of reflection."
     },
     "social": {
         "instagram": "Instagram",
@@ -70,8 +73,8 @@
         "next": "Next"
     },
     "about": {
-        "title": "Painting is my way to listen to light.",
-        "text": "I create paintings where color becomes memory and silence becomes space. Every brushstroke is a conversation with light as it comes and goes. I search for the moment between stillness and motion — where the breath of a painting begins.",
+        "title": "Painting as a language of presence and loss.",
+        "text": "I make work where the pictorial and the poetic meet — a practice of surfaces that hold memory, uncanny intimacies, and quiet reckonings. My paintings trace thresholds: of life and its echo, of tenderness and decay.",
         "signature": "Studio — 2025"
     },
     "gallery": {
@@ -85,10 +88,19 @@
     },
     "exhibitions": {
         "title": "SERIES",
-        "description": "Each series embodies a distinct theme – from introspective portraits to abstract landscapes. These cycles are not just paintings, but dialogues between color, light, and inner space.",
-        "cta_title": "Full Exhibition",
-        "cta_text": "Explore all series in the complete exhibition – stories bound by light, color, and introspection. Every painting is a fragment of a larger search for balance between emotion and silence.",
-        "cta_button": "All Series"
+        "index_title": "Exhibitions & Series",
+        "index_intro": "Each exhibition is a chapter — spaces where color, light and introspection meet.",
+        "view_series": "View series →",
+        "description": "Series as atmospheric passages — from intimate, introspective portraits to abstract, dream-worn landscapes. These cycles are not mere images but quiet rituals: dialogues between color, breath, and the shadow of meaning.",
+        "cta_title": "Complete Exhibition",
+        "cta_text": "Step through the full exhibition — a sequence of fragments tracing how light, form and mortality converse. Each canvas is a node in a wider meditation on being and the traces we leave.",
+        "cta_button": "View All Series",
+        "back": "← Back to exhibitions"
     },
-    "rights": "© 2025 Adéla Masná Bočková Studio. All rights reserved."
+    "rights": "© 2025 Adéla Masná Bočková Studio. All rights reserved.",
+    "footer": {
+        "credits": "Design & development",
+        "privacy": "Privacy",
+        "terms": "Terms"
+    }
 }

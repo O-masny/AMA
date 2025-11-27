@@ -57,7 +57,7 @@ const Index: React.FC = () => {
                             initial={{ y: 80, opacity: 0 }}
                             whileInView={{ y: 0, opacity: 1 }}
                             transition={{ duration: 1, delay: 0.2 }}
-                            className="relative z-10 text-5xl md:text-7xl font-bold text-white mix-blend-difference"
+                            className="relative z-10 text-display md:text-display font-bold text-white mix-blend-difference"
                         >
                             {art.title}
                         </motion.h2>

@@ -90,8 +90,8 @@
     --font-signature: 'Adelia', cursive;
 
     /* Typographic scale (fluid values) */
-    /* Display size increased (x2) per design korektura */
-    --fs-display: clamp(7rem, 20vw, 14rem);
+    /* Display size increased further (x2 again) — now at least 2x current */
+    --fs-display: clamp(14rem, 40vw, 28rem);
     --lh-display: 1;
 
     /* Headings scaled up to maintain hierarchy */
@@ -234,5 +234,39 @@
     * {
         scrollbar-width: thin;
         scrollbar-color: hsl(var(--accent)) hsl(var(--muted));
+    }
+}
+
+/* Semantic section spacing utilities for consistent vertical rhythm */
+@layer components {
+    .section { @apply py-24 md:py-32; }
+    .section--sm { @apply py-12 md:py-16; }
+    .section--lg { @apply py-32 md:py-40; }
+    .section--hero { @apply py-20 md:py-36; }
+
+    /* Larger display helpers for headline scaling — responsive and layout-safe.
+       Use a container- and viewport-aware sizing strategy to avoid overflow.
+       - font-size uses `min()` to cap by viewport width
+       - keep max-width and wrapping rules to prevent horizontal overflow
+    */
+    .huge-display {
+        /* scale up the display variable but never exceed a reasonable vw cap */
+        font-size: min(calc(var(--fs-display) * 1.8), 16vw);
+        line-height: var(--lh-display);
+        max-width: 100%;
+        display: block;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        hyphens: auto;
+    }
+
+    .huge-heading {
+        font-size: min(calc(var(--fs-heading) * 1.6), 9.5vw);
+        line-height: var(--lh-heading);
+        max-width: 100%;
+        display: block;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        hyphens: auto;
     }
 }

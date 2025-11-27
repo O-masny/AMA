@@ -59,7 +59,7 @@ const Exhibitions = ({ exhibitions }: ExhibitionsProps) => {
             {/* Intro */}
             <div className="px-6 md:px-10 pt-24 md:pt-32 pb-16">
                 <motion.h2
-                    className="font-display font-extrabold leading-none text-display text-foreground tracking-tight"
+                    className="font-display font-extrabold leading-none text-display huge-display text-foreground tracking-tight"
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
@@ -67,8 +67,9 @@ const Exhibitions = ({ exhibitions }: ExhibitionsProps) => {
                     {t("exhibitions.title", "SERIES")}
                 </motion.h2>
 
+
                 <motion.p
-                    className="mt-8 max-w-2xl text-lg md:text-2xl text-muted-foreground leading-relaxed font-light"
+                    className="mt-8 max-w-2xl text-body md:text-title text-muted-foreground leading-relaxed font-light"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
@@ -148,7 +149,7 @@ const Exhibitions = ({ exhibitions }: ExhibitionsProps) => {
                                         }}
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--background)/.95)] via-[hsl(var(--background)/.5)] to-transparent p-6 flex flex-col justify-end">
-                                        <h4 className="text-2xl font-display font-semibold mb-1">
+                                        <h4 className="font-display font-semibold text-title mb-1">
                                             {a.title}
                                         </h4>
                                         <p className="text-sm text-muted-foreground">{a.location}</p>
@@ -191,12 +192,12 @@ const Exhibitions = ({ exhibitions }: ExhibitionsProps) => {
 
             {/* CTA */}
             <motion.div
-                className="relative z-20 py-32 flex flex-col items-center justify-center text-center"
+                className="relative z-20 section section--lg flex flex-col items-center justify-center text-center"
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
             >
-                <h3 className="font-display text-display md:text-heading leading-none text-foreground mb-6 tracking-tight">
+                <h3 className="font-display text-display huge-display leading-none text-foreground mb-6 tracking-tight">
                     {t("exhibitions.cta_title", "Celá výstava")}
                 </h3>
                 <p className="max-w-xl text-muted-foreground text-lg md:text-xl mb-12">

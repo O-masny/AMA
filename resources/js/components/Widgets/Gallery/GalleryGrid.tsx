@@ -26,7 +26,7 @@ const cardVariants: Variants = {
 
 const GalleryGrid: React.FC<GalleryGridProps> = ({ artworks }) => {
     return (
-        <section className="py-32 bg-background/95">
+        <section className="section section--lg bg-background/95">
             <div className="max-w-7xl mx-auto px-6">
                 <h2 className="text-heading md:text-display font-display font-bold text-center text-primary mb-20">
                     Kompletní kolekce
