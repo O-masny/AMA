@@ -5,7 +5,7 @@ services:
     depends_on:
       - app
     volumes:
-      - ./public:/var/www/public:ro          # hotový frontend z hostu
+      # Serve `public` directory from image (do NOT mount host ./public)
       - ./docker/prod/nginx/default.conf:/etc/nginx/conf.d/default.conf:rw
       - storage_data:/var/www/storage
       - database_data:/var/www/database

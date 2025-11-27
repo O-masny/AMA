@@ -41,7 +41,9 @@ return [
     |
     */
 
-    'default_filesystem_disk' => env('FILESYSTEM_DISK', 'local'),
+    // Default Filament disk: prefer the public disk so uploads go to
+    // `storage/app/public` and are served via the `public/storage` symlink.
+    'default_filesystem_disk' => env('FILESYSTEM_DISK', 'public'),
 
     /*
     |--------------------------------------------------------------------------

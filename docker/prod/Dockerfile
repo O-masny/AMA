@@ -52,6 +52,11 @@ RUN composer install --no-dev --optimize-autoloader
 # Překopíruj frontend build z node stage
 COPY --from=node-builder /app/public/build ./public/build
 
+# Ensure the public/storage symlink exists so uploaded files stored on the
+# `public` disk (storage/app/public) are accessible via /public/storage.
+# Run during image build so the symlink is baked into the image.
+RUN php artisan storage:link || true
+
 # Nastavení práv pro storage, cache a databázi
 RUN chown -R www-data:www-data storage bootstrap/cache database
 RUN { \
