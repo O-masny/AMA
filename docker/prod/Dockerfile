@@ -10,7 +10,7 @@ RUN npm ci
 COPY resources ./resources
 COPY vite.config.* ./
 COPY tsconfig*.json ./
-COPY public ./public  # ← PŘIDEJ TOTO - Vite potřebuje public/ pro correct build
+COPY public ./public
 
 # Proveď build
 RUN npm run build
@@ -53,11 +53,20 @@ RUN composer install --no-dev --optimize-autoloader
 # Překopíruj frontend build z node stage
 COPY --from=node-builder /app/public/build ./public/build
 
+# Hotfix: Vite 7 generuje manifest do .vite/, Laravel ho hledá v root
+RUN if [ -f public/build/.vite/manifest.json ]; then \
+        cp public/build/.vite/manifest.json public/build/manifest.json && \
+        echo "Manifest hotfix applied"; \
+    else \
+        echo "No manifest found!" && exit 1; \
+    fi
+
+# Storage symlink
 RUN php artisan storage:link || true
 
 # Nastavení práv
-RUN chown -R www-data:www-data storage bootstrap/cache database public/build \
-    && chmod -R 775 storage bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache database public/build && \
+    chmod -R 775 storage bootstrap/cache
 
 RUN { \
     echo "upload_max_filesize=50M"; \
