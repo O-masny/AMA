@@ -68,10 +68,9 @@ RUN php artisan storage:link || true
 RUN chown -R www-data:www-data storage bootstrap/cache database public/build && \
     chmod -R 775 storage bootstrap/cache
 
-RUN { \
-    echo "upload_max_filesize=50M"; \
-    echo "post_max_size=55M"; \
-} > /usr/local/etc/php-conf.d/uploads.ini
+# PHP konfigurace - OPRAVENA CESTA
+RUN echo "upload_max_filesize=50M" > /usr/local/etc/php/conf.d/uploads.ini && \
+    echo "post_max_size=55M" >> /usr/local/etc/php/conf.d/uploads.ini
 
 EXPOSE 9000
 CMD ["php-fpm"]
