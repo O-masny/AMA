@@ -55,7 +55,7 @@ const LoadingScreen = ({ isActive, onFinish }: LoadingScreenProps) => {
             {/* Animated Logo */}
             <div
                 ref={logoRef}
-                className="relative z-10 text-5xl md:text-7xl font-playfair font-extrabold text-white drop-shadow-lg tracking-wide"
+                className="relative z-10 text-heading font-display font-extrabold text-white drop-shadow-lg tracking-wide"
             >
                 Atelier AMA
             </div>

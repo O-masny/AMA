@@ -43,7 +43,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ artworks = [] }) => {
                 <div className="relative z-10 text-center px-4">
                     <motion.h1
                         style={{ y: titleY, opacity: titleOpacity }}
-                        className="text-[14vw] md:text-[9vw] font-black font-playfair text-white mix-blend-difference leading-none"
+                        className="text-display md:text-heading font-display font-extrabold text-white mix-blend-difference leading-none"
                     >
                         GALERIE
                     </motion.h1>

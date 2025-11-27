@@ -37,7 +37,7 @@ const Gallery = ({ artworks }: GalleryProps) => {
                     style={{ opacity: introOpacity }}
                     className="absolute inset-0 flex flex-col items-center justify-center text-center"
                 >
-                    <h2 className="font-playfair font-extrabold text-[12vw] md:text-[8vw] text-foreground tracking-tight">
+                    <h2 className="font-display font-extrabold text-display md:text-heading text-foreground tracking-tight">
                         {t("gallery.title")}
                     </h2>
                     <p className="mt-6 text-lg md:text-xl max-w-xl text-muted-foreground">
@@ -83,10 +83,10 @@ const Gallery = ({ artworks }: GalleryProps) => {
                                         }}
                                     >
                                         <div>
-                                            <h3 className="font-playfair font-bold text-3xl text-white mb-2">
+                                            <h3 className="font-display font-bold text-title text-white mb-2">
                                                 {artwork.title}
                                             </h3>
-                                            <p className="font-inter text-white/80">
+                                            <p className="font-sans text-white/80">
                                                 {artwork.year} · {artwork.category}
                                             </p>
                                         </div>
@@ -103,7 +103,7 @@ const Gallery = ({ artworks }: GalleryProps) => {
                     style={{ opacity: ctaOpacity, scale: ctaScale }}
                     className="absolute inset-0 flex flex-col items-center justify-center text-center bg-background px-6"
                 >
-                    <h2 className="font-playfair font-black text-[8vw] md:text-[5vw] text-foreground tracking-tight leading-none mb-6">
+                    <h2 className="font-display font-extrabold text-heading md:text-display text-foreground tracking-tight leading-none mb-6">
                         {t("gallery.cta.title")}
                     </h2>
 

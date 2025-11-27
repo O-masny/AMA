@@ -1,8 +1,8 @@
 import { Artwork } from "@/components/data/artworks";
 import { Card } from "@/components/ui/card";
-import { motion } from "framer-motion";
-import { Link } from "@inertiajs/react";
 import { HorizontalScroll } from "@/components/Widgets/ScrollAnimations";
+import { Link } from "@inertiajs/react";
+import { motion } from "framer-motion";
 
 interface FeaturedArtworksProps {
     artworks: Artwork[];
@@ -28,18 +28,18 @@ const FeaturedArtworks: React.FC<FeaturedArtworksProps> = ({ artworks }) => {
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                                 <div className="absolute bottom-6 left-6 right-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                    <h3 className="font-playfair font-bold text-3xl mb-2">{artwork.title}</h3>
-                                    <p className="font-inter text-sm opacity-90">{artwork.description}</p>
+                                    <h3 className="font-display font-bold text-title mb-2">{artwork.title}</h3>
+                                    <p className="font-sans text-sm opacity-90">{artwork.description}</p>
                                 </div>
                             </div>
                             <div className="p-8 h-1/4 flex flex-col justify-between">
                                 <div>
-                                    <h3 className="font-playfair font-bold text-2xl text-foreground mb-2">{artwork.title}</h3>
-                                    <p className="font-inter text-muted-foreground text-sm">{artwork.technique} • {artwork.dimensions}</p>
+                                    <h3 className="font-display font-bold text-title text-foreground mb-2">{artwork.title}</h3>
+                                    <p className="font-sans text-muted-foreground text-sm">{artwork.technique} • {artwork.dimensions}</p>
                                 </div>
                                 <div className="flex justify-between items-center pt-4">
-                                    <span className="bg-art-lavender text-foreground px-3 py-1 rounded-full text-xs font-inter font-medium">{artwork.category}</span>
-                                    <span className="font-inter font-bold text-primary text-lg">{artwork.year}</span>
+                                    <span className="bg-art-lavender text-foreground px-3 py-1 rounded-full text-xs font-sans font-medium">{artwork.category}</span>
+                                    <span className="font-sans font-bold text-primary text-lg">{artwork.year}</span>
                                 </div>
                             </div>
                         </Card>

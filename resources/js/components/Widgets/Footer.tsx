@@ -33,7 +33,7 @@ const Footer = () => {
                 {/* Branding */}
                 <div className="text-center mb-16">
                     <motion.h2
-                        className="text-5xl md:text-6xl font-boska font-bold tracking-widest mb-6 text-background"
+                        className="text-display md:text-heading font-display font-bold tracking-widest mb-6 text-background"
                         initial={{ opacity: 0, y: -20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -43,7 +43,7 @@ const Footer = () => {
                     </motion.h2>
 
                     <motion.p
-                        className="font-synonym text-background/80 max-w-xl mx-auto text-lg md:text-xl italic"
+                        className="font-sans text-background/80 max-w-xl mx-auto text-lg md:text-xl italic"
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
@@ -85,7 +85,7 @@ const Footer = () => {
                 {/* Divider */}
                 <div className="border-t border-background/20 pt-6">
                     <motion.p
-                        className="font-inter text-sm text-background/60 text-center tracking-wide"
+                        className="font-sans text-sm text-background/60 text-center tracking-wide"
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
@@ -101,7 +101,7 @@ const Footer = () => {
                         whileHover={{ opacity: 1 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 0.8 }}
-                        className="mt-4 text-center text-sm font-synonym text-background/50"
+                        className="mt-4 text-center text-sm font-sans text-background/50"
                     >
                         Created by ------
                         <a

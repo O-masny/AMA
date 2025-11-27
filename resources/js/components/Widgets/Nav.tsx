@@ -67,19 +67,19 @@ const Navigation = ({ isReady }: { isReady: boolean }) => {
             <motion.nav
                 role="navigation"
                 aria-label="Main navigation"
-                className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[95%] md:w-auto"
+                className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[95%]"
                 animate={{ height: isCollapsed ? 56 : 88 }}
                 transition={{ type: "spring", stiffness: 120, damping: 20 }}
             >
                 <div
                     className="relative flex items-center justify-between 
           bg-background/70 backdrop-blur-xl border border-border 
-          rounded-2xl px-6 py-3 md:px-12 md:py-5 
+          rounded-2xl px-6 py-3 md:px-20 md:py-5 
           shadow-[0_0_25px_-5px_var(--tw-shadow-color)] shadow-primary/20"
                 >
                     {/* Desktop left nav */}
                     <motion.div
-                        className="hidden md:flex items-center space-x-10"
+                        className="hidden md:flex items-center space-x-10 flex-1 justify-start"
                         animate={{ opacity: isCollapsed ? 0 : 1, y: isCollapsed ? -10 : 0 }}
                     >
                         {navItems.slice(0, 2).map((item) => (
@@ -95,11 +95,11 @@ const Navigation = ({ isReady }: { isReady: boolean }) => {
                     </motion.div>
 
                     {/* Center logo */}
-                    <Link href="/" aria-label={t("nav.home")} className="mx-4 md:mx-8 flex-shrink-0">
+                    <Link href="/" aria-label={t("nav.home")} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto">
                         <motion.div
                             animate={{ scale: isCollapsed ? 0.8 : 1 }}
                             transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                            className="relative w-20 h-10 md:w-28 md:h-14"
+                            className="relative w-10 h-10 md:w-28 md:h-14 flex items-center justify-center"
                         >
                             <img
                                 src="/assets/logo_white.svg"
@@ -113,7 +113,7 @@ const Navigation = ({ isReady }: { isReady: boolean }) => {
 
                     {/* Desktop right nav */}
                     <motion.div
-                        className="hidden md:flex items-center space-x-10"
+                        className="hidden md:flex items-center space-x-10 flex-1 justify-end"
                         animate={{ opacity: isCollapsed ? 0 : 1, y: isCollapsed ? -10 : 0 }}
                     >
                         {navItems.slice(2).map((item) => (
@@ -127,8 +127,6 @@ const Navigation = ({ isReady }: { isReady: boolean }) => {
                             </Link>
                         ))}
                     </motion.div>
-
-                    {/* Mobile menu toggle */}
                     <div className="flex md:hidden items-center">
                         <Button
                             size="icon"

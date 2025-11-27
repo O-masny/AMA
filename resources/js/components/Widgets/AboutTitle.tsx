@@ -14,8 +14,7 @@ const AboutTitle = () => {
 
     return (
         <div ref={ref} className="relative h-[60vh] flex items-center justify-center">
-            <h2 className="relative font-playfair font-extrabold 
-                     text-[14vw] md:text-[10vw] text-center text-foreground leading-none">
+            <h2 className="relative font-display font-extrabold text-display md:text-heading text-center text-foreground leading-none">
                 ABOUT ME
                 {/* Brush stroke overlay */}
                 <motion.svg

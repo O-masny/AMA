@@ -13,7 +13,7 @@ export default function ExhibitionsIndex({ exhibitions }: ExhibitionsProps) {
             {/* Header */}
             <div className="text-center pt-32 pb-16">
                 <motion.h1
-                    className="font-boska text-[clamp(4rem,10vw,8rem)] font-black text-foreground tracking-tight leading-none"
+                    className="font-display text-display font-black text-foreground tracking-tight leading-none"
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1 }}
@@ -21,7 +21,7 @@ export default function ExhibitionsIndex({ exhibitions }: ExhibitionsProps) {
                     {t("exhibitions.index_title", "Výstavy & Série")}
                 </motion.h1>
                 <motion.p
-                    className="font-synonym text-muted-foreground text-lg md:text-xl mt-6 max-w-2xl mx-auto leading-relaxed"
+                    className="font-sans text-muted-foreground text-lg md:text-xl mt-6 max-w-2xl mx-auto leading-relaxed"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.2 }}
@@ -59,7 +59,7 @@ export default function ExhibitionsIndex({ exhibitions }: ExhibitionsProps) {
                         {/* Text Overlay */}
                         <div className="absolute bottom-0 left-0 p-10 text-white">
                             <motion.h2
-                                className="font-boska text-6xl md:text-7xl mb-4 leading-none tracking-tight"
+                                className="font-display text-heading md:text-display mb-4 leading-none tracking-tight"
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
@@ -67,7 +67,7 @@ export default function ExhibitionsIndex({ exhibitions }: ExhibitionsProps) {
                                 {ex.title}
                             </motion.h2>
                             <motion.p
-                                className="font-synonym text-lg max-w-md text-white/80"
+                                className="font-sans text-lg max-w-md text-white/80"
                                 initial={{ opacity: 0 }}
                                 whileInView={{ opacity: 1 }}
                                 viewport={{ once: true }}
@@ -78,7 +78,7 @@ export default function ExhibitionsIndex({ exhibitions }: ExhibitionsProps) {
 
                             <Link href={`/exhibitions/${ex.id}`}>
                                 <motion.span
-                                    className="inline-block mt-6 text-primary font-synonym text-xl underline underline-offset-4 decoration-primary/50 hover:decoration-primary"
+                                    className="inline-block mt-6 text-primary font-sans text-xl underline underline-offset-4 decoration-primary/50 hover:decoration-primary"
                                     whileHover={{ x: 4 }}
                                     transition={{ type: "spring", stiffness: 300 }}
                                 >

@@ -28,7 +28,7 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({ artworks }) => {
     return (
         <section className="py-32 bg-background/95">
             <div className="max-w-7xl mx-auto px-6">
-                <h2 className="text-5xl md:text-6xl font-playfair font-bold text-center text-primary mb-20">
+                <h2 className="text-heading md:text-display font-display font-bold text-center text-primary mb-20">
                     Kompletní kolekce
                 </h2>
 
@@ -64,16 +64,16 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({ artworks }) => {
                                     </div>
                                     <div className="p-6 flex flex-col justify-between h-56">
                                         <div>
-                                            <h3 className="font-playfair font-bold text-2xl text-foreground mb-2 group-hover:text-primary transition-colors duration-500">
+                                            <h3 className="font-display font-bold text-title text-foreground mb-2 group-hover:text-primary transition-colors duration-500">
                                                 {artwork.title}
                                             </h3>
-                                            <p className="font-inter text-muted-foreground text-sm">
+                                            <p className="font-sans text-muted-foreground text-sm">
                                                 {artwork.technique} • {artwork.dimensions}
                                             </p>
                                         </div>
                                         <div className="flex justify-between items-center pt-4">
                                             <Badge>{artwork.category}</Badge>
-                                            <span className="font-inter font-bold text-primary">
+                                            <span className="font-sans font-bold text-primary">
                                                 {artwork.year}
                                             </span>
                                         </div>

@@ -79,7 +79,6 @@ export const Index = ({ artworks, exhibitions }: IndexProps) => {
                     <Hero isReady={heroReady} />
                     <Gallery artworks={artworks} />
                     <About />
-
                     <Exhibitions exhibitions={exhibitions} />
                     <Contact />
                 </main>

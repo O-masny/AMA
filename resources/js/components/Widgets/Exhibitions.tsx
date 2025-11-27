@@ -49,6 +49,7 @@ const Exhibitions = ({ exhibitions }: ExhibitionsProps) => {
     console.log(exhibitions)
     const touchX = typeof window !== "undefined" ? window.innerWidth / 2 - 192 : 0;
     const touchY = typeof window !== "undefined" ? window.innerHeight / 2 - 240 : 0;
+    const firstImage = a?.galleries?.[0]?.image ?? null;
 
     return (
         <section
@@ -58,7 +59,7 @@ const Exhibitions = ({ exhibitions }: ExhibitionsProps) => {
             {/* Intro */}
             <div className="px-6 md:px-10 pt-24 md:pt-32 pb-16">
                 <motion.h2
-                    className="font-display font-black leading-none text-[14vw] md:text-[10vw] text-foreground tracking-tight"
+                    className="font-display font-extrabold leading-none text-display text-foreground tracking-tight"
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
@@ -90,17 +91,30 @@ const Exhibitions = ({ exhibitions }: ExhibitionsProps) => {
                             onMouseLeave={!isTouchDevice ? () => handleHover(null) : undefined}
                         >
                             <Link href={`/exhibitions/${ex.id}`} className="block">
-                                <span
-                                    className={`block font-display font-semibold text-5xl md:text-7xl transition-colors ${active === ex.id
-                                        ? "text-primary"
-                                        : "text-foreground group-hover:text-primary/80"
-                                        }`}
-                                >
-                                    {ex.title}
-                                </span>
-                                <span className="block text-base md:text-lg text-muted-foreground italic">
-                                    {ex.date} · {ex.gallery}
-                                </span>
+                                <div className="flex items-center gap-6">
+                                    {/* Left thumbnail (always visible) */}
+                                    <div className="w-16 h-16 md:w-28 md:h-20 rounded-lg overflow-hidden flex-shrink-0 bg-muted">
+                                        <img
+                                            src={ex.galleries?.[0]?.image ? `/storage/${ex.galleries[0].image}` : `/assets/placeholder.png`}
+                                            alt={ex.title}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+
+                                    <div className="flex-1">
+                                        <span
+                                            className={`block font-display font-semibold text-heading md:text-display transition-colors ${active === ex.id
+                                                ? "text-primary"
+                                                : "text-foreground group-hover:text-primary/80"
+                                                }`}
+                                        >
+                                            {ex.title}
+                                        </span>
+                                        <span className="block text-base md:text-lg text-muted-foreground italic">
+                                            {ex.date} · {ex.gallery}
+                                        </span>
+                                    </div>
+                                </div>
                             </Link>
                         </li>
                     ))}
@@ -109,7 +123,7 @@ const Exhibitions = ({ exhibitions }: ExhibitionsProps) => {
 
             {/* Floating preview */}
             <AnimatePresence>
-                {active && a && (
+                {active && a && firstImage && (
                     <>
                         {!isTouchDevice && (
                             <motion.div
@@ -122,8 +136,8 @@ const Exhibitions = ({ exhibitions }: ExhibitionsProps) => {
                             >
                                 <div className="relative w-[24rem] h-[30rem] overflow-hidden rounded-3xl shadow-artistic">
                                     <motion.img
-                                        src={`/storage/${a.galleries[0].image}`}
-                                        alt={a.title}
+                                        src={`/storage/${firstImage}`}
+                                        alt={a.title ?? ""}
                                         className="w-full h-full object-cover"
                                         initial={{ scale: 1 }}
                                         animate={{ scale: 1.05 }}
@@ -147,6 +161,34 @@ const Exhibitions = ({ exhibitions }: ExhibitionsProps) => {
                 )}
             </AnimatePresence>
 
+            {/* Right-side thumbnails (desktop) */}
+            <AnimatePresence>
+                {active && a && a.galleries && a.galleries.length > 0 && (
+                    <motion.div
+                        initial={{ opacity: 0, x: 40 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 40 }}
+                        transition={{ duration: 0.25 }}
+                        className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col gap-4"
+                    >
+                        {a.galleries.slice(0, 6).map((g, idx) => (
+                            <div
+                                key={g.image + idx}
+                                className="relative w-20 h-20 rounded-xl overflow-hidden shadow-lg cursor-pointer group"
+                                aria-hidden
+                            >
+                                <img
+                                    src={`/storage/${g.image}`}
+                                    alt={a.title ?? ''}
+                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                />
+                                <span className="absolute top-1 left-1 px-2 py-0.5 bg-primary text-primary-foreground text-xs font-semibold rounded">{(idx + 1).toString().padStart(2, '0')}</span>
+                            </div>
+                        ))}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             {/* CTA */}
             <motion.div
                 className="relative z-20 py-32 flex flex-col items-center justify-center text-center"
@@ -154,7 +196,7 @@ const Exhibitions = ({ exhibitions }: ExhibitionsProps) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
             >
-                <h3 className="font-display text-[10vw] md:text-[6vw] leading-none text-foreground mb-6 tracking-tight">
+                <h3 className="font-display text-display md:text-heading leading-none text-foreground mb-6 tracking-tight">
                     {t("exhibitions.cta_title", "Celá výstava")}
                 </h3>
                 <p className="max-w-xl text-muted-foreground text-lg md:text-xl mb-12">

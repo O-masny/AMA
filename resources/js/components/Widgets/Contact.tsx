@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import CTAButton from "@/components/ui/CTAButton";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "@inertiajs/react";
@@ -53,7 +54,7 @@ const Contact = () => {
                     style={{ opacity: step1 }}
                     className="absolute inset-0 flex flex-col items-center justify-center text-center space-y-4"
                 >
-                    <h3 className="font-playfair text-6xl md:text-7xl font-extrabold text-primary">
+                    <h3 className="font-display text-heading md:text-heading font-extrabold text-primary">
                         {t("contact.steps.email.title")}
                     </h3>
                     <p className="text-lg md:text-xl text-muted-foreground">
@@ -66,7 +67,7 @@ const Contact = () => {
                     style={{ opacity: step2 }}
                     className="absolute inset-0 flex flex-col items-center justify-center text-center space-y-4"
                 >
-                    <h3 className="font-playfair text-6xl md:text-7xl font-extrabold text-primary">
+                    <h3 className="font-display text-heading md:text-heading font-extrabold text-primary">
                         {t("contact.steps.phone.title")}
                     </h3>
                     <p className="text-lg md:text-xl text-muted-foreground">
@@ -81,7 +82,7 @@ const Contact = () => {
                     style={{ opacity: formOpacity }}
                     className="absolute inset-0 flex flex-col items-center justify-center px-6"
                 >
-                    <h3 className="font-playfair font-extrabold text-5xl md:text-7xl text-center text-foreground mb-12">
+                    <h3 className="font-display font-extrabold text-heading md:text-heading text-center text-foreground mb-12">
                         {t("contact.form.heading")}
                     </h3>
 
@@ -128,13 +129,9 @@ const Contact = () => {
                         </p>
 
                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
-                            <Button
-                                type="submit"
-                                disabled={processing}
-                                className="w-full rounded-full bg-gradient-to-r from-primary to-art-rose text-white font-semibold py-6 text-xl shadow-lg hover:shadow-xl transition-all"
-                            >
+                            <CTAButton type="submit" disabled={processing}>
                                 {processing ? t("contact.form.sending") : t("contact.form.send")}
-                            </Button>
+                            </CTAButton>
                         </motion.div>
                     </form>
                 </motion.div>

@@ -27,14 +27,14 @@ export default function ExhibitionShow({ exhibition }: ExhibitionProps) {
 
                 <div className="absolute bottom-16 left-10 max-w-4xl">
                     <motion.h1
-                        className="font-boska text-[clamp(3rem,8vw,7rem)] leading-none font-bold tracking-tight text-primary mb-4"
+                        className="font-display text-display leading-none font-bold tracking-tight text-primary mb-4"
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1 }}
                     >
                         {exhibition.title}
                     </motion.h1>
-                    <p className="font-synonym text-lg md:text-xl text-muted-foreground">
+                    <p className="font-sans text-lg md:text-xl text-muted-foreground">
                         {exhibition.date} · {exhibition.location}
                     </p>
                 </div>
@@ -43,7 +43,7 @@ export default function ExhibitionShow({ exhibition }: ExhibitionProps) {
             {/* Description */}
             <div className="max-w-4xl mx-auto py-24 px-6 md:px-0">
                 <motion.p
-                    className="font-synonym text-lg md:text-2xl leading-relaxed text-muted-foreground"
+                    className="font-sans text-lg md:text-2xl leading-relaxed text-muted-foreground"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}

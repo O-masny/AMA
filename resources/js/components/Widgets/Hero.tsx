@@ -51,7 +51,7 @@ const Hero = ({ isReady }: { isReady: boolean }) => {
 
             {/* Title */}
             <motion.h1
-                className="text-[clamp(3rem,9vw,10rem)] font-display font-black leading-[0.9] tracking-tight text-[hsl(var(--foreground))]"
+                className="text-display font-display font-extrabold leading-[0.9] tracking-tight text-[hsl(var(--foreground))]"
             >
                 {Array.from(title).map((char, i) => (
                     <motion.span
@@ -72,7 +72,7 @@ const Hero = ({ isReady }: { isReady: boolean }) => {
 
             {/* Subtitle */}
             <motion.h2
-                className="mt-10 text-2xl md:text-4xl font-sans text-[hsl(var(--muted-foreground))] tracking-wide"
+                className="mt-10 text-title md:text-heading font-sans text-[hsl(var(--muted-foreground))] tracking-wide"
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.7 }}
@@ -82,7 +82,7 @@ const Hero = ({ isReady }: { isReady: boolean }) => {
 
             {/* Description */}
             <motion.p
-                className="max-w-2xl mt-8 text-lg md:text-xl font-sans text-[hsl(var(--muted-foreground))]/90 leading-relaxed"
+                className="max-w-2xl mt-8 text-body md:text-body font-sans text-[hsl(var(--muted-foreground))]/90 leading-relaxed"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1 }}

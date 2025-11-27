@@ -26,7 +26,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
                                 <motion.button
                                     key={category}
                                     onClick={() => setSelectedCategory(category)}
-                                    className={`relative px-6 py-3 rounded-full font-inter font-medium text-base md:text-lg transition-all duration-500 whitespace-nowrap
+                                    className={`relative px-6 py-3 rounded-full font-sans font-medium text-base md:text-lg transition-all duration-500 whitespace-nowrap
                   ${isSelected
                                             ? "text-primary-foreground"
                                             : "text-card-foreground hover:text-foreground"
@@ -54,7 +54,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
                         })
                     ) : (
                         <motion.span
-                            className="text-muted-foreground font-inter text-base md:text-lg"
+                            className="text-muted-foreground font-sans text-base md:text-lg"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                         >

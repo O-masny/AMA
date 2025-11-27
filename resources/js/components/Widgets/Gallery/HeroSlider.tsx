@@ -23,9 +23,9 @@ export default function HeroSlider({ artwork }: HeroSliderProps) {
             {/* Left side with text */}
             <motion.div
                 style={{ width: leftWidth }}
-                className="relative h-full bg-black/60 backdrop-blur-md p-12 flex flex-col justify-center text-white transition-all duration-300"
+                className="relative h-full bg-popover/60 backdrop-blur-md p-12 flex flex-col justify-center text-white transition-all duration-300"
             >
-                <h1 className="text-6xl md:text-8xl font-playfair font-bold mb-6">
+                <h1 className="text-heading md:text-display font-display font-bold mb-6">
                     {artwork.title}
                 </h1>
                 <p className="text-lg md:text-xl text-white/80 max-w-lg leading-relaxed">

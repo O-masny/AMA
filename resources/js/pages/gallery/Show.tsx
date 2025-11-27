@@ -36,7 +36,7 @@ const Show: React.FC = () => {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gradient-subtle">
                 <div className="text-center">
-                    <h1 className="text-4xl font-playfair font-bold text-primary mb-4">
+                    <h1 className="text-title font-display font-bold text-primary mb-4">
                         {t("artwork.notFound")}
                     </h1>
                     <Link href="/gallery">
@@ -59,7 +59,7 @@ const Show: React.FC = () => {
             <section className="relative h-screen overflow-hidden">
                 <button
                     onClick={() => window.history.back()}
-                    className="absolute top-6 left-6 z-30 flex items-center gap-2 px-4 py-2 bg-black/60 hover:bg-black/80 text-white rounded-full transition"
+                    className="absolute top-6 left-6 z-30 flex items-center gap-2 px-4 py-2 bg-popover/60 hover:bg-popover/80 text-white rounded-full transition"
                 >
                     <ArrowLeft className="w-4 h-4" />
                     <span className="text-sm font-medium">{t("artwork.back")}</span>
@@ -85,7 +85,7 @@ const Show: React.FC = () => {
                 >
                     <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}>
                         <h1
-                            className="text-6xl md:text-8xl font-playfair font-bold tracking-wide mb-6 text-primary-foreground"
+                            className="text-display font-display font-bold tracking-wide mb-6 text-primary-foreground"
                             style={{ transform: `translateY(${scrollY * -0.2}px)` }}
                         >
                             {artwork.title}
@@ -98,7 +98,7 @@ const Show: React.FC = () => {
                 <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
                     <button
                         onClick={() => setShowOverlay(!showOverlay)}
-                        className="px-5 py-3 bg-black/60 rounded-full flex items-center gap-2 text-white hover:bg-black/80 transition"
+                        className="px-5 py-3 bg-popover/60 rounded-full flex items-center gap-2 text-white hover:bg-popover/80 transition"
                     >
                         {showOverlay ? (
                             <>
@@ -130,10 +130,10 @@ const Show: React.FC = () => {
                                 <Badge variant="outline" className="border-primary text-primary mb-6 text-sm uppercase tracking-widest">
                                     {artwork.category}
                                 </Badge>
-                                <h1 className="text-6xl md:text-7xl font-playfair font-bold text-primary mb-8 leading-tight">
+                                <h1 className="text-heading md:text-display font-display font-bold text-primary mb-8 leading-tight">
                                     {artwork.title}
                                 </h1>
-                                <p className="text-xl font-inter text-muted-foreground leading-relaxed max-w-2xl italic">
+                                <p className="text-xl font-sans text-muted-foreground leading-relaxed max-w-2xl italic">
                                     {artwork.description}
                                 </p>
                             </div>
@@ -146,7 +146,7 @@ const Show: React.FC = () => {
                                     {
                                         label: t("artwork.availability"),
                                         value: artwork.available ? t("artwork.available") : t("artwork.sold"),
-                                        color: artwork.available ? "text-green-600" : "text-red-600",
+                                        color: artwork.available ? "text-success" : "text-error",
                                     },
                                 ].map((info, idx) => (
                                     <motion.div
@@ -156,8 +156,8 @@ const Show: React.FC = () => {
                                         transition={{ duration: 0.8, delay: idx * 0.2 }}
                                         className="p-6 bg-white/70 dark:bg-black/40 backdrop-blur-md rounded-2xl shadow-lg"
                                     >
-                                        <h3 className="font-playfair font-bold text-lg mb-2">{info.label}</h3>
-                                        <p className={`text-muted-foreground font-inter ${info.color || ""}`}>
+                                        <h3 className="font-display font-bold text-lg mb-2">{info.label}</h3>
+                                        <p className={`text-muted-foreground font-sans ${info.color || ""}`}>
                                             {info.value}
                                         </p>
                                     </motion.div>
@@ -171,7 +171,7 @@ const Show: React.FC = () => {
                                     transition={{ duration: 0.6, delay: 0.8 }}
                                     className="p-8 bg-gradient-to-r from-primary/90 to-primary rounded-2xl shadow-xl text-white"
                                 >
-                                    <h3 className="font-playfair font-bold text-xl mb-2">{t("artwork.price")}</h3>
+                                    <h3 className="font-display font-bold text-xl mb-2">{t("artwork.price")}</h3>
                                     <p className="font-bold text-3xl">{artwork.price}</p>
                                 </motion.div>
                             )}
@@ -213,14 +213,14 @@ const Show: React.FC = () => {
                     <div className="max-w-4xl mx-auto px-6">
                         <ScrollReveal>
                             <div className="text-center mb-16">
-                                <h2 className="text-heading font-playfair font-bold">
+                                <h2 className="text-heading font-display font-bold">
                                     {t("artwork.storyTitle")}
                                 </h2>
                             </div>
                         </ScrollReveal>
                         <ScrollReveal direction="up" delay={0.2}>
                             <Card className="p-12 bg-card shadow-artistic">
-                                <p className="text-lg font-inter text-muted-foreground leading-relaxed text-center italic">
+                                <p className="text-lg font-sans text-muted-foreground leading-relaxed text-center italic">
                                     “{artwork.story}”
                                 </p>
                             </Card>
@@ -232,7 +232,7 @@ const Show: React.FC = () => {
             <section className="py-20 bg-background">
                 <div className="max-w-7xl mx-auto px-6">
                     <ScrollReveal>
-                        <h2 className="text-heading font-playfair font-bold text-primary text-center mb-16">
+                        <h2 className="text-heading font-display font-bold text-primary text-center mb-16">
                             {t("artwork.nextWorks")}
                         </h2>
                     </ScrollReveal>
@@ -249,14 +249,14 @@ const Show: React.FC = () => {
                                             />
                                             <div className={`absolute top-4 ${idx === 0 ? "left-4" : "right-4"}`}>
                                                 {idx === 0 ? (
-                                                    <ChevronLeft className="w-6 h-6 text-white bg-black/50 rounded-full p-1" />
+                                                    <ChevronLeft className="w-6 h-6 text-white bg-popover/50 rounded-full p-1" />
                                                 ) : (
-                                                    <ChevronRight className="w-6 h-6 text-white bg-black/50 rounded-full p-1" />
+                                                    <ChevronRight className="w-6 h-6 text-white bg-popover/50 rounded-full p-1" />
                                                 )}
                                             </div>
                                         </div>
                                         <div className="p-6">
-                                            <h3 className="font-playfair font-bold text-xl mb-2">{item.title}</h3>
+                                            <h3 className="font-display font-bold text-xl mb-2">{item.title}</h3>
                                             <p className="text-muted-foreground text-sm">
                                                 {idx === 0 ? t("artwork.previous") : t("artwork.next")}
                                             </p>
