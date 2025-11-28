@@ -1,26 +1,25 @@
-version: "3.9"
-
 services:
   app:
     container_name: ama_app
     build:
-      context: ../
+      context: ../../
       dockerfile: docker/prod/Dockerfile
     image: ama-prod:latest
     working_dir: /var/www
     env_file:
-      - ../.env.production
+      - ../../.env.production
     volumes:
-      - storage_data:/var/www/storage          # persist uploads
-      - database_data:/var/www/database        # persist DB if using SQLite
-      - ../.env.production:/var/www/.env:ro   # environment
+      - storage_data:/var/www/storage          # PERZISTENTNÍ uploads z Filamentu
+      - database_data:/var/www/database        # PERZISTENTNÍ SQLite DB
+      - ../../.env.production:/var/www/.env:ro
     expose:
       - "9000"
     networks:
       - ama
     restart: unless-stopped
     command: >
-      sh -c "php artisan optimize:clear &&
+      sh -c "php artisan storage:link &&
+             php artisan optimize:clear &&
              php-fpm -F"
 
   nginx:
@@ -29,9 +28,9 @@ services:
     depends_on:
       - app
     volumes:
-      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
-      - ama_app_public:/var/www/public:ro     # mount built frontend from app container
-      - storage_data:/var/www/storage:ro      # mount storage uploads
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - app_public:/var/www/public:ro          # Nově buildnutý public/ z app containeru
+      - storage_data:/var/www/storage:ro       # PERZISTENTNÍ storage pro /storage/... requesty
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.ama.rule=Host(`amatelier.cz`) || Host(`www.amatelier.cz`)"
@@ -48,9 +47,9 @@ services:
     restart: unless-stopped
 
 volumes:
-  storage_data:
-  database_data:
-  ama_app_public:
+  storage_data:      # PERZISTENTNÍ - uploads z Filamentu
+  database_data:     # PERZISTENTNÍ - SQLite
+  app_public:        # NEPERZISTENTNÍ - přepisuje se při každém buildu
 
 networks:
   traefik:
