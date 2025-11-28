@@ -2,7 +2,7 @@ services:
   app:
     container_name: ama_app
     build:
-      context: ../..
+      context: .
       dockerfile: docker/prod/Dockerfile
     image: ama-prod:latest
     working_dir: /var/www

@@ -30,13 +30,13 @@ fi
 
 # ---- Build Docker image ----
 info "Builduji Docker image..."
-docker compose -f docker/prod/docker-compose.yml build --no-cache app
+docker compose build --no-cache app
 
 success "Docker image postaven"
 
 # ---- Ověř manifest v image ----
 info "Ověřuji Vite manifest v image..."
-MANIFEST_CHECK=$(docker compose -f docker/prod/docker-compose.yml run --rm app sh -c '
+MANIFEST_CHECK=$(docker compose run --rm app sh -c '
   if [ -f /var/www/public/build/manifest.json ]; then
     echo "root"
   elif [ -f /var/www/public/build/.vite/manifest.json ]; then
@@ -56,11 +56,11 @@ fi
 
 # ---- Stop old containers ----
 info "Zastavuji staré kontejnery..."
-docker compose -f docker/prod/docker-compose.yml down --remove-orphans
+docker compose down --remove-orphans
 
 # ---- Start services ----
 info "Spouštím kontejnery..."
-docker compose -f docker/prod/docker-compose.yml up -d app nginx
+docker compose up -d app nginx
 success "Kontejnery běží"
 
 # ---- Wait for startup ----
@@ -69,11 +69,11 @@ sleep 5
 
 # ---- Storage link (důležité pro Filament uploads!) ----
 info "Vytvářím symlink public/storage -> storage/app/public..."
-docker compose -f docker/prod/docker-compose.yml exec -T app php artisan storage:link || warn "Symlink už existuje"
+docker compose exec -T app php artisan storage:link || warn "Symlink už existuje"
 
 # ---- Laravel optimalizace ----
 info "Optimalizuji Laravel cache..."
-docker compose -f docker/prod/docker-compose.yml exec -T app bash -c "
+docker compose exec -T app bash -c "
   php artisan config:clear &&
   php artisan cache:clear &&
   php artisan view:clear &&
@@ -86,13 +86,13 @@ success "Laravel cache optimalizována"
 
 # ---- Migrace ----
 info "Spouštím migrace..."
-docker compose -f docker/prod/docker-compose.yml exec -T app php artisan migrate --force || error "Migrace selhaly"
+docker compose exec -T app php artisan migrate --force || error "Migrace selhaly"
 success "Migrace hotové"
 
 # ---- Storage permissions (důležité pro Filament!) ----
 info "Kontroluji práva storage..."
-docker compose -f docker/prod/docker-compose.yml exec -T app chown -R www-data:www-data storage bootstrap/cache || true
-docker compose -f docker/prod/docker-compose.yml exec -T app chmod -R 775 storage || true
+docker compose exec -T app chown -R www-data:www-data storage bootstrap/cache || true
+docker compose exec -T app chmod -R 775 storage || true
 
 # ---- Health check ----
 APP_URL=$(grep -E '^APP_URL=' .env.production | cut -d '=' -f2)
@@ -108,15 +108,15 @@ elif [[ "$STATUS" =~ ^3 ]]; then
 else
   warn "⚠️  Neočekávaný HTTP status: $STATUS"
   info "Poslední logy:"
-  docker compose -f docker/prod/docker-compose.yml logs --tail=30 app
+  docker compose logs --tail=30 app
 fi
 
 # ---- Summary ----
 echo ""
 success "🚀 Deployment dokončen!"
 info "URL: $APP_URL"
-info "Logy: cd docker/prod && docker compose logs -f"
-info "Status: cd docker/prod && docker compose ps"
+info "Logy: docker compose logs -f"
+info "Status: docker compose ps"
 info ""
 info "📦 Perzistentní data:"
 info "  - storage_data (Filament uploads)"
