@@ -5,26 +5,39 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
+RUN printf '%s\n' "#!/bin/sh" "echo 'php shim: noop'" "exit 0" > /usr/local/bin/php \
+    && chmod +x /usr/local/bin/php
+
 COPY resources ./resources
 COPY vite.config.* ./
 COPY tsconfig*.json ./
-COPY public ./public
 
 RUN npm run build
 
-# Přesun manifestu z .vite do build/ (Vite 4+)
-RUN cp -r public/build/.vite/* public/build/ \
-    && rm -rf public/build/.vite
 
-# --- Stage 2: PHP 8.3 ---
+# --- Stage 2: PHP Runtime ---
 FROM php:8.3-fpm-alpine
+
 WORKDIR /var/www
 
 RUN apk add --no-cache \
-    libzip-dev unzip oniguruma-dev sqlite-dev bash git curl icu-dev \
-    libpng-dev libjpeg-turbo-dev libwebp-dev freetype-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
-    && docker-php-ext-install pdo pdo_mysql pdo_sqlite bcmath zip intl gd
+        libzip-dev \
+        unzip \
+        oniguruma-dev \
+        sqlite-dev \
+        bash \
+        git \
+        curl \
+        icu-dev \
+        libpng-dev \
+        libjpeg-turbo-dev \
+        libwebp-dev \
+        freetype-dev \
+    && docker-php-ext-configure gd \
+        --with-freetype \
+        --with-jpeg \
+        --with-webp \
+    && docker-php-ext-install pdo pdo_sqlite bcmath zip intl gd
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
@@ -32,22 +45,30 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
-# Copy Node build
+# Zkopíruj build PŘÍMO do finální cesty
 COPY --from=node-builder /app/public/build ./public/build
 
-# Nastavení práv
-RUN chown -R www-data:www-data bootstrap/cache storage public/build \
-    && chmod -R 775 bootstrap/cache storage public/build
+# ✅ NOVÉ: Vytvoř záložní kopii public pro entrypoint
+RUN mkdir -p /var/www-template && cp -r /var/www/public /var/www-template/
 
-RUN echo "upload_max_filesize=50M" > /usr/local/etc/php/conf.d/uploads.ini \
-    && echo "post_max_size=55M" >> /usr/local/etc/php/conf.d/uploads.ini
+# Vytvoř základní strukturu storage
+RUN mkdir -p storage/database storage/framework/sessions \
+             storage/framework/views storage/framework/cache \
+             storage/logs \
+    && chown -R www-data:www-data storage bootstrap/cache
 
-# Persistent storage jen pro storage a cache
-VOLUME ["/var/www/storage", "/var/www/bootstrap/cache"]
+# Nastav práva pro build assets
+RUN chown -R www-data:www-data public/build
+
+# Zkopíruj entrypoint script
+COPY docker/prod/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+RUN { \
+    echo "upload_max_filesize=50M"; \
+    echo "post_max_size=55M"; \
+} > /usr/local/etc/php/conf.d/uploads.ini
 
 EXPOSE 9000
 
-COPY docker/prod/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["php-fpm", "-F", "-R"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
