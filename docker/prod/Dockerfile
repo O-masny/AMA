@@ -38,9 +38,9 @@ RUN composer install --no-dev --optimize-autoloader
 # Copy built frontend (public/build/ s Vite assety)
 COPY --from=node-builder /app/public/build ./public/build
 
-# Permissions (NEPŘEPISUJ storage a database - to jsou mountnuté volumes!)
-RUN chown -R www-data:www-data bootstrap/cache public/build \
-    && chmod -R 775 bootstrap/cache
+# Permissions
+RUN chown -R www-data:www-data bootstrap/cache storage public/build \
+    && chmod -R 775 bootstrap/cache storage public/build
 
 # PHP config
 RUN echo "upload_max_filesize=50M" > /usr/local/etc/php/conf.d/uploads.ini \
@@ -50,4 +50,9 @@ RUN echo "upload_max_filesize=50M" > /usr/local/etc/php/conf.d/uploads.ini \
 VOLUME ["/var/www/public"]
 
 EXPOSE 9000
-CMD ["php-fpm"]
+
+COPY docker/prod/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["php-fpm", "-F", "-R"]
