@@ -28,7 +28,7 @@ services:
     depends_on:
       - app
     volumes:
-      - .docker/prod/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./docker/prod/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
       - app_public:/var/www/public:ro          # Nově buildnutý public/ z app containeru
       - storage_data:/var/www/storage:ro       # PERZISTENTNÍ storage pro /storage/... requesty
     labels:
