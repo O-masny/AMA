@@ -35,7 +35,8 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Copy built frontend (public/build/ s Vite assety)
+# Copy built frontend do lokálního public/ mountu (pokud existuje)
+# NEPŘEPISUJ storage, database ani .env!
 COPY --from=node-builder /app/public/build ./public/build
 
 # Permissions
@@ -46,13 +47,11 @@ RUN chown -R www-data:www-data bootstrap/cache storage public/build \
 RUN echo "upload_max_filesize=50M" > /usr/local/etc/php/conf.d/uploads.ini \
     && echo "post_max_size=55M" >> /usr/local/etc/php/conf.d/uploads.ini
 
-# Named volume pro public/ (sdílený s nginx)
-VOLUME ["/var/www/public"]
-
-EXPOSE 9000
-
+# Entrypoint
 COPY docker/prod/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
+EXPOSE 9000
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["php-fpm", "-F", "-R"]
