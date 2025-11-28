@@ -10,8 +10,15 @@ chown -R www-data:www-data bootstrap/cache storage
 
 # Kontrola existence Vite manifest.json
 if [ ! -f public/build/manifest.json ]; then
-  echo "[ERROR] Missing Vite manifest.json in /var/www/public/build"
-  exit 1
+  if [ -d /var/www-template/public/build ]; then
+    echo "[WARN] Missing Vite manifest.json in /var/www/public/build; restoring from image backup"
+    rm -rf public/build
+    cp -r /var/www-template/public/build public/build
+    chown -R www-data:www-data public/build
+  else
+    echo "[ERROR] Missing Vite manifest.json in /var/www/public/build and no backup available"
+    exit 1
+  fi
 fi
 
 echo "🧹 Laravel cache clear..."
