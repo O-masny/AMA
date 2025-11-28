@@ -12,7 +12,7 @@ COPY vite.config.* ./
 COPY tsconfig*.json ./
 COPY public ./public
 
-# Build frontend
+# Build frontend (vytvoří public/build/)
 RUN npm run build
 
 # --- Stage 2: PHP 8.3 ---
@@ -35,19 +35,19 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Copy built frontend
+# Copy built frontend (public/build/ s Vite assety)
 COPY --from=node-builder /app/public/build ./public/build
 
-# Storage symlink
-RUN php artisan storage:link || true
-
-# Permissions
-RUN chown -R www-data:www-data storage bootstrap/cache database public/build \
-    && chmod -R 775 storage bootstrap/cache
+# Permissions (NEPŘEPISUJ storage a database - to jsou mountnuté volumes!)
+RUN chown -R www-data:www-data bootstrap/cache public/build \
+    && chmod -R 775 bootstrap/cache
 
 # PHP config
 RUN echo "upload_max_filesize=50M" > /usr/local/etc/php/conf.d/uploads.ini \
     && echo "post_max_size=55M" >> /usr/local/etc/php/conf.d/uploads.ini
+
+# Named volume pro public/ (sdílený s nginx)
+VOLUME ["/var/www/public"]
 
 EXPOSE 9000
 CMD ["php-fpm"]
