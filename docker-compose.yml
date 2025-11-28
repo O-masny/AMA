@@ -7,11 +7,11 @@ services:
     image: ama-prod:latest
     working_dir: /var/www
     env_file:
-      - env.production
+      - .env.production
     volumes:
       - storage_data:/var/www/storage          # PERZISTENTNÍ uploads z Filamentu
       - database_data:/var/www/database        # PERZISTENTNÍ SQLite DB
-      - env.production:/var/www/.env:ro
+      - .env.production:/var/www/.env:ro
     expose:
       - "9000"
     networks:
