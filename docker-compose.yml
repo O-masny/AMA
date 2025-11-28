@@ -21,7 +21,7 @@ services:
       - ama
       - traefik
     restart: unless-stopped
-    entrypoint: ["/entrypoint.sh"]
+    entrypoint: ["/usr/local/bin/entrypoint.sh"]
     command: ["php-fpm", "-F", "-R"]
 
   nginx:
