@@ -16,30 +16,9 @@ RUN npm run build
 
 
 # --- Stage 2: PHP Runtime ---
-FROM php:8.3-fpm-alpine
+FROM laravel-base:8.4
 
 WORKDIR /var/www
-
-RUN apk add --no-cache \
-        libzip-dev \
-        unzip \
-        oniguruma-dev \
-        sqlite-dev \
-        bash \
-        git \
-        curl \
-        icu-dev \
-        libpng-dev \
-        libjpeg-turbo-dev \
-        libwebp-dev \
-        freetype-dev \
-    && docker-php-ext-configure gd \
-        --with-freetype \
-        --with-jpeg \
-        --with-webp \
-    && docker-php-ext-install pdo pdo_sqlite bcmath zip intl gd
-
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY . .
 
@@ -71,4 +50,4 @@ RUN { \
 
 EXPOSE 9000
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
