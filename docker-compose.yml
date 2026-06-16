@@ -52,6 +52,7 @@ services:
       - "traefik.http.routers.ama.tls.certresolver=cloudflare"
       - "traefik.http.routers.ama.middlewares=cloudflare-only@file,security-headers@file"
       - "traefik.http.services.ama.loadbalancer.server.port=80"
+      - "traefik.docker.network=soccky_web"
     networks:
       - soccky_web
       - ama
